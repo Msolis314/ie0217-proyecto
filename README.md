@@ -221,10 +221,10 @@ El esquema de la base de datos se presenta a continuación:
 
 ![Esquema Base de Datos](https://github.com/Msolis314/Clases/blob/main/Bases%20de%20Datos.jpg)
 
+## Cronograma
 
-| **Cronograma** |            |                     |
-|----------------|------------|---------------------|
 | **Fecha**      | **Entrega**| **Persona**         |
+|----------------|------------|---------------------|
 | viernes 24 de mayo | Investigación                       | Todos los integrantes           |
 | sábado 25 de mayo  | Diagramas y Estructura del Proyecto | Todos los integrantes           |
 | domingo 26 de mayo | Presentación                        | Todos los integrantes           |
