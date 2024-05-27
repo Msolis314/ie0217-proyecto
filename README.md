@@ -222,6 +222,30 @@ El esquema de la base de datos se presenta a continuación:
 ![Esquema Base de Datos](https://github.com/Msolis314/Clases/blob/main/Bases%20de%20Datos.jpg)
 
 
+| **Cronograma** |            |                     |
+|----------------|------------|---------------------|
+| **Fecha**      | **Entrega**| **Persona**         |
+| viernes 24 de mayo | Investigación                       | Todos los integrantes           |
+| sábado 25 de mayo  | Diagramas y Estructura del Proyecto | Todos los integrantes           |
+| domingo 26 de mayo | Presentación                        | Todos los integrantes           |
+| lunes 27 de mayo   | Presentación Primera Fase           | Todos los integrantes           |
+| 5 de junio         | Header files de las clases y menu inicial | Todos los integrantes, Mariana menu inicial |
+| viernes 7 de junio | Definir estructura de las bases de datos | Mariana                |
+| lunes 10 de junio  | Definición de la clase Entidad Bancaria  | Esteban                |
+| lunes 10 de junio  | Definición de la clase cliente          | Charlie                |
+| lunes 10 de junio  | Definición de la clase banco            | Mariana                |
+| martes 11 de junio | Definición de cuenta                    | Charlie                |
+| viernes 14 de junio| Transacciones                           | Esteban, Mariana       |
+| viernes 14 de junio| CDP                                     | Charlie                |
+| sábado 15 de junio | Préstamo fase inicial                   | Todos los integrantes  |
+| lunes 17 de junio  | Presentación del Avance                 | Todos los integrantes  |
+| miércoles 19 de junio | Préstamo fase final                  | Todos los integrantes  |
+| viernes 21 de junio| Interfaz con el usuario del programa    | Mariana                |
+| viernes 28 de junio| Arreglos finales                        | Todos los integrantes  |
+| jueves 4 de julio  | Presentación Final                      | Todos los integrantes  |
+
+
+
 ## Referencias 
 Asociación Bancaria Costarricense. (2011). Credito y 
 Garantías. Biblioteca Financiera Virtual.
