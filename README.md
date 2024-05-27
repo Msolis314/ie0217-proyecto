@@ -24,8 +24,8 @@ Cabe destacar que la persona puede recuperar su dinero en el momento que lo nece
 -	**Cuenta Empresas**: Estas cuentas van dirigidas a empresas, ya que satisfacen necesidades que presentan las mismas, por lo que la entidad bancaria  ofrece ciertos beneficios, como permitir la gestión de pagos e ingresos de una manera fácil y eficiente, así como poder hacer transferencias nacionales e internacionales, entre otras. Cabe mencionar que usualmente tiene comisiones según términos y condiciones del banco.
 -	**Cuenta mancumunadas**: Esta es una cuenta particular, que puede tener varios usuarios y existen dos modos:
 
-        -Solidaria: cualquier persona integrante puede realizar tramites sin consentimiento.
-        -Mancomunada: Debe tenerse el consentimiento de todos los integrantes para realizar una transacción.
+    - Solidaria: cualquier persona integrante puede realizar tramites sin consentimiento.
+    - Mancomunada: Debe tenerse el consentimiento de todos los integrantes para realizar una transacción.
 
 -	**Cuenta moneda extranjera**: Este tipo de cuentas va dirigido a usuarios en que necesitan hacer uso de distintas divisas, es útil para esos clientes que realizan operaciones internacionales.
 
@@ -129,8 +129,8 @@ La tasa de interés es simple cuando el interés que se obtiene al vencimiento n
 
 $$
 I=P×r×t
-$$
 
+$$
 Donde:
 - 𝐼 es el interés total.
 - 𝑃 es el monto prestado.
@@ -243,8 +243,6 @@ El esquema de la base de datos se presenta a continuación:
 | viernes 21 de junio| Interfaz con el usuario del programa    | Mariana                |
 | viernes 28 de junio| Arreglos finales                        | Todos los integrantes  |
 | jueves 4 de julio  | Presentación Final                      | Todos los integrantes  |
-
-
 
 ## Referencias 
 Asociación Bancaria Costarricense. (2011). Credito y 
