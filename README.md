@@ -129,8 +129,8 @@ La tasa de interés es simple cuando el interés que se obtiene al vencimiento n
 
 $$
 I=P×r×t
-
 $$
+
 Donde:
 - 𝐼 es el interés total.
 - 𝑃 es el monto prestado.
