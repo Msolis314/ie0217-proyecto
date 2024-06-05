@@ -68,6 +68,52 @@ int crearDB(){
     }else{
         std::cout << "Tabla de informacion bancaria creada con exito" << std::endl;
     }
+        // Crear tabla de informacion Bancaria
+    sql = "CREATE TABLE IF NOT EXISTS BANKINFO(" \
+        "FECHA           TEXT    NOT NULL," \
+        "TIPO_CAMBIO    REAL    NOT NULL," \
+        " TASA_BANCO_CENTRAL NOT NULL);";
+    
+    rc = sqlite3_exec(db, sql, callback, 0, &zErrMsg);
+    if (rc != SQLITE_OK){
+        std::cout << "SQL ERROR: " << zErrMsg << std::endl;
+        sqlite3_free(zErrMsg);
+    }else{
+        std::cout << "Tabla de informacion bancaria creada con exito" << std::endl;
+    }
+
+    // Crear tabla de Cuenta Bancaria
+    sql = "CREATE TABLE IF NOT EXISTS CUENTA_BANCARIA(" \
+        "ID_CUENTA INT PRIMARY KEY NOT NULL," \
+        "TIPO_MONEDA TEXT NOT NULL," \
+        "AHORROS INT NOT NULL," \
+        "ID_CLIENTE INT NOT NULL," \
+        "FOREIGN KEY (ID_CLIENTE) REFERENCES CUSTOMERS(ID));"; // se usa la clave foranea
+    
+    rc = sqlite3_exec(db, sql, callback, 0, &zErrMsg);
+    if (rc != SQLITE_OK){
+        std::cout << "SQL ERROR: " << zErrMsg << std::endl;
+        sqlite3_free(zErrMsg);
+    }else{
+        std::cout << "Tabla de cuenta bancaria creada con exito" << std::endl;
+    }
+    // Crear tabla de transacciones.
+    sql = "CREATE TABLE IF NOT EXISTS TRANSACCIONES(" \
+    "NUM_TRAN INT NOT NULL," \
+    "ID_CLIENTE INT NOT NULL," \
+    "ID_CUENTA_ORIGEN INT NOT NULL," \
+    "FECHA DATETIME NOT NULL," \
+    "FOREIGN KEY (ID_CLIENTE) REFERENCES CUSTOMERS(ID)," \
+    "FOREIGN KEY (ID_CUENTA_ORIGEN) REFERENCES CUENTA_BANCARIA(ID_CUENTA));";
+
+
+    rc = sqlite3_exec(db, sql, callback, 0, &zErrMsg);
+    if (rc != SQLITE_OK){
+        std::cout << "SQL ERROR: " << zErrMsg << std::endl;
+        sqlite3_free(zErrMsg);
+    }else{
+        std::cout << "Tabla de Transaccion creada con exito" << std::endl;
+    }
 
     return 0;
 }
