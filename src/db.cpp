@@ -68,19 +68,6 @@ int crearDB(){
     }else{
         std::cout << "Tabla de informacion bancaria creada con exito" << std::endl;
     }
-        // Crear tabla de informacion Bancaria
-    sql = "CREATE TABLE IF NOT EXISTS BANKINFO(" \
-        "FECHA           TEXT    NOT NULL," \
-        "TIPO_CAMBIO    REAL    NOT NULL," \
-        " TASA_BANCO_CENTRAL NOT NULL);";
-    
-    rc = sqlite3_exec(db, sql, callback, 0, &zErrMsg);
-    if (rc != SQLITE_OK){
-        std::cout << "SQL ERROR: " << zErrMsg << std::endl;
-        sqlite3_free(zErrMsg);
-    }else{
-        std::cout << "Tabla de informacion bancaria creada con exito" << std::endl;
-    }
 
     // Crear tabla de Cuenta Bancaria
     sql = "CREATE TABLE IF NOT EXISTS CUENTA_BANCARIA(" \
@@ -131,6 +118,28 @@ int crearDB(){
         sqlite3_free(zErrMsg);
     }else{
         std::cout << "Tabla de Historial creada con exito" << std::endl;
+    }
+
+    // Crear tabla de Prestamos
+    sql = "CREATE TABLE IF NOT EXISTS PRESTAMO(" \
+    "ID_PRESTAMO INT PRIMARY KEY NOT NULL," \
+    "ID_CLIENTE INT NOT NULL," \
+    "TIPO_CAMBIO TEXT NOT NULL," \
+    "TIPO_INTERES TEXT NOT NULL," \
+    "CUOTA REAL NOT NULL," \
+    "PLAZO INT NOT NULL," \
+    "INTERESES_ABONADOS REAL NOT NULL," \
+    "TASA_INTERES REAL NOT NULL," \
+    "CAPITAL_OG REAL NOT NULL," \
+    "CAPITAL_ACTUAL REAL NOT NULL," \
+    "FOREIGN KEY (ID_CLIENTE) REFERENCES CUSTOMERS(ID));";
+
+    rc = sqlite3_exec(db, sql, callback, 0, &zErrMsg);
+    if (rc != SQLITE_OK) {
+        std::cout << "SQL ERROR: " << zErrMsg << std::endl;
+        sqlite3_free(zErrMsg);
+    } else {
+        std::cout << "Tabla de Prestamos creada con exito" << std::endl;
     }
 
     sqlite3_close(db);
