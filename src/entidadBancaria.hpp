@@ -10,20 +10,28 @@ enum Monedas{
     COLON
 };
 
+enum TipoTransaccion{
+    DEPOSITO,
+    RETIRO,
+    PAGOCAPITAL,
+    PAGOINTERES,
+    TRANSFERENCIA
+};
+
 class EntidadBancaria{
     private:
-        time_t fecha;
-        float tipoCambio;
+        char* fecha;
+        float* tipoCambio;
     public:
         EntidadBancaria();
         time_t getFecha();
         float getTipoCambio();
-        void setFecha(time_t fecha);
-        void setTipoCambio(float tipoCambio);
-        void consultarHistorial();
+        void setFecha();
+        void setTipoCambio();
+        void escribirEnHistorial(int tipoTransaccion, int ID_CLIENTE,int ID_CUENTA, int ID_PRESTAMO = 0, int ID_CUENTA_DESTINO);
         template <typename T> bool validarDatos(T dato);
         void convertirMoneda(float monto, Monedas moneda);
         virtual void transaccion(float monto, Monedas moneda);
 
 };
-#endif // ENTIDAD_BANCARIA_HPP
+#endif // ENTIDAD_BANCARIA_HPP 

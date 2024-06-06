@@ -115,5 +115,27 @@ int crearDB(){
         std::cout << "Tabla de Transaccion creada con exito" << std::endl;
     }
 
+    sql = "CREATE TABLE IF NOT EXISTS HISTORIAL(" \
+    "ID_CLIENTE INT NOT NULL," \
+    "TIPO_TRANSACCION TEXT NOT NULL," \
+    "ID_PRESTAMO INT ," \
+    "ID_CUENTA INT ," \
+    "FECHA DATETIME NOT NULL," \
+    "FOREIGN KEY (ID_CLIENTE) REFERENCES CUSTOMERS(ID)," \
+    "FOREIGN KEY (ID_CUENTA) REFERENCES CUENTA_BANCARIA(ID_CUENTA)," \
+    "FOREIGN KEY (ID_PRESTAMO) REFERENCES PRESTAMO(ID_PRESTAMO));";
+
+    rc = sqlite3_exec(db, sql, callback, 0, &zErrMsg);
+    if (rc != SQLITE_OK){
+        std::cout << "SQL ERROR: " << zErrMsg << std::endl;
+        sqlite3_free(zErrMsg);
+    }else{
+        std::cout << "Tabla de Historial creada con exito" << std::endl;
+    }
+
+    sqlite3_close(db);
+
+
     return 0;
 }
+

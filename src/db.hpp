@@ -12,5 +12,12 @@ int crearDB();
 /// @param azColName Nombre de las columnas
 /// @return Codigo de error
 static int callback(void *NotUsed, int argc, char **argv, char **azColName);
+template <typename T> 
+T returnValue(void *data, int argc, char **argv, char **azColName) {
+    T value;
+
+    *(T*)data =  (T)argv[0];
+    
+};
 
 #endif // DB_HPP
