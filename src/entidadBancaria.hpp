@@ -15,23 +15,28 @@ enum TipoTransaccion{
     RETIRO,
     PAGOCAPITAL,
     PAGOINTERES,
-    TRANSFERENCIA
+    TRANSFERENCIA,
+    PAGOCAPITALAJENO,
+    PAGOINTERESAJENO
 };
 
+/// @brief Clase padre del sistema bancario
 class EntidadBancaria{
     private:
         char* fecha;
         float* tipoCambio;
     public:
+
         EntidadBancaria();
-        time_t getFecha();
+        std::string getFecha();
         float getTipoCambio();
         void setFecha();
         void setTipoCambio();
-        void escribirEnHistorial(int tipoTransaccion, int ID_CLIENTE,int ID_CUENTA, int ID_PRESTAMO = 0, int ID_CUENTA_DESTINO);
-        template <typename T> bool validarDatos(T dato);
+        void escribirEnHistorial();
+        bool validarDatos(std::string dato,float* monto);
         void convertirMoneda(float monto, Monedas moneda);
-        virtual void transaccion(float monto, Monedas moneda);
+        void transaccion(float monto, Monedas moneda);
+        static int callback(void *data, int argc, char **argv, char **azColName);
 
 };
 #endif // ENTIDAD_BANCARIA_HPP 

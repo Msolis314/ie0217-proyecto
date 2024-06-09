@@ -4,6 +4,7 @@
 #include <ctime>
 #include <sqlite3.h>
 #include <stdexcept>
+#include <sstream>
 #include "entidadBancaria.hpp"
 #include "db.hpp"
 
@@ -31,7 +32,7 @@ void EntidadBancaria::setTipoCambio(){
     }
 
     const char* sql = "SELECT TIPO_CAMBIO FROM BANKINFO";
-    rc = sqlite3_exec(db, sql, returnValue, fecha, &zErrMsg);
+    rc = sqlite3_exec(db, sql, returnValue<float>, tipoCambio, &zErrMsg);
     if (rc != SQLITE_OK){
         std::cout << "SQL ERROR: " << zErrMsg << std::endl;
         sqlite3_free(zErrMsg);
@@ -44,14 +45,22 @@ void EntidadBancaria::setTipoCambio(){
 
 }
 
-template <typename T>
-bool EntidadBancaria::validarDatos(T dato){
+
+bool EntidadBancaria::validarDatos(std::string dato, float* monto){
+
     try {
-        if (dato < 0){
-            throw std::invalid_argument("El dato no puede ser negativo");
+        std::istringstream stream(dato);
+
+        if (!(stream >> *monto) || !stream.eof()){
+            throw std::invalid_argument("El dato ingresado no es un numero");
         }
-    } catch (const std::invalid_argument& e){
-        std::cerr << e.what() << std::endl;
+        else if (*monto < 0){
+            throw std::invalid_argument("El monto no puede ser negativo");
+        }
+        return true;
+    }
+    catch (std::invalid_argument &e){
+        std::cout << e.what() << std::endl;
         return false;
     }
 }

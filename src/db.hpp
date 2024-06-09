@@ -1,6 +1,7 @@
 #ifndef DB_HPP //DB_HPP
 #define DB_HPP
 
+#include <stdlib.h>
 /// @brief Funcion que crea la base de datos
 /// @return Codigo de error
 int crearDB();
@@ -13,10 +14,10 @@ int crearDB();
 /// @return Codigo de error
 static int callback(void *NotUsed, int argc, char **argv, char **azColName);
 template <typename T> 
-T returnValue(void *data, int argc, char **argv, char **azColName) {
+int returnValue(void *data, int argc, char **argv, char **azColName) {
     T value;
 
-    *(T*)data =  (T)argv[0];
+    *(T*)data = strtof(argv[0],NULL);
     
 };
 
