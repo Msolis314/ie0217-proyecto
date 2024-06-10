@@ -19,7 +19,7 @@ class Cliente: public EntidadBancaria{
         void consultarCuentas();
         void consultarPrestamos();
         int generarIDCuenta();
-    
+        bool checkIDCuentaExists(int idCuenta); 
         // void transaccion(float monto, Monedas moneda);
         // void operarPrestamo(float monto, Monedas moneda);
 
