@@ -6,6 +6,12 @@
 #include <vector>
 #include "entidadBancaria.hpp"
 
+enum LoginMenu{
+    LOGIN = 1,
+    REGISTRO,
+    SALIR
+};
+
 /**
  * @brief Clase que representa un banco.
  */
@@ -99,7 +105,14 @@ class Banco: public EntidadBancaria{
         /// @return true si el nombre o apellido es válido, false si no lo es
         bool validarNombre(std::string nombre);
 
+        /// @brief Método para validar la contraseña
+        /// @param contrasena Contraseña a validar
+        /// @return true si la contraseña es válida, false si no lo es
+        bool validarContrasena(std::string contrasena);
+
         bool checkifClienteExists(std::string nombre, std::string apellido);
+
+        void signUp();
 
 };
 

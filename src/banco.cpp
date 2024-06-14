@@ -5,11 +5,16 @@
 #include <ctime>
 #include <sqlite3.h>
 #include <regex>
+#include <stdexcept>
+#include <sstream>
+#include <type_traits>
 #include "entidadBancaria.hpp"
 #include "banco.hpp"
 #include "db.hpp"
 #include "cliente.hpp"
 #include "tools.hpp"
+
+#define NUMTRIES 3
 
 // Definiendo el constructor
 Banco::Banco(){
@@ -248,6 +253,22 @@ bool Banco::validarNombre(std::string nombre){
     }
 }
 
+bool Banco::validarContrasena(std::string contrasena){
+    //^: Inicio de la cadena
+    //(?=.*[a-z]): Al menos una letra minúscula
+    //(?=.*[A-Z]): Al menos una letra mayúscula
+    //(?=.*\d): Al menos un dígito
+    //[a-zA-Z\d]: Cualquier letra de la a a la z, mayúscula o minúscula o dígito
+    //{8,}: Al menos 8 caracteres
+    //$: Fin de la cadena
+    std::regex regex("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)[a-zA-Z\\d]{8,}$"); // Expresion regular para validar la contraseña
+    if (std::regex_match(contrasena, regex)){ // Si la contraseña cumple con la expresion regular
+        return true;
+    } else {
+        return false;
+    }
+}
+
 bool Banco::checkifClienteExists(std::string nombre, std::string apellido){
     sqlite3 *db;                                                        // puntero db
     char *zErrMsg = 0;                                                  // msj de error
@@ -289,15 +310,7 @@ void Banco::login(){
         if (!checkifClienteExists(nombre, apellido)){
             throw std::invalid_argument("El cliente no existe");
         }
-        std::string password;
-        std::cout << "Ingrese su contraseña: ";
-        std::cin >> password;
-        if (password == ""){
-            throw std::invalid_argument("Contraseña invalida");
-        }
-
-        
-
+    
     }
     catch (std::invalid_argument& e) {
         std::cout << e.what() << std::endl;
@@ -305,6 +318,105 @@ void Banco::login(){
     }
     catch (std::exception& e) {
         std::cout << e.what() << std::endl;
-        return;
+        std::cout << "Que desea hacer?" << std::endl;
+        std::string choice;
+        int* opcion;
+        while(!(this->validarEntrada<int>(choice,opcion)) || *opcion < 1 || *opcion > 3){
+            std::cout << "1. Intentar de nuevo" << std::endl;
+            std::cout << "2. Registrarse como nuevo cliente" << std::endl;
+            std::cout << "3. Salir" << std::endl;
+            std::cin >> choice;   
+        }
+
+        switch (*opcion)
+        {
+        case LOGIN:
+            login();
+            break;
+        case REGISTRO:
+            signUp();
+            break;
+        case SALIR:
+            return;
+            break;
+        
+        default:
+            break;
+        }
+        
     }
+
+    std::string password;
+        while (true){
+            std::cout << "Ingrese su contraseña: ";
+            std::cin >> password;
+            if (password == ""){
+                throw std::invalid_argument("Contraseña invalida");
+            } else {
+                break;
+            }
+        }
+        sqlite3 *db;
+        char *zErrMsg = 0;
+        int rc;
+        rc = sqlite3_open("SistemaBancario.db", &db);
+        if (rc){
+            std::cout << "No se pudo abrir la base de datos" << std::endl;
+        }else{
+            std::cout << "Base de datos abierta con exito" << std::endl;
+        }
+        std::string sql = "SELECT ID FROM CUSTOMERS WHERE NOMBRE = '" + nombre + "' AND APELLIDO = '" + apellido + "';";
+        const char* data = sql.c_str();
+        void* id;
+        rc = sqlite3_exec(db, data, intCallback, id, &zErrMsg);
+        if (rc != SQLITE_OK){
+            std::cout << "SQL ERROR: " << zErrMsg << std::endl;
+            sqlite3_free(zErrMsg);
+        }else{
+            std::cout << "Consulta realizada con exito" << std::endl;
+        }
+
+        std::string storedPassword = getPassword(*(int*)id);
+        std::string storedSalt = getSalt(*(int*)id);
+        int i;
+        for (i = 0; i < NUMTRIES; i++){
+            if (checkPassword(password, storedSalt, storedPassword)){
+                std::cout << "Login exitoso" << std::endl;
+                break;
+            } else {
+                std::cout << "Contraseña incorrecta, intento " << i + 1 << " de " << NUMTRIES << std::endl;
+                std::cout << "Ingrese su contraseña: ";
+                std::cin >> password;
+            }
+        }
+        if (i == NUMTRIES){
+            std::cout << "Demasiados intentos, bloqueando cuenta" << std::endl;
+            return;
+        }
+
+}
+
+void Banco::signUp(){
+    std::string nombre;
+    std::string apellido;
+    std::string password;
+    std::string password2;
+    while(!validarNombre(nombre)){
+        std::cout << "Ingrese su nombre: ";
+        std::cin >> nombre;
+    }
+    while(!validarNombre(apellido)){
+        std::cout << "Ingrese su apellido: ";
+        std::cin >> apellido;
+    }
+
+    while(!validarContrasena(password)){
+        std::cout << "Ingrese su contraseña: ";
+        std::cin >> password;
+    }
+    while(!validarContrasena(password2) || password != password2){
+        std::cout << "Ingrese su contraseña de nuevo: ";
+        std::cin >> password2;
+    }
+    agregarCliente(nombre, apellido, password);
 }

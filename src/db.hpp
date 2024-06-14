@@ -21,4 +21,19 @@ int returnValue(void *data, int argc, char **argv, char **azColName) {
     
 };
 
+/// @brief Funcion para retornar un unico string
+/// @param data puntero a string
+/// @param argc numero de columnas
+/// @param argv Resultado de la fila
+/// @param azColName Nombre de las columnas
+/// @return 
+static int stringCallback(void *data, int argc, char **argv, char **azColName);
+
+/// @brief Funcion para retornar un unico entero
+/// @param data puntero a entero
+/// @param argc numero de columnas
+/// @param argv Resultado de la fila
+/// @param azColName Nombre de las columnas
+/// @return
+static int intCallback(void *data, int argc, char **argv, char **azColName);
 #endif // DB_HPP

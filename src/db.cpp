@@ -14,6 +14,22 @@ static int callback(void *NotUsed, int argc, char **argv, char **azColName){
     return 0;
 }
 
+static int stringCallback(void *data, int argc, char **argv, char **azColName){
+    // Se convierte el puntero a string
+    std::string *str = (std::string*)data;
+    // Se guarda el valor de la columna en el string
+    *str = argv[0];
+    return 0;
+}
+
+static int intCallback(void *data, int argc, char **argv, char **azColName){
+    // Se convierte el puntero a entero
+    int *value = (int*)data;
+    // Se guarda el valor de la columna en el entero
+    *value = std::stoi(argv[0]);
+    return 0;
+}
+
 int crearDB(){
     sqlite3 *db;
     char *zErrMsg = 0;

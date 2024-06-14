@@ -4,9 +4,11 @@
 #include <ctime>
 #include <openssl/evp.h>
 #include <openssl/rand.h>
+#include <sqlite3.h>
 #include <sstream>
 #include <iomanip>
 #include "tools.hpp"
+#include "db.hpp"
 
 #define SALT_SIZE 16
 #define HASH_SIZE 32
@@ -61,3 +63,51 @@ bool checkPassword(const std::string &password, const std::string &storedsalt, c
     return newhash == storedhash;
 }
 
+std::string getPassword(int ID){
+    std::string password;
+    std::string salt;
+    std::string hash;
+    sqlite3 *db;
+    char *zErrMsg = 0;
+    const char * data = "SQLite 3";
+    int rc;
+    rc = sqlite3_open("SistemaBancario.db", &db);
+    if (rc){
+        std::cout << "No se pudo abrir la base de datos" << std::endl;
+        return "";
+    }else{
+        std::cout << "Base de datos abierta con exito" << std::endl;
+    }
+    std::string sql = "SELECT PASSWORD FROM PASSWORDS WHERE ID = " + std::to_string(ID) + ";";
+    rc = sqlite3_exec(db, sql.c_str(), stringCallback, &password, &zErrMsg);
+    if (rc != SQLITE_OK){
+        std::cout << "Error en la consulta: " << zErrMsg << std::endl;
+        sqlite3_free(zErrMsg);
+        return "";
+    }
+    return password;
+}
+
+
+std::string getSalt(int ID){
+    std::string salt;
+    sqlite3 *db;
+    char *zErrMsg = 0;
+    const char * data = "SQLite 3";
+    int rc;
+    rc = sqlite3_open("SistemaBancario.db", &db);
+    if (rc){
+        std::cout << "No se pudo abrir la base de datos" << std::endl;
+        return "";
+    }else{
+        std::cout << "Base de datos abierta con exito" << std::endl;
+    }
+    std::string sql = "SELECT SALT FROM PASSWORDS WHERE ID = " + std::to_string(ID) + ";";
+    rc = sqlite3_exec(db, sql.c_str(), stringCallback, &salt, &zErrMsg);
+    if (rc != SQLITE_OK){
+        std::cout << "Error en la consulta: " << zErrMsg << std::endl;
+        sqlite3_free(zErrMsg);
+        return "";
+    }
+    return salt;
+}

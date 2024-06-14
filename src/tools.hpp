@@ -23,4 +23,12 @@ std::string genSalt();
 std::string hash(const std::string &password, const std::string &salt);
 
 bool checkPassword(const std::string &password, const std::string &storedsalt, const std::string &storedhash);
+
+/// @brief Funcion para obtener una contraseña
+// Tal vez deveria ir en la clase Cliente
+std::string getPassword(int ID);
+
+std::string getSalt(int ID);
+
+
 #endif // TOOL_HPP
