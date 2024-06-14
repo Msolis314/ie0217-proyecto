@@ -4,10 +4,12 @@
 #include <vector>
 #include <ctime>
 #include <sqlite3.h>
+#include <regex>
 #include "entidadBancaria.hpp"
 #include "banco.hpp"
 #include "db.hpp"
 #include "cliente.hpp"
+#include "tools.hpp"
 
 // Definiendo el constructor
 Banco::Banco(){
@@ -164,7 +166,7 @@ bool Banco::checkIDExists(int id){
 }
 
 // Generando la logica de la funcion para agregar clientes.
-void Banco::agregarCliente(std::string nombre, std::string apellido){ 
+void Banco::agregarCliente(std::string nombre, std::string apellido,std::string password){ 
     sqlite3 *db;                                                        // Puntero de que se va usar a la base de datos
     char *zErrMsg = 0;                                                  // mensaje de error
     int rc;                                                             // codigo de retorno, indicador de si se ejecuto bien
@@ -185,6 +187,21 @@ void Banco::agregarCliente(std::string nombre, std::string apellido){
         sqlite3_free(zErrMsg);
     }else{
         std::cout << "Cliente agregado con exito" << std::endl;         //cliente agregado.
+    }
+
+    // Encriptando la contraseña
+    std::string salt = genSalt();                                       // generando un salt
+    std::string hashPassword = hash(password, salt);                    // hasheando la contraseña
+    // Haciendo una consulta SQL para insertar la contraseña hasheada
+
+    sql = "INSERT INTO PASSWORDS (ID, SALT, PASSWORD) VALUES (" + std::to_string(id) + ", '" + salt + "', '" + hashPassword + "');";
+    data = sql.c_str();
+    rc = sqlite3_exec(db, data, NULL, 0, &zErrMsg);
+    if (rc != SQLITE_OK){                                               // si todo se ejecuta bien en el if, la contraseña se agrega con exito, sino msj error
+        std::cout << "SQL ERROR: " << zErrMsg << std::endl;
+        sqlite3_free(zErrMsg);
+    }else{
+        std::cout << "Contraseña agregada con exito" << std::endl;      //contraseña agregada.
     }
 
 
@@ -218,13 +235,76 @@ void Banco::consultarClientes(std::string nombre, std::string apellido){ // dos 
 
 }
 
+bool Banco::validarNombre(std::string nombre){
+    //^: Inicio de la cadena
+    //[a-zA-Z]: Cualquier letra de la a a la z, mayúscula o minúscula
+    //+: Uno o más caracteres
+    //$: Fin de la cadena
+    std::regex regex("^[a-zA-Z]+$"); // Expresion regular para validar el nombre
+    if (std::regex_match(nombre, regex)){ // Si el nombre cumple con la expresion regular
+        return true;
+    } else {
+        return false;
+    }
+}
+
+bool Banco::checkifClienteExists(std::string nombre, std::string apellido){
+    sqlite3 *db;                                                        // puntero db
+    char *zErrMsg = 0;                                                  // msj de error
+    int rc;                                                             // codigo de retorno
+    rc = sqlite3_open("SistemaBancario.db", &db);                       // abriendo base de datos
+    if (rc){                                                            // verificando que se abre la db correctamente.
+        std::cout << "No se pudo abrir la base de datos" << std::endl;
+    }else{
+        std::cout << "Base de datos abierta con exito" << std::endl;
+    }
+    // usando un selec de la tabla clientes para nombre
+    std::string sql = "SELECT * FROM CUSTOMERS WHERE NOMBRE = '" + nombre + "' AND APELLIDO = '" + apellido + "';";
+    const char* data = sql.c_str();
+    rc = sqlite3_exec(db, data, NULL, 0, &zErrMsg);       // ejecutando la consulta.
+    if (rc != SQLITE_OK){                                                // Verificando que se encuentre algun cliente.
+        std::cout << "No se encontraron clientes con esos datos " << zErrMsg << std::endl;
+        sqlite3_free(zErrMsg);
+        return false;
+    }
+    else {
+        std::cout << "Consulta realizada con exito" << std::endl;
+        return true;
+    }
+
+}
 // Generando login.
 void Banco::login(){
     std::string nombre;
     std::string apellido;
-    std::cout << "Ingrese su nombre: ";
-    std::cin >> nombre;
-    std::cout << "Ingrese su apellido: ";
-    std::cin >> apellido;
-    consultarClientes(nombre, apellido);
+
+    try {
+        std::cout << "Ingrese su nombre: ";
+        std::cin >> nombre;
+        std::cout << "Ingrese su apellido: ";
+        std::cin >> apellido;
+        if (!validarNombre(nombre) || !validarNombre(apellido)){
+            throw std::invalid_argument("Nombre o apellido invalido");
+        }
+        if (!checkifClienteExists(nombre, apellido)){
+            throw std::invalid_argument("El cliente no existe");
+        }
+        std::string password;
+        std::cout << "Ingrese su contraseña: ";
+        std::cin >> password;
+        if (password == ""){
+            throw std::invalid_argument("Contraseña invalida");
+        }
+
+        
+
+    }
+    catch (std::invalid_argument& e) {
+        std::cout << e.what() << std::endl;
+        return;
+    }
+    catch (std::exception& e) {
+        std::cout << e.what() << std::endl;
+        return;
+    }
 }

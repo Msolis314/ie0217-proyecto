@@ -145,6 +145,21 @@ int crearDB(){
         std::cout << "Tabla de Prestamos creada con exito" << std::endl;
     }
 
+    // Crear tabla para guardar las contraseñas
+    sql = "CREATE TABLE IF NOT EXISTS PASSWORDS(" \
+    "ID_CLIENTE INT PRIMARY KEY NOT NULL," \
+    "PASSWORD TEXT NOT NULL," \
+    "SALT TEXT NOT NULL," \
+    "FOREIGN KEY (ID_CLIENTE) REFERENCES CUSTOMERS(ID));";
+
+    rc = sqlite3_exec(db, sql, callback, 0, &zErrMsg);
+    if (rc != SQLITE_OK) {
+        std::cout << "SQL ERROR: " << zErrMsg << std::endl;
+        sqlite3_free(zErrMsg);
+    } else {
+        std::cout << "Tabla de Passwords creada con exito" << std::endl;
+    }
+
     sqlite3_close(db);
 
 

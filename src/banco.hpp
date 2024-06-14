@@ -63,7 +63,7 @@ class Banco: public EntidadBancaria{
          * @param nombre Nombre del cliente
          * @param apellido Apellido del cliente
          */
-        void agregarCliente(std::string nombre, std::string apellido);                     
+        void agregarCliente(std::string nombre, std::string apellido,std::string password);                     
         /**
          * @brief Metodo para generar los id de los clientes
          */
@@ -93,6 +93,13 @@ class Banco: public EntidadBancaria{
          * @param monto Monto a depositar
          */
         void depositoEntreCuentas(int idCuentaD, int idCuentaC, float monto);
+
+        /// @brief Método para validar el string del nombre o apellido
+        /// @param nombre Nombre o apellido a validar
+        /// @return true si el nombre o apellido es válido, false si no lo es
+        bool validarNombre(std::string nombre);
+
+        bool checkifClienteExists(std::string nombre, std::string apellido);
 
 };
 
