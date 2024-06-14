@@ -8,7 +8,6 @@ int main(){
     crearDB();                            
     Banco banco;
     banco.login();
-    // agregando clientes 
-    banco.agregarCliente("Juan", "Perez");
+    
     return 0;
 }

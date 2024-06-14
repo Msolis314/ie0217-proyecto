@@ -5,35 +5,11 @@
 #include <sqlite3.h>
 #include "db.hpp"
 
-static int callback(void *NotUsed, int argc, char **argv, char **azColName){
-    int i;
-    for(i = 0; i < argc; i++){
-        std::cout << azColName[i] << " = " << (argv[i] ? argv[i] : "NULL") << std::endl;
-    }
-    std::cout << std::endl;
-    return 0;
-}
-
-static int stringCallback(void *data, int argc, char **argv, char **azColName){
-    // Se convierte el puntero a string
-    std::string *str = (std::string*)data;
-    // Se guarda el valor de la columna en el string
-    *str = argv[0];
-    return 0;
-}
-
-static int intCallback(void *data, int argc, char **argv, char **azColName){
-    // Se convierte el puntero a entero
-    int *value = (int*)data;
-    // Se guarda el valor de la columna en el entero
-    *value = std::stoi(argv[0]);
-    return 0;
-}
 
 int crearDB(){
     sqlite3 *db;
     char *zErrMsg = 0;
-    const char * data = "SQLite 3";
+    //const char * data = "SQLite 3";
     int rc;
     
     // Abrir la base de datos
@@ -42,7 +18,7 @@ int crearDB(){
         std::cout << "No se pudo abrir la base de datos" << std::endl;
         return 1;
     }else{
-        std::cout << "Base de datos abierta con exito" << std::endl;
+        std::cout << std::endl;
     }
     // Crear tabla de Clientes
 
@@ -68,7 +44,7 @@ int crearDB(){
         std::cout << "SQL ERROR: " << zErrMsg << std::endl;
         sqlite3_free(zErrMsg);
     }else{
-        std::cout << "Tabla de clientes creada con exito" << std::endl;
+        std::cout  << std::endl;
     }
 
     // Crear tabla de informacion Bancaria

@@ -41,7 +41,7 @@ class Banco: public EntidadBancaria{
         /**
          * @brief callback
          */
-        static int callback(void *data, int argc, char **argv, char **azColName);     
+        static int callbackIDs(void *data, int argc, char **argv, char **azColName);     
         /**
          * @brief Callback  consultando a prestamos
          */      

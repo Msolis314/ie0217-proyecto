@@ -4,6 +4,9 @@
 #include <ctime>
 #include <openssl/evp.h>
 #include <openssl/rand.h>
+#include <openssl/err.h>
+#include <openssl/pem.h>
+#include <openssl/rsa.h>
 #include <sqlite3.h>
 #include <sstream>
 #include <iomanip>

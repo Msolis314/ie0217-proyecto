@@ -42,11 +42,11 @@ class EntidadBancaria{
         static int callback(void *data, int argc, char **argv, char **azColName);
 
         /// @brief Funcion para validar la entrada de datos
-        template <typename T>
-        bool validarEntrada(std::string dato, T* valor){
+        
+        bool validarEntrada(std::string dato, int* valor){
             try {
                 std::istringstream ss(dato);
-                if(!( ss >> *valor)|| !ss.eof()){
+                if(!( ss >> *valor)|| !(ss >> std::ws).eof()){
                     throw std::invalid_argument("No se pudo convertir el dato");
                 }
                 return true;
