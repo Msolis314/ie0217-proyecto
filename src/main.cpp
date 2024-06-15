@@ -1,13 +1,14 @@
 // Librerias
 #include "db.hpp"
 #include "banco.hpp"
+#include "menu.hpp"
 #include <iostream>
 
 int main(){
     // llamada de funciones
-    crearDB();                            
-    Banco banco;
-    banco.login();
+    Menu menu;
+    
+    
     
     return 0;
 }

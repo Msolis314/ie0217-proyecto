@@ -1,4 +1,5 @@
 #include <iostream>
+#include <cstdlib>
 #include <vector>
 #include <string>
 #include <ctime>
@@ -58,7 +59,7 @@ int crearDB(){
         std::cout << "SQL ERROR: " << zErrMsg << std::endl;
         sqlite3_free(zErrMsg);
     }else{
-        std::cout << "Tabla de informacion bancaria creada con exito" << std::endl;
+        std::cout << "\n..." << std::endl;
     }
 
     // Crear tabla de Cuenta Bancaria
@@ -74,7 +75,7 @@ int crearDB(){
         std::cout << "SQL ERROR: " << zErrMsg << std::endl;
         sqlite3_free(zErrMsg);
     }else{
-        std::cout << "Tabla de cuenta bancaria creada con exito" << std::endl;
+        std::cout << "....." << std::endl;
     }
     // Crear tabla de transacciones.
     sql = "CREATE TABLE IF NOT EXISTS TRANSACCIONES(" \
@@ -91,7 +92,7 @@ int crearDB(){
         std::cout << "SQL ERROR: " << zErrMsg << std::endl;
         sqlite3_free(zErrMsg);
     }else{
-        std::cout << "Tabla de Transaccion creada con exito" << std::endl;
+        std::cout << "......." << std::endl;
     }
 
     sql = "CREATE TABLE IF NOT EXISTS HISTORIAL(" \
@@ -112,7 +113,7 @@ int crearDB(){
         std::cout << "SQL ERROR: " << zErrMsg << std::endl;
         sqlite3_free(zErrMsg);
     }else{
-        std::cout << "Tabla de Historial creada con exito" << std::endl;
+        std::cout << "........" << std::endl;
     }
 
     // Crear tabla de Prestamos
@@ -134,7 +135,7 @@ int crearDB(){
         std::cout << "SQL ERROR: " << zErrMsg << std::endl;
         sqlite3_free(zErrMsg);
     } else {
-        std::cout << "Tabla de Prestamos creada con exito" << std::endl;
+        std::cout << "..........." << std::endl;
     }
 
     // Crear tabla para guardar las contraseñas
@@ -149,10 +150,11 @@ int crearDB(){
         std::cout << "SQL ERROR: " << zErrMsg << std::endl;
         sqlite3_free(zErrMsg);
     } else {
-        std::cout << "Tabla de Passwords creada con exito" << std::endl;
+        std::cout << "............." << std::endl;
     }
 
     sqlite3_close(db);
+    system("clear");
 
 
     return 0;

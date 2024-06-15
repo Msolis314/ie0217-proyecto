@@ -5,6 +5,18 @@ int menu();
 enum MenuOptions{
     ATENCION = 1,
     CONSULTA = 2,
-    SALIR = 3
+    SALIRMENU= 3
+};
+
+class Menu{
+    public:
+        Menu();
+        int showMainMenu();
+
+        int getOption();
+        void showAtencionMenu();
+        void showConsultaMenu();
+        void returnToMainMenu();
+
 };
 #endif // MENU_HPP

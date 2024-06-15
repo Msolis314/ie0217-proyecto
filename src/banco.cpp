@@ -23,6 +23,7 @@ Banco::Banco(){
     setActualIDPrestamos();
     //Todavia no esta lista la funcion
     //setActualIDCuentas();
+    
 }
 
 
@@ -258,19 +259,31 @@ bool Banco::validarNombre(std::string nombre){
 }
 
 bool Banco::validarContrasena(std::string contrasena){
-    //^: Inicio de la cadena
-    //(?=.*[a-z]): Al menos una letra minúscula
-    //(?=.*[A-Z]): Al menos una letra mayúscula
-    //(?=.*\d): Al menos un dígito
-    //[a-zA-Z\d]: Cualquier letra de la a a la z, mayúscula o minúscula o dígito
-    //{8,}: Al menos 8 caracteres
-    //$: Fin de la cadena
-    std::regex regex("^(?=.*[a-z])(?=.*[A-Z])(?=.*\\d)[a-zA-Z\\d]{8,}$"); // Expresion regular para validar la contraseña
-    if (std::regex_match(contrasena, regex)){ // Si la contraseña cumple con la expresion regular
-        return true;
-    } else {
+    /// Debe contener al menos una letra minúscula
+    if (!std::regex_search(contrasena, std::regex(".*[a-z].*"))) {
+        std::cout << "La contraseña debe contener al menos una letra minúscula." << std::endl;
         return false;
     }
+
+    // Debe contener al menos una letra mayúscula
+    if (!std::regex_search(contrasena, std::regex(".*[A-Z].*"))) {
+        std::cout << "La contraseña debe contener al menos una letra mayúscula." << std::endl;
+        return false;
+    }
+
+    // Debe contener al menos un dígito
+    if (!std::regex_search(contrasena, std::regex(".*\\d.*"))) {
+        std::cout << "La contraseña debe contener al menos un dígito." << std::endl;
+        return false;
+    }
+
+    // Checar longitud
+    if (contrasena.length() < 8) {
+        std::cout << "La contraseña debe tener al menos 8 caracteres." << std::endl;
+        return false;
+    }
+
+    return true;
 }
 bool Banco::checkifClienteExists(std::string nombre, std::string apellido) {
     sqlite3 *db;
@@ -309,31 +322,99 @@ bool Banco::checkifClienteExists(std::string nombre, std::string apellido) {
     sqlite3_close(db);
     return found;
 }
+void Banco::newSession(){
+    //Esta funcion se encarga de iniciar una nueva sesion
+    std::string choice;
+    int* opcion = new int();
+    
+    //Preguntar si desea iniciar sesion o registrarse como nuevo cliente
+    do {
+        do {
+        std::cout << "1. Iniciar sesion" << std::endl;
+        std::cout << "2. Registrarse como nuevo cliente" << std::endl;
+        std::cout << "3. Salir" << std::endl;
+        std::cin >> choice;
+        } while (!(std::stringstream(choice) >> *opcion) || (*opcion < 1 || *opcion > 3));
+        std::cout << "Opcion: " << *opcion << std::endl;
+        switch (*opcion) {
+        case LOGIN:
+            login();
+            //Aqui se debe desplegar el menu del cliente
+            return;
+            break;
+        case REGISTRO:
+            signUp();
+            break;
+        case SALIR:
+            return;
+            break;
+        default:
+            break;
+        }
+    }while(*opcion != SALIR);
+    
+
+}
+
+
 // Generando login.
 void Banco::login(){
     //Opcion de login
     std::string nombre;
     std::string apellido;
+    int choice;
 
-    try {
-        //Solicitar nombre y apellido
+    do {
+        
         std::cout << "Ingrese su nombre: ";
         std::cin >> nombre;
+        if(!validarNombre(nombre)){
+            choice = this->returnMain("Nombre invalido");
+            switch (choice)
+            {
+            case RETRY:
+                //Intentar de nuevo
+                break;
+            case RETURN:
+                //Salir
+                return;
+                break;
+            default:
+                break;
+            }
+            
+        }
+        
+    } while (!validarNombre(nombre));
+
+    do{
         std::cout << "Ingrese su apellido: ";
         std::cin >> apellido;
-        //Validar nombre y apellido
-        if (!validarNombre(nombre) || !validarNombre(apellido)){
-            throw std::invalid_argument("Nombre o apellido invalido");
+        if(!validarNombre(apellido)){
+            choice = this->returnMain("Apellido invalido");
+            switch (choice)
+            {
+            case RETRY:
+                //Intentar de nuevo
+                break;
+            case RETURN:
+                //Salir
+                return;
+                break;
+            default:
+                break;
+            }
+            
         }
+    } while (!validarNombre(apellido));
+
+    try {
+        
         //Verificar si el cliente existe
         if (!checkifClienteExists(nombre, apellido)){
             throw std::string("El cliente no existe");
         }
     
-    }
-    catch (std::invalid_argument& e) {
-        std::cout << e.what() << std::endl;
-        return;
     }
     catch (std::string& e) {
         //En caso que no exista el cliente
@@ -388,12 +469,16 @@ void Banco::login(){
     rc = sqlite3_open("SistemaBancario.db", &db);
     if (rc){
         std::cout << "No se pudo abrir la base de datos" << std::endl;
+        return;
     }else{
-        std::cout << "Base de datos abierta con exito" << std::endl;
+        std::cout << "...." << std::endl;
     }
+    //Hacer una consulta para obtener el ID del cliente
     std::string sql = "SELECT ID FROM CUSTOMERS WHERE NOMBRE = '" + nombre + "' AND APELLIDO = '" + apellido + "';";
     const char* data = sql.c_str();
-    void* id;
+
+    //Se usa un puntero para guardar el ID
+    void *id = new int();
     rc = sqlite3_exec(db, data, intCallback, id, &zErrMsg);
     if (rc != SQLITE_OK){
         std::cout << "SQL ERROR: " << zErrMsg << std::endl;
@@ -401,7 +486,7 @@ void Banco::login(){
     }else{
         std::cout << "Consulta realizada con exito" << std::endl;
     }
-
+    //Comienza el proceso de desencriptar la contraseña
     std::string storedPassword = getPassword(*(int*)id);
     std::string storedSalt = getSalt(*(int*)id);
 
@@ -421,6 +506,7 @@ void Banco::login(){
         std::cout << "Demasiados intentos, bloqueando cuenta" << std::endl;
         return;
     }
+    system("sleep 1");
 
 }
 
@@ -449,4 +535,5 @@ void Banco::signUp(){
         std::cin >> password2;
     } while (!validarContrasena(password2) || password != password2);
     agregarCliente(nombre, apellido, password);
+    std::cout << "Registro exitoso" << std::endl;
 }

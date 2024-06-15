@@ -23,6 +23,10 @@ enum TipoTransaccion{
     PAGOINTERESAJENO
 };
 
+enum Respuesta{
+    RETRY =1,
+    RETURN
+};
 /// @brief Clase padre del sistema bancario
 class EntidadBancaria{
     private:
@@ -36,6 +40,7 @@ class EntidadBancaria{
         void setFecha();
         void setTipoCambio();
         void escribirEnHistorial();
+        int returnMain(std::string mensaje);
         bool validarDatos(std::string dato,float* monto);
         void convertirMoneda(float monto, Monedas moneda);
         void transaccion(float monto, Monedas moneda);

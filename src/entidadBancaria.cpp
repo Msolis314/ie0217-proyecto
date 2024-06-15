@@ -28,7 +28,7 @@ void EntidadBancaria::setTipoCambio(){
     if (rc){
         std::cout << "No se pudo abrir la base de datos" << std::endl;
     }else{
-        std::cout << "Base de datos abierta con exito" << std::endl;
+        std::cout << "...." << std::endl;
     }
 
     const char* sql = "SELECT TIPO_CAMBIO FROM BANKINFO";
@@ -45,7 +45,20 @@ void EntidadBancaria::setTipoCambio(){
 
 }
 
+int EntidadBancaria::returnMain(std::string mensaje){
+    std::cout << mensaje << std::endl;
+    std::cout << "Que desea hacer?" << std::endl;
+    int opcion;
+    do{
+        std::cout << "1. Intentar de nuevo" << std::endl;
+        std::cout << "2. Salir al menu incial" << std::endl;
+    
+    }while(!(std::cin >> opcion) || opcion < 1 || opcion > 2);
 
+    return opcion;
+
+
+}
 bool EntidadBancaria::validarDatos(std::string dato, float* monto){
 
     try {

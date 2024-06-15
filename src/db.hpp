@@ -52,7 +52,9 @@ static int stringCallback(void *data, int argc, char **argv, char **azColName){
 /// @return
 static int intCallback(void *data, int argc, char **argv, char **azColName){
     int *value = (int*)data;
-    *value = atoi(argv[0]);
+    if (argv[0]){
+        *value = atoi(argv[0]);
+    }
     return 0;
 }
 #endif // DB_HPP

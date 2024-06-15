@@ -81,7 +81,7 @@ std::string getPassword(int ID){
     }else{
         std::cout << "Base de datos abierta con exito" << std::endl;
     }
-    std::string sql = "SELECT PASSWORD FROM PASSWORDS WHERE ID = " + std::to_string(ID) + ";";
+    std::string sql = "SELECT PASSWORD FROM PASSWORDS WHERE ID_CLIENTE = " + std::to_string(ID) + ";";
     rc = sqlite3_exec(db, sql.c_str(), stringCallback, &password, &zErrMsg);
     if (rc != SQLITE_OK){
         std::cout << "Error en la consulta: " << zErrMsg << std::endl;
@@ -105,7 +105,7 @@ std::string getSalt(int ID){
     }else{
         std::cout << "Base de datos abierta con exito" << std::endl;
     }
-    std::string sql = "SELECT SALT FROM PASSWORDS WHERE ID = " + std::to_string(ID) + ";";
+    std::string sql = "SELECT SALT FROM PASSWORDS WHERE ID_CLIENTE = " + std::to_string(ID) + ";";
     rc = sqlite3_exec(db, sql.c_str(), stringCallback, &salt, &zErrMsg);
     if (rc != SQLITE_OK){
         std::cout << "Error en la consulta: " << zErrMsg << std::endl;

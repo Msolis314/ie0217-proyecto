@@ -29,6 +29,12 @@ class Banco: public EntidadBancaria{
          * @brief lista o vector de los IDs cuentas actuale
          */
         std::vector<int> actualIDCuentas; 
+
+        // Datos del cliente actual
+
+        int idCliente;
+        std::string nombreCliente;
+        std::string apellidoCliente;
     public:
         /**
          * @brief constructor
@@ -110,7 +116,16 @@ class Banco: public EntidadBancaria{
         /// @return true si la contraseña es válida, false si no lo es
         bool validarContrasena(std::string contrasena);
 
+        /// @brief Método para verificar si un cliente existe
+        /// @param nombre Nombre del cliente
+        /// @param apellido Apellido del cliente
+        /// @return true si el cliente existe, false si no existe
         bool checkifClienteExists(std::string nombre, std::string apellido);
+
+        /// @brief Nueva sesión de la clase Banco
+        void newSession();
+
+
 
         void signUp();
 
