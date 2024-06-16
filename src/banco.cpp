@@ -5,6 +5,8 @@
 #include <ctime>
 #include <sqlite3.h>
 #include <regex>
+#include <random>
+#include <set>
 #include <stdexcept>
 #include <sstream>
 #include <type_traits>
@@ -154,12 +156,15 @@ void Banco::setActualIDPrestamos(){
 
 // Generando un ID unico para cada cliente.
 int Banco::generarID(){
-    int id = 0;                     // Iniciando el primer id
-    while (true){
-        if (!checkIDExists(id)){    // verifica que el id no exista ya
-            return id;              // si el id no existe, se le da se habilita para un cliente.
+    std::random_device rd; // Objeto para obtener una semilla aleatoria
+    std::mt19937 gen(rd()); // Generador de números aleatorios Mersenne Twister
+    std::uniform_int_distribution<> dis(0, 999999999); // Distribución uniforme en el rango 0 a 999999999
+
+    while (true) {
+        int id = dis(gen); // Genera un ID aleatorio
+        if (!checkIDExists(id)) { // Verifica que el ID no exi
+            return id; // Si el ID no existe, se devuelve y se habilita para un cliente.
         }
-        id++;                       // si el id ya existe, se aumenta en 1 y se vuelve a hacer el proceso.
     }
 }
 
@@ -541,7 +546,7 @@ void Banco::signUp(){
             std::cout << "Las contraseñas no coinciden" << std::endl;
         }
     } while ( password != password2);
-
+    
     //Se agrega el cliente a la base de datos
     agregarCliente(nombre, apellido, password);
     std::cout << "Registro exitoso" << std::endl;

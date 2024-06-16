@@ -6,6 +6,7 @@
 #include <sqlite3.h>
 #include "db.hpp"
 
+#define TIPO_CAMBIO 540
 
 int crearDB(){
     sqlite3 *db;
@@ -61,6 +62,8 @@ int crearDB(){
     }else{
         std::cout << "\n..." << std::endl;
     }
+
+    
 
     // Crear tabla de Cuenta Bancaria
     sql = "CREATE TABLE IF NOT EXISTS CUENTA_BANCARIA(" \
@@ -169,7 +172,7 @@ int callback(void *NotUsed, int argc, char **argv, char **azColName){
     return 0;
 }
 
-
+/*
 int stringCallback(void *data, int argc, char **argv, char **azColName){
     std::string *str = (std::string*)data;
     *str = argv[0];
@@ -184,4 +187,10 @@ int intCallback(void *data, int argc, char **argv, char **azColName){
         *value = atoi(argv[0]);
     }
     return 0;
+}
+*/
+std::string getFecha(){
+    time_t now = time(0);
+    char *dt = ctime(&now);
+    return dt;
 }

@@ -33,7 +33,13 @@ int returnValue(void *data, int argc, char **argv, char **azColName) {
 /// @param argv Resultado de la fila
 /// @param azColName Nombre de las columnas
 /// @return 
-static int stringCallback(void *data, int argc, char **argv, char **azColName);
+static int stringCallback(void *data, int argc, char **argv, char **azColName){
+    std::string *value = (std::string*)data;
+    if (argv[0]){
+        *value = argv[0];
+    }
+    return 0;
+}
 
 /// @brief Funcion para retornar un unico entero
 /// @param data puntero a entero
@@ -41,7 +47,14 @@ static int stringCallback(void *data, int argc, char **argv, char **azColName);
 /// @param argv Resultado de la fila
 /// @param azColName Nombre de las columnas
 /// @return
-static int intCallback(void *data, int argc, char **argv, char **azColName);
+static int intCallback(void *data, int argc, char **argv, char **azColName){
+    int *value = (int*)data;
+    if (argv[0]){
+        *value = atoi(argv[0]);
+    }
+    return 0;
+}
+
 
 
 /// @brief Funcion para retorn la fecha actual

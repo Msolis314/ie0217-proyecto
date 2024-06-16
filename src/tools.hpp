@@ -3,7 +3,9 @@
 
 #include <iostream>
 #include <vector>
+
 #include <string>
+#include "db.hpp"
 
 /// @brief Función para convertir un string a un vector de bytes
 /// @param data string a convertir
@@ -13,7 +15,7 @@ std::string toHex(const unsigned char *data, size_t len);
 
 
 /// @brief Funcion para generar un salt
-/// @note Se utiliza para hashear contraseñas
+/// @note Se utiliza para hashear contraseñasSSSSSS
 /// @return salt
 std::string genSalt();
 
