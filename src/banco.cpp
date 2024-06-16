@@ -257,8 +257,14 @@ bool Banco::validarNombre(std::string nombre){
     //$: Fin de la cadena
     std::regex regex("^[a-zA-Z]+$"); // Expresion regular para validar el nombre
     if (std::regex_match(nombre, regex)){ // Si el nombre cumple con la expresion regular
+        
         return true;
     } else {
+        if (nombre == "") {
+            std::cout << "El nombre no puede estar vacío." << std::endl;
+        } else {
+            std::cout << "El nombre solo puede contener letras." << std::endl;
+        }
         return false;
     }
 }
@@ -335,6 +341,7 @@ void Banco::newSession(){
     //Preguntar si desea iniciar sesion o registrarse como nuevo cliente
     do {
         do {
+        std::cout << "\nQue desea hacer?" << std::endl;
         std::cout << "1. Iniciar sesion" << std::endl;
         std::cout << "2. Registrarse como nuevo cliente" << std::endl;
         std::cout << "3. Salir" << std::endl;
@@ -372,7 +379,7 @@ void Banco::login(){
 
     do {
         
-        std::cout << "Ingrese su nombre: ";
+        std::cout << "\nIngrese su nombre: ";
         std::cin >> nombre;
         if(!validarNombre(nombre)){
             choice = this->returnMain("Nombre invalido");
@@ -426,7 +433,7 @@ void Banco::login(){
         //En caso que no exista el cliente
         //Se le da la opcion de intentar de nuevo, registrarse como nuevo cliente o salir
         std::cout << e << std::endl;
-        std::cout << "Que desea hacer?" << std::endl;
+        std::cout << "\nQue desea hacer?" << std::endl;
         std::string choice;
         int* opcion = new int();
 
@@ -459,7 +466,7 @@ void Banco::login(){
         //Solicitar contraseña
     std::string password;
     while (true){
-        std::cout << "Ingrese su contraseña: ";
+        std::cout << "\nIngrese su contraseña: ";
         std::cin >> password;
         if (password == ""){
             throw std::invalid_argument("Contraseña invalida");
@@ -500,7 +507,7 @@ void Banco::login(){
     int i;
     for (i = 0; i < NUMTRIES; i++){
         if (checkPassword(password, storedSalt, storedPassword)){
-            std::cout << "Login exitoso" << std::endl;
+            std::cout << "\nLogin exitoso" << std::endl;
             this->idCliente = *(int*)id;
             this->nombreCliente = nombre;
             this->apellidoCliente = apellido;
@@ -525,17 +532,17 @@ void Banco::signUp(){
     std::string password;
     std::string password2;
     do {
-        std::cout << "Ingrese su nombre: ";
+        std::cout << "\nIngrese su nombre: ";
         std::cin >> nombre;
     } while (!validarNombre(nombre));
     
     do {
-        std::cout << "Ingrese su apellido: ";
+        std::cout << "\nIngrese su apellido: ";
         std::cin >> apellido;
     } while (!validarNombre(apellido));
     
     do{
-        std::cout << "Ingrese su contraseña: ";
+        std::cout << "\nIngrese su contraseña: ";
         std::cin >> password;
     } while (!validarContrasena(password));
     
@@ -543,11 +550,11 @@ void Banco::signUp(){
         std::cout << "Confirme su contraseña: ";
         std::cin >> password2;
         if (password != password2){
-            std::cout << "Las contraseñas no coinciden" << std::endl;
+            std::cout << "\nLas contraseñas no coinciden" << std::endl;
         }
     } while ( password != password2);
     
     //Se agrega el cliente a la base de datos
     agregarCliente(nombre, apellido, password);
-    std::cout << "Registro exitoso" << std::endl;
+    std::cout << "\nRegistro exitoso" << std::endl;
 }
