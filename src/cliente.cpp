@@ -171,7 +171,7 @@ bool Cliente::checkIDCuentaExists(int idCuenta) {
     } else {
         std::cout << "Base de datos abierta con exito" << std::endl;
     }
-    
+
     std::string sql = "SELECT COUNT(*) FROM CUSTOMERS WHERE ID_CUENTA_C = " + std::to_string(idCuenta); // se va buscar en el parametro que se le pase
 
     rc = sqlite3_exec(db, sql.c_str(), [](void* foundPtr, int argc, char** argv, char** azColName) -> int {
@@ -185,7 +185,7 @@ bool Cliente::checkIDCuentaExists(int idCuenta) {
         sqlite3_free(zErrMsg);                          // liberar memoria            
     }
 
-    return found;                                      // devuelve true si se encontro en la base de datos, fase si no
+    return found;                                      // devuelve true si se encontro en la base de datos, fase si no.
 }
 
 
