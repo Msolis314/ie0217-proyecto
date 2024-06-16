@@ -8,20 +8,16 @@
 /// @return Codigo de error
 int crearDB();
 
+
 /// @brief Funcion que se llama para cada fila del resultado
 /// @param NotUsed Primer argumento de la funcion de callback
 /// @param argc Numero de columnas en la fila
 /// @param argv Resultado de la fila
 /// @param azColName Nombre de las columnas
 /// @return Codigo de error
-static int callback(void *NotUsed, int argc, char **argv, char **azColName){
-    int i;
-    for(i = 0; i < argc; i++){
-        std::cout << azColName[i] << " = " << (argv[i] ? argv[i] : "NULL") << std::endl;
-    }
-    std::cout << std::endl;
-    return 0;
-}
+static int callback(void *NotUsed, int argc, char **argv, char **azColName);
+
+
 template <typename T> 
 int returnValue(void *data, int argc, char **argv, char **azColName) {
     T value;
@@ -37,12 +33,7 @@ int returnValue(void *data, int argc, char **argv, char **azColName) {
 /// @param argv Resultado de la fila
 /// @param azColName Nombre de las columnas
 /// @return 
-static int stringCallback(void *data, int argc, char **argv, char **azColName){
-    std::string *str = (std::string*)data;
-    *str = argv[0];
-    return 0;
-
-}
+static int stringCallback(void *data, int argc, char **argv, char **azColName);
 
 /// @brief Funcion para retornar un unico entero
 /// @param data puntero a entero
@@ -50,11 +41,11 @@ static int stringCallback(void *data, int argc, char **argv, char **azColName){
 /// @param argv Resultado de la fila
 /// @param azColName Nombre de las columnas
 /// @return
-static int intCallback(void *data, int argc, char **argv, char **azColName){
-    int *value = (int*)data;
-    if (argv[0]){
-        *value = atoi(argv[0]);
-    }
-    return 0;
-}
+static int intCallback(void *data, int argc, char **argv, char **azColName);
+
+
+/// @brief Funcion para retorn la fecha actual
+/// @return string con la fecha actual
+std::string getFecha();
+
 #endif // DB_HPP

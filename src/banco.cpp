@@ -339,6 +339,7 @@ void Banco::newSession(){
         switch (*opcion) {
         case LOGIN:
             login();
+            //Crear el objeto cliente
             //Aqui se debe desplegar el menu del cliente
             return;
             break;
@@ -439,7 +440,7 @@ void Banco::login(){
             break;
         case REGISTRO:
             signUp();
-            break;
+            return;
         case SALIR:
             return;
             break;
@@ -484,7 +485,7 @@ void Banco::login(){
         std::cout << "SQL ERROR: " << zErrMsg << std::endl;
         sqlite3_free(zErrMsg);
     }else{
-        std::cout << "Consulta realizada con exito" << std::endl;
+        std::cout << "...." << std::endl;
     }
     //Comienza el proceso de desencriptar la contraseña
     std::string storedPassword = getPassword(*(int*)id);
@@ -495,6 +496,9 @@ void Banco::login(){
     for (i = 0; i < NUMTRIES; i++){
         if (checkPassword(password, storedSalt, storedPassword)){
             std::cout << "Login exitoso" << std::endl;
+            this->idCliente = *(int*)id;
+            this->nombreCliente = nombre;
+            this->apellidoCliente = apellido;
             break;
         } else {
             std::cout << "Contraseña incorrecta, intento " << i + 1 << " de " << NUMTRIES << std::endl;
@@ -533,7 +537,12 @@ void Banco::signUp(){
     do {
         std::cout << "Confirme su contraseña: ";
         std::cin >> password2;
-    } while (!validarContrasena(password2) || password != password2);
+        if (password != password2){
+            std::cout << "Las contraseñas no coinciden" << std::endl;
+        }
+    } while ( password != password2);
+
+    //Se agrega el cliente a la base de datos
     agregarCliente(nombre, apellido, password);
     std::cout << "Registro exitoso" << std::endl;
 }

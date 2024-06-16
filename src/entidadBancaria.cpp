@@ -89,3 +89,21 @@ void EntidadBancaria::convertirMoneda(float monto, Monedas moneda){
     }
 }
 
+
+bool EntidadBancaria::validarEntrada(std::string dato, int* valor){
+    try {
+        std::istringstream stream(dato);
+
+        if (!(stream >> *valor) || !stream.eof()){
+            throw std::invalid_argument("El dato ingresado no es un numero");
+        }
+        else if (*valor < 0){
+            throw std::invalid_argument("El monto no puede ser negativo");
+        }
+        return true;
+    }
+    catch (std::invalid_argument &e){
+        std::cout << e.what() << std::endl;
+        return false;
+    }
+}
