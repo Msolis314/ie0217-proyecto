@@ -126,7 +126,7 @@ class Banco: public EntidadBancaria{
         void newSession();
 
 
-
+        /// @brief  Metodo para registrar un nuevo cliente
         void signUp();
 
 };

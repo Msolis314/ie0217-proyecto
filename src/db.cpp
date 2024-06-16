@@ -160,3 +160,28 @@ int crearDB(){
     return 0;
 }
 
+int callback(void *NotUsed, int argc, char **argv, char **azColName){
+    int i;
+    for(i = 0; i < argc; i++){
+        std::cout << azColName[i] << " = " << (argv[i] ? argv[i] : "NULL") << std::endl;
+    }
+    std::cout << std::endl;
+    return 0;
+}
+
+
+int stringCallback(void *data, int argc, char **argv, char **azColName){
+    std::string *str = (std::string*)data;
+    *str = argv[0];
+    return 0;
+
+}
+
+
+int intCallback(void *data, int argc, char **argv, char **azColName){
+    int *value = (int*)data;
+    if (argv[0]){
+        *value = atoi(argv[0]);
+    }
+    return 0;
+}
