@@ -244,6 +244,85 @@ El esquema de la base de datos se presenta a continuación:
 | viernes 28 de junio| Arreglos finales                        | Todos los integrantes  |
 | jueves 4 de julio  | Presentación Final                      | Todos los integrantes  |
 
+## Avance 
+
+En el presente avance se completo la definición de la base de datos, la implementación de las clases Cliente, Banco y Entidad Bancaria y la creación del sistema de Login y de consulta.
+
+### Base de Datos
+Debido a tiempo y cuestiones de implementación se tomó la desición de utilizar una base local (Squlite3) en vez de una remota para el manejo de los datos. Apesar que se pierde la opción de escalabilidad para el proyecto y la coloaboración simultanea en la base de datos se consideró que enfocarse en la modularidad y funcionamiento del código era de mayor relevancia. Especialmente considerando la importancia de que todos los integrante colaboren de forma independiente en una parte del proyecto. 
+Además al esquema propuesto para la base de datos se agrego una nueva tabla con el objetivo de guardar las contraseñas de los clientes y su llave (Salt) de desencriptación. La encriptación de contraseñas se realizan mediante la librería `Openssl`. Los pasos para la encriptación se explican a continuación:
+
+1. Generar un `SALT`, un valor único que garantiza que aunque dos personas tengan la misma contraseña su valor encriptado sea distinto. 
+2. Hashear la contraseña con el método `PBKDF2`.
+3. Guardar la contraseña encriptada en conjunto con el SALT asociados al ID del cliente en la tabla PASSWORDS. 
+4. Para verificar una contraseña se le pide al usuario una entrada, se busca con el id su SALT en la tabla PASSWORDS y se encripta la entrada con dicho SALT. La contraseño es correcta si es igual a la encriptada dentro de la tabla. 
+
+En la siguiente imagen se denota como luce la tabla PASSWORDS que contiene únicamente valores encriptados:
+
+![TablaPasswords](https://github.com/Msolis314/Clases/blob/main/varios/PASSSS.png)
+
+El nuevo esquema de la base de datos es el siguiente:
+
+![Esquema Base de Datos Avance](https://github.com/Msolis314/Clases/blob/main/varios/Bases%20de%20Datos%20(3).jpg)
+
+### Login
+
+Para la implementación del sistema de _Login_ se procedió como detalla el diagrama de flujo siguiente:
+
+![Diagrama _Login_](https://github.com/Msolis314/Clases/blob/main/varios/Flowchart.jpg)
+
+**Ejemplo "Happy Path"**
+
+A continuación se detallan imágenes del uso del sistema de login si se sigue el camino sin entradas problemáticas. 
+- Menu inicial 
+![https://github.com/Msolis314/Clases/blob/main/varios/MainEntry.png](https://github.com/Msolis314/Clases/blob/main/varios/MainEntry.png)
+
+- Menu del banco
+![https://github.com/Msolis314/Clases/blob/main/varios/BancoMenu.png](https://github.com/Msolis314/Clases/blob/main/varios/BancoMenu.png)
+
+- Registro de usuario
+![https://github.com/Msolis314/Clases/blob/main/varios/Registro.png](https://github.com/Msolis314/Clases/blob/main/varios/Registro.png)
+
+**Casos Límite**
+
+- Opción invalida en algún menu.
+
+![InvalOP](https://github.com/Msolis314/Clases/blob/main/varios/InvalidOp.png)
+
+- Cliente no existe en el sistema de login, se despliegan las opciones de la imagen
+
+    ![https://github.com/Msolis314/Clases/blob/main/varios/ClienteNoexiste.png](https://github.com/Msolis314/Clases/blob/main/varios/ClienteNoexiste.png)
+
+- Nombre inválido en el inicio de sesión:
+
+    ![https://github.com/Msolis314/Clases/blob/main/varios/InvalidName2.png](https://github.com/Msolis314/Clases/blob/main/varios/InvalidName2.png)
+
+## Compilación 
+
+Se necesitan de algunas librerías adicionales a las estandar para ejecutar el programa. Se facilitó de un script que se encarga de descargar estás librerías en el sistema operativo linux. Seguir los siguientes pasos para completar la instalación: 
+1. Dar permisos de ejecución al script
+
+    ```bash
+    chmod +x install.sh
+    ```
+
+2. Correr
+
+    ```bash
+    ./install.sh
+    ```
+
+Para está etapa se realizó un make file dentro del directorio src debido a que no todos los archivos estaban listos en un momento determinado. Para compilar el programa entrar a src y ejecutar:
+
+```bash
+make
+```
+Para ejecutar:
+
+```bash
+./main.exe
+```
+
 ## Referencias 
 Asociación Bancaria Costarricense. (2011). Credito y 
 Garantías. Biblioteca Financiera Virtual.
