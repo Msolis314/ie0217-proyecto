@@ -348,12 +348,11 @@ void Banco::newSession(){
         std::cin >> choice;
         } while (!(std::stringstream(choice) >> *opcion) || (*opcion < 1 || *opcion > 3));
         std::cout << "Opcion: " << *opcion << std::endl;
-        Cliente cliente(this->nombreCliente, this->apellidoCliente, this->idCliente);
+
         switch (*opcion) {
         case LOGIN:
             login();
-            cliente= Cliente(this->nombreCliente, this->apellidoCliente, this->idCliente);           
-            cliente.mostrarMenuC();
+
             break;
         case REGISTRO:
             signUp();
@@ -505,12 +504,15 @@ void Banco::login(){
 
     //Hay un limite de intentos
     int i;
+    Cliente cliente(this->nombreCliente, this->apellidoCliente, this->idCliente);
     for (i = 0; i < NUMTRIES; i++){
         if (checkPassword(password, storedSalt, storedPassword)){
             std::cout << "\nLogin exitoso" << std::endl;
             this->idCliente = *(int*)id;
             this->nombreCliente = nombre;
             this->apellidoCliente = apellido;
+            cliente= Cliente(this->nombreCliente, this->apellidoCliente, this->idCliente);           
+            cliente.mostrarMenuC();
             break;
         } else {
             std::cout << "Contraseña incorrecta, intento " << i + 1 << " de " << NUMTRIES << std::endl;
