@@ -246,7 +246,7 @@ El esquema de la base de datos se presenta a continuación:
 
 ## Avance 
 
-En el presente avance se completo la definición de la base de datos, la implementación de las clases Cliente, Banco y Entidad Bancaria y la creación del sistema de Login y de consulta.
+En el presente avance se completo la definición de la base de datos, la implementación de las clases Cliente, Banco y Entidad Bancaria y la creación del sistema de Login.
 
 ### Base de Datos
 Debido a tiempo y cuestiones de implementación se tomó la desición de utilizar una base local (Squlite3) en vez de una remota para el manejo de los datos. Apesar que se pierde la opción de escalabilidad para el proyecto y la coloaboración simultanea en la base de datos se consideró que enfocarse en la modularidad y funcionamiento del código era de mayor relevancia. Especialmente considerando la importancia de que todos los integrante colaboren de forma independiente en una parte del proyecto. 
