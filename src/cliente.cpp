@@ -36,8 +36,9 @@ void Cliente::mostrarMenuC() {
                     int opcionTipoCuenta;
                     do {
                         std::cout << "Por favor, seleccione el tipo de cuenta que desea adquirir:" << std::endl;
-                        std::cout << "2. Cuenta en dólares" << std::endl;
                         std::cout << "1. Cuenta en colones" << std::endl;
+                        std::cout << "2. Cuenta en dólares" << std::endl;
+
                         std::cout << "Elija una opción: ";
                         std::cin >> opcionTipoCuenta;
 
@@ -86,7 +87,7 @@ void Cliente::agregarCuentaC(int idCuentaC) {
 
     rc = sqlite3_open("SistemaBancario.db", &db);
     if (rc) {
-        std::cout << "No se pudo abrir la base de datos" << std::endl;
+        std::cout << "...." << std::endl;
         return;
     }
 
@@ -210,7 +211,7 @@ bool Cliente::checkIDCuentaExists(int idCuenta,Monedas moneda) {
         std::cout << "No se pudo abrir la base de datos" << std::endl;
         return false;
     } else {
-        std::cout << "Base de datos abierta con exito" << std::endl;
+        std::cout << "...." << std::endl;
     }
 
     if (moneda == DOLAR) {

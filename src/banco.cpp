@@ -41,7 +41,7 @@ void Banco::setActualIDs(){
     if (rc){                                                           // se ejecuta un if, si no genera errores, mostrar mensaje de exito, sino de error
         std::cout << "No se pudo abrir la base de datos" << std::endl;
     }else{
-        std::cout << "Base de datos abierta con exito" << std::endl;   // Base de datos abierta
+        std::cout << "...." << std::endl;   // Base de datos abierta
     }
 
     const char* sql = "SELECT ID FROM CUSTOMERS;";                      // Tomando todos los ids de la tabla customers
@@ -67,7 +67,7 @@ void Banco::setActualIDCuentas(){
     if (rc){                                                            // se ejecuta un if, si no genera errores, mostrar mensaje de exito, sino de error
         std::cout << "No se pudo abrir la base de datos" << std::endl;
     }else{
-        std::cout << "Base de datos abierta con exito" << std::endl;
+        std::cout << "...." << std::endl;
     }
 
     const char* sql = "SELECT ID_CUENTA FROM CUSTOMERS";                // Tomando todos los ids_cuentas de la tabla customers
@@ -138,7 +138,7 @@ void Banco::setActualIDPrestamos(){
     if (rc){                                                               // ejecuta el if, para comprobar si se pudo abrir la base de datos
         std::cout << "No se pudo abrir la base de datos" << std::endl;  
     }else{
-        std::cout << "Base de datos abierta con exito" << std::endl;
+        std::cout << "....." << std::endl;
     }
 
     const char* sql = "SELECT ID_PRESTAMO_C FROM CUSTOMERS";               // Selecciona de la tabla customers los ids_prestamos
@@ -189,7 +189,7 @@ void Banco::agregarCliente(std::string nombre, std::string apellido,std::string 
     if (rc){                                                            // if para verificar que se abrio correctamente
         std::cout << "No se pudo abrir la base de datos" << std::endl;
     }else{
-        std::cout << "Base de datos abierta con exito" << std::endl;
+        std::cout << "...." << std::endl;
     }
     
     int id = generarID();                                               // generar un id unico para el cliente, se llama la funcion
@@ -233,7 +233,7 @@ void Banco::consultarClientes(std::string nombre, std::string apellido){ // dos 
     if (rc){                                                             // verificando que se abre la db correctamente.
         std::cout << "No se pudo abrir la base de datos" << std::endl;
     }else{
-        std::cout << "Base de datos abierta con exito" << std::endl;
+        std::cout << "...." << std::endl;
     }
     // usando un selec de la tabla clientes para nombre
     std::string sql = "SELECT * FROM CUSTOMERS WHERE NOMBRE = '" + nombre + "' AND APELLIDO = '" + apellido + "';";
@@ -307,7 +307,7 @@ bool Banco::checkifClienteExists(std::string nombre, std::string apellido) {
         std::cout << "No se pudo abrir la base de datos" << std::endl;
         return false;
     } else {
-        std::cout << "Base de datos abierta con exito" << std::endl;
+        std::cout << "...." << std::endl;
     }
 
     std::string sql = "SELECT * FROM CUSTOMERS WHERE NOMBRE = '" + nombre + "' AND APELLIDO = '" + apellido + "';";
@@ -507,7 +507,10 @@ void Banco::login(){
     Cliente cliente(this->nombreCliente, this->apellidoCliente, this->idCliente);
     for (i = 0; i < NUMTRIES; i++){
         if (checkPassword(password, storedSalt, storedPassword)){
-            std::cout << "\nLogin exitoso" << std::endl;
+            std::cout << "\nLogin exitoso" << std::endl;\
+            std::cout << std::endl;
+            std::cout << std::endl;
+            
             this->idCliente = *(int*)id;
             this->nombreCliente = nombre;
             this->apellidoCliente = apellido;

@@ -10,8 +10,8 @@
 
 /// @brief Enumeracion de las monedas
 enum Monedas{
-    DOLAR,
-    COLON
+    DOLAR = 2,
+    COLON = 1
 };
 
 /// @brief Enumeracion de los tipos de transacciones

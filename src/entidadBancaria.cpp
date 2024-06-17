@@ -19,7 +19,7 @@ void EntidadBancaria::setFecha(){
 }
 
 void EntidadBancaria::setTipoCambio(){
-    //Consultar la base de datos para obtener el tipo de cambio
+    //Consultar la base de datos para obtener el tipo de cambio.
     sqlite3 *db;
     char *zErrMsg = 0;
     int rc;
