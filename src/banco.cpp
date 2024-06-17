@@ -348,18 +348,18 @@ void Banco::newSession(){
         std::cin >> choice;
         } while (!(std::stringstream(choice) >> *opcion) || (*opcion < 1 || *opcion > 3));
         std::cout << "Opcion: " << *opcion << std::endl;
+        Cliente cliente(this->nombreCliente, this->apellidoCliente, this->idCliente);
         switch (*opcion) {
         case LOGIN:
             login();
-            //Crear el objeto cliente
-            //Aqui se debe desplegar el menu del cliente
-            return;
+            cliente= Cliente(this->nombreCliente, this->apellidoCliente, this->idCliente);           
+            cliente.mostrarMenuC();
             break;
         case REGISTRO:
             signUp();
             break;
         case SALIR:
-            return;
+            
             break;
         default:
             break;

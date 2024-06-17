@@ -25,16 +25,17 @@ class Cliente: public EntidadBancaria{
         std::vector<int> cuentas;
         std::vector<int> prestamos;
     public:
-        Cliente(std::string nombre, std::string apellido);
+        Cliente(std::string nombre, std::string apellido, int id);
         void agregarCuentaC(int idCuentaC);
         void agregarCuentaD(int idCuentaD);
         void agregarPrestamo(int idPrestamo);
         void consultarCuentas();
         void consultarPrestamos();
-        int generarIDCuenta();
-        bool checkIDCuentaExists(int idCuenta); 
+        int generarIDCuentaC();
+        int generarIDCuentaD();
+        bool checkIDCuentaExists(int idCuenta, Monedas moneda); 
         void mostrarMenuC();
-        // void transaccion(float monto, Monedas moneda);.
+        // void transaccion(float monto, Monedas moneda);
         // void operarPrestamo(float monto, Monedas moneda);
 
 };
