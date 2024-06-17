@@ -1,3 +1,7 @@
+/**
+ * @file archivo de encabezado cliente.hpp
+ * @brief Atributos y metodos para la clase Cliente
+ */
 #ifndef CLIENTE_HPP
 #define CLIENTE_HPP
 #include <iostream>
@@ -7,16 +11,38 @@
 
 
 
-
+/**
+ * @brief Mostrar en el menu de opciones para el cliente.
+ * @return opcion seleccionada por el cliente.
+ */
 int menu_cliente();
+/**
+ * @enum MenuOptionsC
+ * @brief opciones que puede seleccionar el cliente.
+ */
 enum MenuOptionsC{
+/**
+ * 
+ * @brief opcion generar id cuenta.
+ */
     GEN_ID_CUENTA = 1,
+/**
+ * 
+ * @brief opcion transaccion.
+ */
     TRANS = 2,
+/**
+ * 
+ * @brief salir.
+ */
     SALIRMENUC = 3
 };
 
 
-
+/**
+ * @class Cliente
+ * @brief es un cliente de una entidad bancaria.
+ */
 class Cliente: public EntidadBancaria{
     private:
         std::string nombre;
@@ -25,18 +51,61 @@ class Cliente: public EntidadBancaria{
         std::vector<int> cuentas;
         std::vector<int> prestamos;
     public:
+            /**
+         * @brief constructor de la clase cliente.
+         * @param nombre nombre del cliente.
+         * @param apellido Apellido del cliente.
+         * @param id ID del cliente.
+         */
         Cliente(std::string nombre, std::string apellido, int id);
+
+        /**
+         * @brief Agrega una cuenta al cliente en colones.
+         * @param idCuentaC ID de la cuenta agregar.
+         */
         void agregarCuentaC(int idCuentaC);
+        /**
+         * @brief Agrega una cuenta al cliente en dolares.
+         * @param idCuentaC ID de la cuenta agregar.
+         */
         void agregarCuentaD(int idCuentaD);
+        /**
+         * @brief Agrega un prestamo al cliente.
+         * @param idPrestamo ID del prestamo a agregar.
+         */
         void agregarPrestamo(int idPrestamo);
+
+        /**
+         * @brief Consulta las cuentas del cliente.
+         */
         void consultarCuentas();
+        /**
+         * @brief Consultar los prestamos del cliente.
+         */
         void consultarPrestamos();
+         /**
+         * @brief Genera un  ID para una cuenta en colones.
+         * @return El ID generado para la cuenta.
+         */
         int generarIDCuentaC();
+         /**
+         * @brief Genera un  ID para una cuenta en dolares.
+         * @return El ID generado para la cuenta.
+         */
         int generarIDCuentaD();
-        bool checkIDCuentaExists(int idCuenta, Monedas moneda); 
+        /**
+         * @brief verifica si un ID de cuenta existe.
+         * @param idCuenta ID a verificar.
+         * @param moneda tipo de moneda de la cuenta.
+         * @return true si el ID de la cuenta existe, false en caso contrario
+         */
+        bool checkIDCuentaExists(int idCuenta, Monedas moneda);
+        /**
+         * @brief muestra menu para el cliente.
+         */
         void mostrarMenuC();
         // void transaccion(float monto, Monedas moneda);
         // void operarPrestamo(float monto, Monedas moneda);
 
 };
-#endif // CLIENTE_HPP
+#endif 
