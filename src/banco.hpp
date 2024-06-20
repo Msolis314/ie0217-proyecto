@@ -86,6 +86,21 @@ class Banco: public EntidadBancaria{
          * @return verdad si el ID existe, falso si no existe en la tabla de customers
          */                                                              
         bool checkIDExists(int id); 
+
+        /// @brief  Metodo para verificar si un cliente con esos nombres y apellidos ya existe con ese ID
+        /// @param nombre nombre del cliente
+        /// @param apellido  apellido del cliente
+        /// @param id id del cliente
+        /// @return verdadero si el cliente ya existe, falso si no existe
+        bool checkID(std::string nombre, std::string apellido,int id);
+
+        /// @brief Método para agregar un ID a la lista de IDs actuales
+        void agregarID(int id);
+
+        /// @brief Metodo para validar si la ID es válida
+        /// @param id entrada de la ID
+        /// @return  verdadero si la ID es válida, falso si no lo es
+        bool validarID(std::string id);
         
          /**
          * @brief Metodo login
@@ -97,7 +112,7 @@ class Banco: public EntidadBancaria{
          * @param nombre Nombre del cliente
          * @param apellido Apellido del cliente
          */
-        void consultarClientes(std::string nombre, std::string apellido);
+        bool consultarClientes(std::string nombre, std::string apellido);
         /**
          * @brief Metodo para realizar un deposito entre cuentas
          * @param idCuentaD id de la cuenta de destino
@@ -120,7 +135,7 @@ class Banco: public EntidadBancaria{
         /// @param nombre Nombre del cliente
         /// @param apellido Apellido del cliente
         /// @return true si el cliente existe, false si no existe
-        bool checkifClienteExists(std::string nombre, std::string apellido);
+        bool checkifClienteExists(std::string nombre, std::string apellido, std::string id);
 
         /// @brief Nueva sesión de la clase Banco
         void newSession();
