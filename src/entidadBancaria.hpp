@@ -16,13 +16,16 @@ enum Monedas{
 
 /// @brief Enumeracion de los tipos de transacciones
 enum TipoTransaccion{
-    DEPOSITO,
+    DEPOSITO =1,
     RETIRO,
-    PAGOCAPITAL,
-    PAGOINTERES,
     TRANSFERENCIA,
-    PAGOCAPITALAJENO,
-    PAGOINTERESAJENO
+    PAGOPRESTAMO,
+    SOLICITUDPRESTAMO,
+    CONSULTARSALDO,
+    CONSULTARMOVIMIENTOS,
+    CONSULTARPRESTAMOS,
+    SALIRMENUT
+
 };
 
 /// @brief Enumeracion de las respuestas para la funcion returnMain
@@ -74,7 +77,7 @@ class EntidadBancaria{
         /// @details Metodo que convierte un monto de una moneda a otra
         /// @param monto Monto a convertir
         /// @param moneda Moneda a la que se va a convertir
-        void convertirMoneda(float monto, Monedas moneda);
+        void convertirMoneda(float &monto, Monedas moneda);
 
         /// @brief transaccion
         /// @details Metodo que realiza una transaccion

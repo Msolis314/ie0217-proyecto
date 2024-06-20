@@ -16,6 +16,35 @@ void EntidadBancaria::setFecha(){
     time_t now = time(0);
     char *dt = ctime(&now);
     fecha = dt;
+
+    //Establecer la fecha en la base de datos
+    //mes/dia/año
+
+    time_t t = time(nullptr);
+    std::tm* date = std::localtime(&t);
+    int year = date->tm_year + 1900;
+    int month = date->tm_mon + 1; 
+    int day = date->tm_mday;
+    std::string  yearMonth = std::to_string(month) + "/" + std::to_string(day) + "/" + std::to_string(year);
+
+    sqlite3 *db;
+    char *zErrMsg = 0;
+    int rc;
+
+    rc = sqlite3_open("SistemaBancario.db", &db);
+    if (rc){
+        std::cout << "No se pudo abrir la base de datos" << std::endl;
+    }else{
+        std::cout << "...." << std::endl;
+    }
+
+    std::string sql = "UPDATE BANKINFO SET FECHA = '" + yearMonth + "'";
+    rc = sqlite3_exec(db, sql.c_str(), NULL, 0, &zErrMsg);
+    if (rc != SQLITE_OK){
+        std::cout << "SQL ERROR: " << zErrMsg << std::endl;
+        sqlite3_free(zErrMsg);
+    }
+
 }
 
 void EntidadBancaria::setTipoCambio(){
@@ -36,8 +65,6 @@ void EntidadBancaria::setTipoCambio(){
     if (rc != SQLITE_OK){
         std::cout << "SQL ERROR: " << zErrMsg << std::endl;
         sqlite3_free(zErrMsg);
-    }else{
-        std::cout << "Tipo de cambio obtenido con exito" << std::endl;
     }
 
     sqlite3_close(db);
@@ -51,7 +78,7 @@ int EntidadBancaria::returnMain(std::string mensaje){
     int opcion;
     do{
         std::cout << "1. Intentar de nuevo" << std::endl;
-        std::cout << "2. Salir al menu incial" << std::endl;
+        std::cout << "2. Salir al menu anterior" << std::endl;
     
     }while(!(std::cin >> opcion) || opcion < 1 || opcion > 2);
 
@@ -81,7 +108,18 @@ bool EntidadBancaria::validarDatos(std::string dato, float* monto){
 float EntidadBancaria::getTipoCambio(){
     return *tipoCambio;
 }
-void EntidadBancaria::convertirMoneda(float monto, Monedas moneda){
+void EntidadBancaria::convertirMoneda(float &monto, Monedas moneda){
+    int tipoMonedaMonto;
+
+    do {
+        std::cout << "Seleccione el tipo de moneda del monto" << std::endl;
+        std::cout << "1.Colones" << std::endl;
+        std::cout << "2.Dolares" << std::endl;
+    } while (!(std::cin >> tipoMonedaMonto) || tipoMonedaMonto < COLON || tipoMonedaMonto > DOLAR);
+    if (tipoMonedaMonto == moneda){
+        monto = monto;
+        return;
+    }
     if (moneda == DOLAR){
         monto = monto * getTipoCambio();
     }else{

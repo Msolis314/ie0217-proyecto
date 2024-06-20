@@ -48,9 +48,13 @@ class Cliente: public EntidadBancaria{
         std::string nombre;
         std::string apellido;
         int id;
-        std::vector<int> cuentas;
+        int idCuentaC = 0;
+        int idCuentaD = 0;
         std::vector<int> prestamos;
+
     public:
+        //Declarar la clase operaciones como amiga de la clase cliente
+        friend class Operaciones;
             /**
          * @brief constructor de la clase cliente.
          * @param nombre nombre del cliente.
@@ -103,9 +107,26 @@ class Cliente: public EntidadBancaria{
         /**
          * @brief muestra menu para el cliente.
          */
+
+        bool checkIDPrestamoExists(int idPrestamo);
+
+        /// @brief  Metodo para obtener el IDs de la cuenta.
+        /// @param moneda 
+        /// @return 
+        int getIDCuenta(Monedas moneda);
+
+        /// @brief  Metodo para obtener el IDs de los prestamos.
+        /// @return
+        void getIDPrestamos();
+        
         void mostrarMenuC();
         // void transaccion(float monto, Monedas moneda);
         // void operarPrestamo(float monto, Monedas moneda);
+
+        /// @brief Desplegar el menu de transacciones
+        void transaccion();
+
+        
 
 };
 #endif 
