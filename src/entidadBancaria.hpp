@@ -37,8 +37,8 @@ enum Respuesta{
 /// @details Clase que contiene los metodos y atributos comunes a todas las entidades bancarias
 class EntidadBancaria{
     private:
-        char* fecha;
-        float* tipoCambio;
+        char* fecha = new char[80];
+        float* tipoCambio = new float(0);
     public:
 
         /// @brief Constructor de la clase

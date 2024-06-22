@@ -55,10 +55,25 @@ static int intCallback(void *data, int argc, char **argv, char **azColName){
     return 0;
 }
 
+static int floatCallback(void *data, int argc, char **argv, char **azColName){
+    
+    if (argc > 0){
+        float* saldo = static_cast<float*>(data);
+        *saldo = std::stof(argv[0]);
+    }
+    return 0;
+}
+
 
 
 /// @brief Funcion para retorn la fecha actual
 /// @return string con la fecha actual
 std::string getFecha();
 
+/// @brief Funcion para actualizar la fecha y el tipo de cambio en la base de datos
+
+/// @return Codigo de error
+int updateFecha();
+
+int cleanBankInfo();
 #endif // DB_HPP

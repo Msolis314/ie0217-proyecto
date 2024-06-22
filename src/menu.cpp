@@ -30,6 +30,8 @@ int Menu::showMainMenu(){
     int option; 
     Banco banco;
     crearDB(); // Crear la base de datos
+    updateFecha(); // Actualizar la fecha
+    
     
 
     do {
@@ -52,7 +54,7 @@ int Menu::showMainMenu(){
                 break;
         }
     } while (option != SALIRMENU);
-
+    cleanBankInfo();
     return 0;
 
 

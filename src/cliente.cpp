@@ -26,6 +26,7 @@ Cliente::Cliente(std::string nombre, std::string apellido, int id) {
 
 // Generando menu
 
+/// @note Este metodo muestra el menu de opciones para el cliente.
 void Cliente::mostrarMenuC() {
     int opc;
     do {
@@ -34,6 +35,7 @@ void Cliente::mostrarMenuC() {
         std::cout << "2. Realizar transacciones" << std::endl;
         std::cout << "3. Salir del menú" << std::endl;
         std::cout << "Elija una opción: ";
+        //Validar que la opcion sea un numero
         do {
             std::cin >> opc;
             if (std::cin.fail()) {
@@ -54,14 +56,25 @@ void Cliente::mostrarMenuC() {
                         std::cout << "2. Cuenta en dólares" << std::endl;
 
                         std::cout << "Elija una opción: ";
-                        std::cin >> opcionTipoCuenta;
+                        //Validar que la opcion sea un numero
+                        do {
+                            std::cin >> opcionTipoCuenta;
+                            if (std::cin.fail()) {
+                                std::cin.clear();
+                                std::cin.ignore();
+                                std::cout << "Opción inválida. Intente de nuevo." << std::endl;
+                            }
+                        } while (std::cin.fail() || opcionTipoCuenta < 1 || opcionTipoCuenta > 2);
+                        
 
                         if (opcionTipoCuenta == DOLAR) {
+                            // Generar un nuevo ID de cuenta en dólares
                             int id_newD = generarIDCuentaD();
                             agregarCuentaD(id_newD);
                             
 
                         } else if (opcionTipoCuenta == COLON) {
+                            // Generar un nuevo ID de cuenta en colones
                             int id_newC = generarIDCuentaC();
                             agregarCuentaC(id_newC);
                             
@@ -314,6 +327,7 @@ void Cliente::consultarPrestamos() {
 }
 
 void Cliente::transaccion(){
+    // Menu con todas las transacciones posibles para el cliente
     int opc;
     std::string monto;
     float montoF;

@@ -194,3 +194,59 @@ std::string getFecha(){
     char *dt = ctime(&now);
     return dt;
 }
+
+
+int updateFecha(){
+    std::string fecha;
+    time_t t = time(nullptr);
+    std::tm* date = std::localtime(&t);
+    int year = date->tm_year + 1900;
+    int month = date->tm_mon + 1; 
+    int day = date->tm_mday;
+    std::string  yearMonth = std::to_string(month) + "/" + std::to_string(day) + "/" + std::to_string(year);
+
+    sqlite3 *db;
+    char *zErrMsg = 0;
+    int rc;
+
+    rc = sqlite3_open("SistemaBancario.db", &db);
+    if (rc){
+        std::cout << "No se pudo abrir la base de datos" << std::endl;
+    }else{
+        std::cout << "...." << std::endl;
+    }
+
+    std::string sql = "INSERT INTO BANKINFO (FECHA, TIPO_CAMBIO, TASA_BANCO_CENTRAL) VALUES ('" + yearMonth + "', " + std::to_string(TIPO_CAMBIO) + ", 0.05);";
+    rc = sqlite3_exec(db, sql.c_str(), NULL, 0, &zErrMsg);
+    if (rc != SQLITE_OK){
+        std::cout << "SQL ERROR: " << zErrMsg << std::endl;
+        sqlite3_free(zErrMsg);
+    }
+
+    sqlite3_close(db);
+    return 0;
+}
+
+
+int cleanBankInfo(){
+    sqlite3 *db;
+    char *zErrMsg = 0;
+    int rc;
+
+    rc = sqlite3_open("SistemaBancario.db", &db);
+    if (rc){
+        std::cout << "No se pudo abrir la base de datos" << std::endl;
+    }else{
+        std::cout << "...." << std::endl;
+    }
+
+    std::string sql = "DELETE FROM BANKINFO";
+    rc = sqlite3_exec(db, sql.c_str(), NULL, 0, &zErrMsg);
+    if (rc != SQLITE_OK){
+        std::cout << "SQL ERROR: " << zErrMsg << std::endl;
+        sqlite3_free(zErrMsg);
+    }
+
+    sqlite3_close(db);
+    return 0;
+}

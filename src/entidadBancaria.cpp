@@ -61,16 +61,18 @@ void EntidadBancaria::setTipoCambio(){
     }
 
     const char* sql = "SELECT TIPO_CAMBIO FROM BANKINFO";
-    rc = sqlite3_exec(db, sql, returnValue<float>, tipoCambio, &zErrMsg);
+    rc = sqlite3_exec(db, sql, floatCallback, this->tipoCambio, &zErrMsg);
     if (rc != SQLITE_OK){
         std::cout << "SQL ERROR: " << zErrMsg << std::endl;
         sqlite3_free(zErrMsg);
     }
+    
 
     sqlite3_close(db);
 
 
 }
+
 
 int EntidadBancaria::returnMain(std::string mensaje){
     std::cout << mensaje << std::endl;
@@ -120,7 +122,7 @@ void EntidadBancaria::convertirMoneda(float &monto, Monedas moneda){
         monto = monto;
         return;
     }
-    if (moneda == DOLAR){
+    if (tipoMonedaMonto== DOLAR){
         monto = monto * getTipoCambio();
     }else{
         monto = monto / getTipoCambio();

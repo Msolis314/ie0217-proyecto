@@ -15,12 +15,36 @@ Operaciones:: Operaciones(std::string nombre,std::string apellido,int id):client
 void Operaciones::depositar(Monedas cambio,float monto){
     int opcion;
     float saldo;
+    std::string newMonto;
     int rightChoice;
     sqlite3* db;
     char* error;
     std::string sql;
     int rc;
+    int tries = 0;
+    //Desplegar el menu de opciones
     do {
+        if (tries > 0){
+            std::cout << "Monto a depositar: " << std::endl;
+            std::cin >> newMonto;
+            try{
+                if(!cliente.validarDatos(newMonto, &monto)){
+                    throw std::invalid_argument("El monto ingresado no es valido");
+                }
+            }   
+            catch (std::invalid_argument &e){
+                std::cout << e.what() << std::endl;
+                rightChoice = cliente.returnMain("Desea intentar de nuevo?");
+                if (rightChoice == RETURN){
+                    return;
+                }
+                else {
+                    tries++;
+
+                    continue;
+                }
+            }
+        }
         do {
             std::cout << "Seleccione el tipo de moneda de la cuenta" << std::endl;
             std::cout << "1.Colones" << std::endl;
@@ -37,6 +61,7 @@ void Operaciones::depositar(Monedas cambio,float monto){
                     return;
                 }
                 else {
+                    tries++;
                     break;
                 
                 }
@@ -64,6 +89,7 @@ void Operaciones::depositar(Monedas cambio,float monto){
             }
             rightChoice = cliente.returnMain("Deposito exitoso");
             monto = 0;
+            tries++;
             //Cerrar la base de datos
             sqlite3_close(db);
             break;
@@ -98,6 +124,7 @@ void Operaciones::depositar(Monedas cambio,float monto){
             }
             rightChoice = cliente.returnMain("Deposito exitoso");
             monto = 0;
+            tries++;
             //Cerrar la base de datos
             sqlite3_close(db);
             break;
@@ -111,12 +138,33 @@ void Operaciones::depositar(Monedas cambio,float monto){
 void Operaciones::retirar(Monedas cambio,float monto){
     int opcion;
     float saldo;
+    int tries = 0;
     int rightChoice;
     sqlite3* db;
     char* error;
     std::string sql;
     int rc;
     do {
+        if (tries > 0){
+            std::cout << "Monto a retirar: " << std::endl;
+            std::cin >> monto;
+            try{
+                if(!cliente.validarDatos(std::to_string(monto), &monto)){
+                    throw std::invalid_argument("El monto ingresado no es valido");
+                }
+            }   
+            catch (std::invalid_argument &e){
+                std::cout << e.what() << std::endl;
+                rightChoice = cliente.returnMain("Desea intentar de nuevo?");
+                if (rightChoice == RETURN){
+                    return;
+                }
+                else {
+                    tries++;
+                    continue;
+                }
+            }
+        }
     
         do {
             std::cout << "Seleccione el tipo de moneda de la cuenta" << std::endl;
@@ -134,6 +182,7 @@ void Operaciones::retirar(Monedas cambio,float monto){
                         return;
                     }
                     else {
+                        tries++;
                         break;
                     }
                 }
@@ -146,6 +195,7 @@ void Operaciones::retirar(Monedas cambio,float monto){
                         return;
                     }
                     else {
+                        tries++;
                         break;
                     }
                 }
@@ -170,6 +220,7 @@ void Operaciones::retirar(Monedas cambio,float monto){
                     sqlite3_free(error);
                 }
                 rightChoice = cliente.returnMain("Retiro exitoso");
+                tries++;
                 sqlite3_close(db);
                 break;
             case DOLAR:
@@ -179,6 +230,7 @@ void Operaciones::retirar(Monedas cambio,float monto){
                         return;
                     }
                     else {
+                        tries++;
                         break;
                     }
                 }
@@ -189,6 +241,7 @@ void Operaciones::retirar(Monedas cambio,float monto){
                         return;
                     }
                     else {
+                        tries++;
                         break;
                     }
                 }
@@ -214,6 +267,7 @@ void Operaciones::retirar(Monedas cambio,float monto){
                 //Cerrar la base de datos
                 sqlite3_close(db);
                 rightChoice = cliente.returnMain("Retiro exitoso");
+                tries++;
                 break;
             default:
                 break;
