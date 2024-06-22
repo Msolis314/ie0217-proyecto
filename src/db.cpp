@@ -98,18 +98,38 @@ int crearDB(){
         std::cout << "......." << std::endl;
     }
 
-    sql = "CREATE TABLE IF NOT EXISTS HISTORIAL(" \
-    "ID_CLIENTE INT NOT NULL," \
-    "TIPO_TRANSACCION TEXT NOT NULL," \
-    "ID_PRESTAMO INT ," \
-    "ID_CUENTA INT ," \
-    "ID_CUENTA_DESTINO INT ," \
-    "MONTO REAL ," \
-    "FECHA DATETIME NOT NULL," \
-    "FOREIGN KEY (ID_CLIENTE) REFERENCES CUSTOMERS(ID)," \
-    "FOREIGN KEY (ID_CUENTA) REFERENCES CUENTA_BANCARIA(ID_CUENTA)," \
-    "FOREIGN KEY (ID_CUENTA_DESTINO) REFERENCES CUENTA_BANCARIA(ID_CUENTA)," \
-    "FOREIGN KEY (ID_PRESTAMO) REFERENCES PRESTAMO(ID_PRESTAMO));";
+    // Tabla de historial de transacciones
+    sql = "CREATE TABLE IF NOT EXISTS HISTORIAL_TRANSACCIONES ("
+    "ID_TRANSACCION INTEGER PRIMARY KEY AUTOINCREMENT,"
+    "ID_CLIENTE INT NOT NULL,"
+    "TIPO_TRANSACCION TEXT NOT NULL,"
+    "ID_CUENTA INT,"
+    "ID_CUENTA_DESTINO INT,"
+    "MONTO REAL,"
+    "FECHA DATETIME NOT NULL,"
+    "FOREIGN KEY (ID_CLIENTE) REFERENCES CUSTOMERS(ID),"
+    "FOREIGN KEY (ID_CUENTA) REFERENCES CUENTA_BANCARIA(ID_CUENTA),"
+    "FOREIGN KEY (ID_CUENTA_DESTINO) REFERENCES CUENTA_BANCARIA(ID_CUENTA)"
+    ");";
+
+    rc = sqlite3_exec(db, sql, callback, 0, &zErrMsg);
+    if (rc != SQLITE_OK){
+        std::cout << "SQL ERROR: " << zErrMsg << std::endl;
+        sqlite3_free(zErrMsg);
+    }else{
+        std::cout << "........" << std::endl;
+    }
+
+    // Tabla de historial de prestamos
+    sql = "CREATE TABLE IF NOT EXISTS HISTORIA_PRESTAMOS ("
+    "ID_HISTORIA INTEGER PRIMARY KEY AUTOINCREMENT,"
+    "ID_CLIENTE INT NOT NULL,"
+    "ID_PRESTAMO INT NOT NULL,"
+    "MONTO REAL,"
+    "FECHA DATETIME NOT NULL,"
+    "FOREIGN KEY (ID_CLIENTE) REFERENCES CUSTOMERS(ID),"
+    "FOREIGN KEY (ID_PRESTAMO) REFERENCES PRESTAMO(ID_PRESTAMO)"
+    ");";
 
     rc = sqlite3_exec(db, sql, callback, 0, &zErrMsg);
     if (rc != SQLITE_OK){
