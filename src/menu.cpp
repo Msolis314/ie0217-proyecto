@@ -8,6 +8,7 @@
 #include <stdexcept>
 #include "banco.hpp"
 #include "db.hpp"
+#include "consulta.hpp"
 #include "menu.hpp"
 
 using namespace std;
@@ -32,6 +33,8 @@ int Menu::showMainMenu(){
     crearDB(); // Crear la base de datos
     updateFecha(); // Actualizar la fecha
     
+    // Crear una instancia de Consulta
+    Consulta consulta;
     
 
     do {
@@ -45,6 +48,8 @@ int Menu::showMainMenu(){
                 break;
             case CONSULTA:
                 cout << "Consulta\n";
+                consulta.mostrarMenuConsulta();
+                
                 break;
             case SALIRMENU:
                 cout << "Saliendo...\n";

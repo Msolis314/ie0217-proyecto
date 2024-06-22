@@ -5,7 +5,7 @@ LDLIBS := -lsqlite3 -lssl -lcrypto
 
 all: main.exe
 
-main.exe: main.o db.o menu.o banco.o tools.o entidadBancaria.o cliente.o transaciones.o
+main.exe: main.o db.o menu.o banco.o tools.o entidadBancaria.o cliente.o transaciones.o consulta.o
 	$(CXX) $(CXXFLAGS) -o $@ $^ $(LDFLAGS) $(LDLIBS)
 
 main.o: main.cpp
@@ -30,6 +30,9 @@ client.o: cliente.cpp
 	$(CXX) $(CXXFLAGS) -c $<
 
 transaciones.o: transaciones.cpp
+	$(CXX) $(CXXFLAGS) -c $<
+
+consulta.o: consulta.cpp
 	$(CXX) $(CXXFLAGS) -c $<
 
 clean:
