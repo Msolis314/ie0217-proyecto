@@ -4,6 +4,7 @@
 #include <vector>
 #include <ctime>
 #include <sqlite3.h>
+#include <iomanip>
 #include <stdexcept>
 #include <sstream>
 #include <type_traits>
@@ -13,6 +14,8 @@
 #include "cliente.hpp"
 #include "transaciones.hpp"
 
+#define AMBAST 3
+#define SALIRCONSULTA 4
 
 Cliente::Cliente(std::string nombre, std::string apellido, int id) {
     this->nombre = nombre;
@@ -98,6 +101,7 @@ void Cliente::mostrarMenuC() {
                 std::cout << "Opción inválida. Intente de nuevo." << std::endl;
         }
     } while (opc != SALIRMENUC);
+    system("clear");
     return;
 }
 
@@ -392,7 +396,7 @@ void Cliente::transaccion(){
             // xxxx
             break;
         case CONSULTARSALDO:
-            // xxxx
+            consultarSaldo();
             break;
         case CONSULTARMOVIMIENTOS:
             // xxxx
@@ -407,8 +411,72 @@ void Cliente::transaccion(){
             break;
         }
     } while ( opc != SALIRMENUT);
+    system("clear");
     return;
 
     
 }
 
+void Cliente::consultarSaldo(){
+    int opc; 
+    Operaciones op(this->nombre, this->apellido, this->id);
+
+    do {
+        std::cout << "\n------ Menú de Consulta de Saldo ------" << std::endl;
+        std::cout << "1. Consultar saldo en colones" << std::endl;
+        std::cout << "2. Consultar saldo en dólares" << std::endl;
+        std::cout << "3. Consultar saldo en ambas monedas" << std::endl;
+        std::cout << "4. Salir del menú" << std::endl;
+        std::cout << "Elija una opción: ";
+
+        do {
+            std::cin >> opc;
+            if (std::cin.fail()) {
+                std::cin.clear();
+                std::cin.ignore();
+                std::cout << "Opción inválida. Intente de nuevo." << std::endl;
+            }
+        } while (std::cin.fail());
+
+        float saldoColones = op.consultarSaldo(this->idCuentaC);
+        float saldoDolares = op.consultarSaldo(this->idCuentaD);
+
+        // Header
+        if (opc != SALIRCONSULTA) {
+            std::cout << std::left << std::setw(15) << "ID Cliente" 
+                      << std::setw(10) << "Moneda" 
+                      << std::setw(10) << "Monto" << std::endl;
+            std::cout << std::string(35, '-') << std::endl;
+        }
+
+        // Impresión de saldos
+        switch (opc) {
+            case COLON:
+                std::cout << std::left << std::setw(15) << this->id 
+                          << std::setw(10) << "Colones" 
+                          << std::setw(10) << saldoColones << std::endl;
+                break;
+            case DOLAR:
+                std::cout << std::left << std::setw(15) << this->id 
+                          << std::setw(10) << "Dólares" 
+                          << std::setw(10) << saldoDolares << std::endl;
+                break;
+            case AMBAST:
+                std::cout << std::left << std::setw(15) << this->id 
+                          << std::setw(10) << "Colones" 
+                          << std::setw(10) << saldoColones << std::endl;
+
+                std::cout << std::left << std::setw(15) << this->id 
+                          << std::setw(10) << "Dólares" 
+                          << std::setw(10) << saldoDolares << std::endl;
+                break;
+            case SALIRCONSULTA:
+                std::cout << "Saliendo del menú de consulta de saldo..." << std::endl;
+                break;
+            default:
+                std::cout << "Opción inválida. Intente de nuevo." << std::endl;
+                break;
+        }
+    } while (opc != SALIRCONSULTA);
+    system("clear");
+}

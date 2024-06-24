@@ -126,6 +126,11 @@ class Cliente: public EntidadBancaria{
         /// @brief Desplegar el menu de transacciones
         void transaccion();
 
+
+        /// @brief Metodo para consultar el saldo de las cuentas
+        /// @details Consultar el saldo de las cuentas en colones , dolares o ambos
+         void consultarSaldo();
+
         
 
 };

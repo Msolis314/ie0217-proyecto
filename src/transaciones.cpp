@@ -66,7 +66,7 @@ void Operaciones::depositar(Monedas cambio,float monto){
                 
                 }
             }
-            cliente.convertirMoneda(monto, cambio);
+            cliente.convertirMoneda(monto, COLON);
             saldo = consultarSaldo(cliente.idCuentaC);
             saldo += monto;
 
@@ -102,7 +102,7 @@ void Operaciones::depositar(Monedas cambio,float monto){
                     break;
                 }
             }
-            cliente.convertirMoneda(monto, cambio);
+            cliente.convertirMoneda(monto, DOLAR);
             saldo = consultarSaldo(cliente.idCuentaD);
             saldo += monto;
 
@@ -200,7 +200,7 @@ void Operaciones::retirar(Monedas cambio,float monto){
                     }
                 }
                 
-                cliente.convertirMoneda(monto, cambio);
+                cliente.convertirMoneda(monto, COLON);
                 saldo -= monto;
 
                 rc = sqlite3_open("SistemaBancario.db", &db);
@@ -245,7 +245,7 @@ void Operaciones::retirar(Monedas cambio,float monto){
                         break;
                     }
                 }
-                cliente.convertirMoneda(monto, cambio);
+                cliente.convertirMoneda(monto, DOLAR);
                 saldo -= monto;
 
                 rc = sqlite3_open("SistemaBancario.db", &db);
@@ -298,6 +298,9 @@ float Operaciones::consultarSaldo(int idCuenta){
     }
 
     sqlite3_close(db);
+    if (!cliente.checkIDCuentaExists(idCuenta, COLON) && !cliente.checkIDCuentaExists(idCuenta, DOLAR)){
+        return 0;
+    }
     return saldo;
 }
 
