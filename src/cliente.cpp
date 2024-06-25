@@ -387,7 +387,7 @@ void Cliente::transaccion(){
             }
             break;
         case TRANSFERENCIA:                    
-            // xxxx
+            op.transferir();
             break;
         case PAGOPRESTAMO:
             // xxxx

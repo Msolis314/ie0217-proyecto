@@ -12,10 +12,14 @@
 
 using namespace std;
 
-// Inicializando los atributos de la clase
-Prestamos::Prestamos(std::string tipoInteres, float tasaActual, std::string plazo, double capital, std::string TipoPrestamo)
-    : tipoInteres(tipoInteres), tasaActual(tasaActual), plazo(plazo), capital(capital), TipoPrestamo(TipoPrestamo), interesesAbonados(0.0) {
-    //datos cliente faltan
+// Constructor de la clase Prestamos
+Prestamos::Prestamos(std::string tipoInteres, float tasaActual, std::string plazo, float capital,std::string TipoPrestamo):cliente("","",0) {
+    this->tipoInteres = tipoInteres;
+    this->tasaActual = tasaActual;
+    this->plazo = std::stoi(plazo);
+    this-> cliente  = Cliente(nombre, apellido, idCliente);
+    this->capital = capital;
+    this->TipoPrestamo = TipoPrestamo;
 }
 
 // Metodo para solicitar un prestamo
@@ -62,8 +66,9 @@ void Prestamos::solicitarPrestamo() {
 void Prestamos::ingresar_prestamoPersonal() {
     int seleccion;
     string tipoCambio;
-    Cliente cliente; //  Clase Cliente para el atributo idcliente.
-
+    int rightChoice;
+   //  Clase Cliente para el atributo idcliente.
+    
     // Ingrear la moneda y la con la opcion correcta.
     do {
         cout << "Seleccione el tipo de cambio:\n";
@@ -76,28 +81,43 @@ void Prestamos::ingresar_prestamoPersonal() {
         if (seleccion < 1 || seleccion > 2) {
             cout << "Opción inválida. Inténtelo de nuevo.\n";
         }
-    } while (seleccion < 1 || seleccion > 2);
+    } while (seleccion < 1 || seleccion > 2 || !cin.good());
 
     // Asigna el tipo de cambio segun la selecciin
     tipoCambio = (seleccion == 1) ? "Colones" : "Dólares";
 
     // Solicita al usuario los detalles del prestamo personal
     cout << "****Solicitud de Prestamo Personal****" << endl;
-    cout << "Ingrese el monto del préstamo: ";
-    cin >> capital;
+    string capitalStr;
+    int tryCount = 0;
+    do {
+        cout << "Ingrese el monto del préstamo: ";
+        cin >> capital;
+        if (tryCount > 0) {
+            cliente.returnMain("Por favor ingrese un monto válido");
+        }
+    }while (!validarDatos(capitalStr, &capital));
 
-    cout << "Ingrese el plazo en meses: ";
-    cin >> plazo;
-
+    
+    
+    do {
+        cout << "Ingrese el plazo en meses: ";
+        cin >> plazo;
+        if (plazo < 1) {
+            cout << "El plazo debe ser mayor a 0. Inténtelo de nuevo.\n";
+        }
+    } while (plazo < 1 || !cin.good());
+    
+    
     cout << "Ingrese el tipo de interés (fijo/variable): ";
     cin >> tipoInteres;
 
     cout << "Ingrese la tasa de interés (%): ";
     cin >> tasaActual;
-
+    
     // Calcula el pago mensual basado en la formula de cuota fija
-    float tasaInteresMensual = stof(tasaActual) / 12 / 100; // Convirtiendo la tasaActual a tasa mensual
-    float factor = pow(1 + tasaInteresMensual, stoi(plazo)); // Calculando el factor para la formula de cuota fija
+    float tasaInteresMensual = tasaActual / 12 / 100; // Convirtiendo la tasaActual a tasa mensual
+    float factor = pow(1 + tasaInteresMensual, plazo); // Calculando el factor para la formula de cuota fija
     float cuota = capital * (tasaInteresMensual * factor) / (factor - 1); // Calcula la cuota mensual
 
     // Muestra los detalles generales del prestamo calculado
@@ -122,7 +142,7 @@ void Prestamos::ingresar_prestamoPersonal() {
     }
     // consulta SQL para insertar los datos del prestamo a la tabla prestamo
     string sqlInsert = "INSERT INTO PRESTAMO (ID_CLIENTE, TIPO_CAMBIO, TIPO_INTERES, CUOTA, PLAZO, TASA_INTERES, CAPITAL_OG, CAPITAL_ACTUAL) VALUES (" +
-                       to_string(cliente.idCliente) + ", '" + tipoCambio + "', '" + tipoInteres + "', " + to_string(cuota) + ", " + plazo + ", " + tasaActual + ", " + to_string(capital) + ", " + to_string(capital) + ");";
+                       to_string(this->cliente.id) + ", '" + tipoCambio + "', '" + tipoInteres + "', " + to_string(cuota) + ", " + to_string(plazo) + ", " + to_string(tasaActual) + ", " + to_string(capital) + ", " + to_string(capital) + ");";
 
     // Ejecuta la consulta SQL y verifica si hubo errores
     rc = sqlite3_exec(db, sqlInsert.c_str(), 0, 0, &zErrMsg);
@@ -217,7 +237,7 @@ void Prestamos::ingresar_prestamoHipotecario() {
 
     // Construye la consulta para insertar los datos del prestamo
     std::string sqlInsert = "INSERT INTO PRESTAMO (ID_CLIENTE, TIPO_CAMBIO, TIPO_INTERES, CUOTA, PLAZO, TASA_INTERES, CAPITAL_OG, CAPITAL_ACTUAL) VALUES (" +
-                            std::to_string(cliente.idCliente) + ", '" + tipoCambio + "', '" + tipoInteres + "', " + std::to_string(cuota) + ", " + plazo + ", " + std::to_string(tasaActual) + ", " + std::to_string(capital) + ", " + std::to_string(capital) + ");";
+                            std::to_string(cliente.id) + ", '" + tipoCambio + "', '" + tipoInteres + "', " + std::to_string(cuota) + ", " + plazo + ", " + std::to_string(tasaActual) + ", " + std::to_string(capital) + ", " + std::to_string(capital) + ");";
 
     // Ejecuta la consulta SQL y verifica errores
     rc = sqlite3_exec(db, sqlInsert.c_str(), 0, 0, &zErrMsg);
@@ -309,7 +329,7 @@ void Prestamos::ingresar_prestamoPrendario() {
 
     // Construir la consult para insertar los datos 
     std::string sqlInsert = "INSERT INTO PRESTAMO (ID_CLIENTE, TIPO_CAMBIO, TIPO_INTERES, CUOTA, PLAZO, TASA_INTERES, CAPITAL_OG, CAPITAL_ACTUAL) VALUES (" +
-                            std::to_string(cliente.idCliente) + ", '" + tipoCambio + "', '" + tipoInteres + "', " + std::to_string(cuota) + ", " + plazo + ", " + std::to_string(tasaActual) + ", " + std::to_string(capital) + ", " + std::to_string(capital) + ");";
+                            std::to_string(cliente.id) + ", '" + tipoCambio + "', '" + tipoInteres + "', " + std::to_string(cuota) + ", " + plazo + ", " + std::to_string(tasaActual) + ", " + std::to_string(capital) + ", " + std::to_string(capital) + ");";
 
     rc = sqlite3_exec(db, sqlInsert.c_str(), 0, 0, &zErrMsg);
     if (rc != SQLITE_OK) {

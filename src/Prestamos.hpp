@@ -10,17 +10,20 @@
 
 
 
-class Prestamos {
+class Prestamos : public EntidadBancaria{
 private:
     std::string tipoInteres;
     float tasaActual;
-    int = plazo;
+    int plazo;
     double interesesAbonados;
-    double capital;
+    float capital;
     Cliente cliente;
+    std::string nombre;
+    std::string apellido;
+    int idCliente;  
     std::string TipoPrestamo;
 public:
-    Prestamos(std::string tipoInteres, float tasaActual, std::string plazo, double capital,std::string TipoPrestamo);
+    Prestamos(std::string tipoInteres, float tasaActual, std::string plazo, float capital,std::string TipoPrestamo, Cliente cliente);
 
     // Métodos
     void pagarCuota(double monto);
@@ -33,6 +36,7 @@ public:
     void ingresar_prestamoPersonal();
     void ingresar_prestamoHipotecario();
     void ingresar_prestamoPrendario();
+
 
 
     std::string getTipoInteres() const;
