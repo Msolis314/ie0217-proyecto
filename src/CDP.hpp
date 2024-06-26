@@ -35,7 +35,7 @@ enum TIPOS_INTERES{
 };
 
 enum PERIODOS_PAGO{
-    MENSUAL,
+    MENSUAL= 0,
     TRIMESTRAL,
     SEMESTRAL,
     ANUAL, 
@@ -102,6 +102,8 @@ class CDP: public EntidadBancaria{
 
         void displayMenuOptions();
 
+        
+
         std::string calcularFechaVencimiento(int plazo);
         ~CDP() = default;
 
@@ -161,4 +163,6 @@ class CDPvariableCompuesto: public CDPintereses{
         float calcularInteres() override;
         ~CDPvariableCompuesto() = default;
 };
+
+int callbackgetCDP(void *NotUsed, int argc, char **argv, char **azColName);
 #endif // CDP_HPP

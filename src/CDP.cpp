@@ -47,9 +47,9 @@ float CDPfijaSimple::calcularInteres(){
     switch(moneda){
         
         case COLON:
-            return capital * data.Interes_Colones * (periodos/12);
+            return capital * data.Interes_Colones * (periodos/12.0);
         case DOLAR:
-            return capital * data.Interes_Dolares * (periodos/12);
+            return capital * data.Interes_Dolares * (periodos/12.0);
             break;
         default:
             break;
@@ -105,9 +105,9 @@ float CDPvariableSimple::calcularInteres(){
     switch(moneda){
         
         case COLON:
-            return capital * data.Interes_Colones * (periodos/12);
+            return capital * data.Interes_Colones * (periodos/12.0);
         case DOLAR:
-            return capital * data.Interes_Dolares * (periodos/12);
+            return capital * data.Interes_Dolares * (periodos/12.0);
             break;
         default:
             break;
@@ -196,7 +196,8 @@ void CDP::displayMenuCDP() {
    
     do {
         do {
-            std::cout << "1. Agregar CDP" << std::endl;
+
+            std::cout << "\n1. Agregar CDP" << std::endl;
             std::cout << "2. Retirar CDP" << std::endl;
             std::cout << "3. Desplegar CDP" << std::endl;
             std::cout << "4. Salir" << std::endl;
@@ -207,18 +208,20 @@ void CDP::displayMenuCDP() {
         {
         case AGREGAR_CDP:
             displayMenuOptions();
+           
             break;
         case RETIRAR_CDP:
-            ///
+            retirarCDP();
             break;
         case DESPLEGAR_CDP:
-            ///
+            desplegarCDP();
             break;
         default:
             break;
         }
 
     } while (opcion != SALIR_CDP && rightChoice != RETURN);
+    system("clear");
     return;
 }
 
@@ -313,6 +316,14 @@ void CDP::displayMenuOptions() {
 
         agregarCDP();
         rightChoice = cliente.returnMain("CDP agregado con exito");
+        this->monto = 0;
+        this->plazo = 0;
+        this->interes = 0;
+        this->fechaCreacion = "";
+        this->fechaVencimiento = "";
+        this->periodoPago = "";
+        this->tipoInteres = "";
+        this->moneda = 0;
     
 
         
@@ -379,25 +390,53 @@ PERIODOS_PAGO CDP::displayMenuPeriodosPago(int & opcion){
 }
 
 
-std::string CDP::calcularFechaVencimiento(int plazo){
-    //Calcula la fecha de vencimiento de un CDP
+std::string CDP::calcularFechaVencimiento(int plazo) {
+    // Calcula la fecha de vencimiento de un CDP
     std::string fecha = (this->cliente).getFecha();
-    // fecha "mm/dd/yyyy"
-    std::string year = fecha.substr(6,4);
-    std::string month = fecha.substr(0,2);
-    std::string day = fecha.substr(3,2);
+    // fecha formato "mm/dd/yyyy"
+    std::string year = fecha.substr(6, 4);
+    std::string month = fecha.substr(0, 2);
+    std::string day = fecha.substr(3, 2);
+    
     int yearInt = std::stoi(year);
     int monthInt = std::stoi(month);
     int dayInt = std::stoi(day);
+    
+    // a;adir el plazo al mes
     monthInt += plazo;
-    if (monthInt > 12){
-        yearInt += monthInt / 12;
-        monthInt = monthInt % 12;
+    
+    // A;adir un a;o por cada 12 meses
+    while (monthInt > 12) {
+        yearInt++;
+        monthInt -= 12;
     }
-    std::string newYear = std::to_string(yearInt);
-    std::string newMonth = std::to_string(monthInt);
-    std::string newDay = std::to_string(dayInt);
-    return  newMonth + "/" + newDay + "/" + newYear;
+
+    // Febrero tiene 29 dias si es a;o bisiesto
+    if (monthInt == 2) {
+        if ((yearInt % 4 == 0 && yearInt % 100 != 0) || (yearInt % 400 == 0)) {
+            if (dayInt > 29) {
+                dayInt = 29;
+            }
+        } else {
+            if (dayInt > 28) {
+                dayInt = 28;
+            }
+        }
+    }
+    // meses 30 dias
+    else if (monthInt == 4 || monthInt == 6 || monthInt == 9 || monthInt == 11) {
+        if (dayInt > 30) {
+            dayInt = 30;
+        }
+    }
+
+    // Fmm/dd/yyyy
+    std::ostringstream oss;
+    oss << std::setw(2) << std::setfill('0') << monthInt << "/"
+        << std::setw(2) << std::setfill('0') << dayInt << "/"
+        << yearInt;
+    
+    return oss.str();
 }
 
 
@@ -448,5 +487,135 @@ int CDP::elegirCuenta(){
     
     } while (rightChoice != RETURN);
     return 0;
+
+}
+
+void CDP::desplegarCDP(){
+    std::string monedaStr;
+    int rightChoice = 0;
+    int Moneda;
+    do {
+        std::cout << "Seleccione la cuenta de donde quiere consultar los CDPs" << std::endl;
+        std::cout << "1.Cuenta en colones" << std::endl;
+        std::cout << "2.Cuenta en dolares" << std::endl;
+        try {
+            std::cin >> monedaStr;
+            if (!cliente.validarEntrada(monedaStr,&Moneda)){
+                throw std::invalid_argument("Opcion invalida");
+            }
+            if (Moneda < COLON || Moneda > DOLAR){
+                throw std::invalid_argument("Opcion invalida");
+            }
+            break;
+        } catch (std::invalid_argument &e){
+            rightChoice = cliente.returnMain(e.what());
+        }
+    } while (true);
+    sqlite3 *db;
+    char *zErrMsg = 0;
+    int rc;
+    std::string sql;
+    if (Moneda == COLON){
+        sql = "SELECT * FROM DEPOSITO_PLAZO WHERE ID_CLIENTE = " + std::to_string(cliente.id) + " AND MONEDA = 'Colones';";
+    } else {
+        sql = "SELECT * FROM DEPOSITO_PLAZO WHERE ID_CLIENTE = " + std::to_string(cliente.id) + " AND MONEDA = 'Dolares';";
+    }
+    rc = sqlite3_open("SistemaBancario.db", &db);
+    if (rc) {
+        std::cerr << "Error al abrir la base de datos: " << sqlite3_errmsg(db) << std::endl;
+        sqlite3_close(db);
+        return;
+    }
+
+    rc = sqlite3_exec(db, sql.c_str(), callbackgetCDP, 0, &zErrMsg);
+    if (rc != SQLITE_OK) {
+        std::cerr << "Error al desplegar datos " << zErrMsg << std::endl;
+        sqlite3_free(zErrMsg);
+    } else {
+        std::cout << "..." << std::endl;
+    }
+    sqlite3_close(db);
+}
+
+
+
+
+
+
+
+int callbackgetCDP(void *NotUsed, int argc, char **argv, char **azColName) {
+    static bool headerPrinted = false;
+    const int columnWidth = 15; // Ancho de las columnas
+
+    //Imprimir los nombres de las columnas
+    if (!headerPrinted) {
+        for (int i = 0; i < argc; i++) {
+            std::cout << std::setw(columnWidth) << std::left << azColName[i] << "|";
+        }
+        std::cout << std::endl;
+        for (int i = 0; i < argc; i++) {
+            std::cout << std::setfill('-') << std::setw(columnWidth) << "" << "|";
+        }
+        std::cout << std::setfill(' ') << std::endl; // Resetear el fill
+        headerPrinted = true;
+    }
+    
+    //Imprimir los valores de las columnas
+    for (int i = 0; i < argc; i++) {
+        std::cout << std::setw(columnWidth) << std::left << (argv[i] ? argv[i] : "NULL") << "|";
+    }
+    std::cout << std::endl;
+
+    return 0;
+}
+
+
+
+void CDP::retirarCDP(){
+    //Retira un CDP de la base de datos
+    std::string idCDP;
+    std::string montoRetiro;
+    int rightChoice = 0;
+    int idCDPInt;
+
+    //Preguntar por el ID del CDP
+    do {
+        std::cout << "Ingrese el ID de la cuenta donde desea retirar los CDPs" << std::endl;
+        std::cin >> idCDP;
+        try {
+            if (!cliente.validarEntrada(idCDP,&idCDPInt)){
+                throw std::invalid_argument("ID invalido");
+            }
+            if (!cliente.checkIDCuentaExists(idCDPInt,COLON) && !cliente.checkIDCuentaExists(idCDPInt,DOLAR)){
+                throw std::invalid_argument("ID no encontrado");
+            }
+            break;
+        } catch (std::invalid_argument &e){
+            rightChoice = cliente.returnMain(e.what());
+        }
+    } while (rightChoice != RETURN);
+    
+    sqlite3 *db;
+    char *zErrMsg = 0;
+    int rc;
+    std::string sql;
+    sql = "DELETE FROM DEPOSITO_PLAZO WHERE ID_DEPOSITO = " + idCDP + " AND ID_CLIENTE = " + std::to_string(cliente.id) + ";";
+    rc = sqlite3_open("SistemaBancario.db", &db);
+    if (rc) {
+        std::cerr << "Error al abrir la base de datos: " << sqlite3_errmsg(db) << std::endl;
+        sqlite3_close(db);
+        return;
+    }
+
+    rc = sqlite3_exec(db, sql.c_str(), NULL, 0, &zErrMsg);
+    if (rc != SQLITE_OK) {
+        std::cerr << "Error al retirar CDP " << zErrMsg << std::endl;
+        sqlite3_free(zErrMsg);
+    } else {
+        std::cout << "..." << std::endl;
+    }
+    sqlite3_close(db);
+    std::cout << "CDP retirado con exito" << std::endl;
+    system("clear");
 
 }

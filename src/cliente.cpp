@@ -8,6 +8,8 @@
 #include <stdexcept>
 #include <sstream>
 #include <type_traits>
+#include <random>
+#include <cstdlib>
 #include "entidadBancaria.hpp"
 #include "banco.hpp"
 #include "CDP.hpp"
@@ -214,16 +216,24 @@ void Cliente::agregarCuentaD(int idCuentaD) {
 
 
 int Cliente::generarIDCuentaC() {
-// definiendo un rango
-    long int minDigits = 1000000000000000; // si queremos que contenga al menos 16 digitos 
-    long int maxDigits = 9999999999999999;  
+    unsigned long int minDigits = 1000000000000000; // Min 16 digitos
+    unsigned long int maxDigits = 9999999999999999; // Max 16 digitos
 
-    int idnum = minDigits + rand() % (maxDigits - minDigits + 1); // generamos un numero aleatorio y tomamos el resto del modulo entero
+    std::random_device rd; // Numero aleatorio
+    std::mt19937 gen(rd()); 
+    std::uniform_int_distribution<unsigned long int> distr(minDigits, maxDigits); //  distribucion de numeros aleatorios
+
+    unsigned long int idnum = distr(gen); // Generate a random number within the range
 
     // Verificar si el ID generado ya existe en la base de datos
-    while (checkIDCuentaExists(idnum,COLON)) {
+    while (checkIDCuentaExists(idnum, COLON)) {
         // Si el ID ya existe, generamos otro número aleatorio y lo volvemos a probar
-        idnum = minDigits + rand() % (maxDigits - minDigits + 1);
+        idnum = distr(gen);
+    }
+
+    // Asegurarse que no sea un número negativo
+    if (idnum < 0) {
+        idnum *= -1;
     }
     return idnum;
 }
