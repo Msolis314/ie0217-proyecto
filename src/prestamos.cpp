@@ -10,6 +10,7 @@
 #include <cmath> 
 #include"consulta.hpp"
 
+
 using namespace std;
 
 // Constructor de la clase Prestamos
@@ -342,3 +343,84 @@ void Prestamos::ingresar_prestamoPrendario() {
     // Cerrar la base de datos
     sqlite3_close(db);
 }
+
+
+
+
+
+
+
+
+
+
+/*Llamando a la funcion se ActualIDPrestamos para obtener los ids guardados en la base de datos sql, 
+de sistema bancario, de la tabla cliente,*/
+void Prestamos::setActualIDPrestamos(){
+    sqlite3 *db;                                                           // Declaracion del puntero a sqlite3
+    char *zErrMsg = 0;                                                     // Mensaje de error que puede generarlas funciones sql, comienza en cero, porque no hay errores.
+    int rc;                                                                // Codigos de retorno, indicando si se ejecuto bien
+    rc = sqlite3_open("SistemaBancario.db", &db);                          // abre la base de datos sistema bancario, con el puntero db
+    if (rc){                                                               // ejecuta el if, para comprobar si se pudo abrir la base de datos
+        std::cout << "No se pudo abrir la base de datos" << std::endl;  
+    }else{
+        std::cout << "....." << std::endl;
+    }
+
+    const char* sql = "SELECT ID_PRESTAMO FROM PRESTAMO";               // Selecciona de la tabla customers los ids_prestamos
+    rc = sqlite3_exec(db, sql, callbackPrestamos, this, &zErrMsg);
+    if (rc != SQLITE_OK){                                                  // si la funcion sqlite es ok  significa que no hubo errores, entoces se obtiene los ids prestamos.
+        std::cout << "SQL ERROR: " << zErrMsg << std::endl;                // mensaje de error
+        sqlite3_free(zErrMsg);
+    }else{
+        std::cout << "IDs de prestamos obtenidos con exito" << std::endl;
+    }
+
+};
+
+// Procesando los datos de la consulta sql
+int Prestamos::callbackPrestamos(void *data, int argc, char **argv, char **azColName){ // data apunta a prestamos, argc num de columnas, argv arreglo de punteros val columnas
+    int i;
+    Prestamos* prestamos = static_cast<Prestamos*>(data);                                    
+    for(i = 0;i <argc; i++){                                                       //ciclo for que va iterando desde 0 hasta argc -1
+        if (argv[i]){
+            prestamos->actualIDPrestamos.push_back(std::stoi(argv[i]));                // agregando los valores de las columnas al vector actualIDPrestamos.
+        }                   // agregando los valores de las columnas al vector actualIDPrestamos.
+
+    }
+    return 0;
+}
+
+
+int Prestamos::generar_id_prestamoPerso() {
+    int ID_prestamo = 1; // Empezamos con el ID número 1
+    while (checkID_PRESTAMO(ID_prestamo)) {
+        ID_prestamo++; // Incrementando el ID hasta encontrar uno disponible
+    }
+    agregarID_lista(ID_prestamo); // agregando el ID generado a la lista
+    return ID_prestamo; // Devolviendo el ID generado
+}
+
+
+// Generando el verificador de ids
+bool Prestamos::checkID_PRESTAMO(int ID_prestamo){
+    std:: vector<int>:: iterator it;
+    // desde el inicio de la lista hasta el final, se compara el valor de iterador it con el valor del id proporcionado.
+    for (it = actualIDPrestamos.begin(); it != actualIDPrestamos.end(); it++){ // verificando si ya existen en la lista de IDs clientes
+        if (*it == ID_prestamo){
+            return true; // Si retorna true, ya existe un id igual.
+        }
+    }
+    return false;
+}
+
+void Prestamos::agregarID_lista(int ID_prestamo){
+    if (!checkID_PRESTAMO(ID_prestamo)){
+        std::cout << "ID agregado con exito" << std::endl;
+        actualIDPrestamos.push_back(ID_prestamo);
+    }
+    std::cout << "El ID ya existe" << std::endl;
+    return;
+}
+
+
+

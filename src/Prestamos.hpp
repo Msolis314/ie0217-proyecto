@@ -18,6 +18,9 @@ private:
     double interesesAbonados;
     float capital;
     Cliente cliente;
+
+    std::vector<int> actualIDPrestamos; 
+
     std::string nombre;
     std::string apellido;
     int idCliente;  
@@ -36,7 +39,15 @@ public:
     void ingresar_prestamoPersonal();
     void ingresar_prestamoHipotecario();
     void ingresar_prestamoPrendario();
+    void generar_id_prestamoPerso();
+    void generar_id_prestamoHipo();
+    void generar_id_prestamoPren();
+    
 
+    static int callbackPrestamos(void *data, int argc, char **argv, char **azColName);
+    void setActualIDPrestamos();
+    bool checkID_PRESTAMO(int id);
+    void agregarID_lista(int id);
 
 
     std::string getTipoInteres() const;
