@@ -50,7 +50,7 @@ public:
     void ingresar_prestamoHipotecario();
     void ingresar_prestamoPrendario();
     void generar_id_prestamo();
-
+    string ingresarTipoInteres();
 
     static int callbackPrestamos(void *data, int argc, char **argv, char **azColName);
     void setActualIDPrestamos();

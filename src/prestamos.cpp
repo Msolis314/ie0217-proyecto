@@ -68,6 +68,8 @@ void Prestamos::ingresar_prestamoPersonal() {
     int seleccion;
     string tipoCambio;
     int rightChoice;
+    std::string tipoInteres;
+    int id;
    //  Clase Cliente para el atributo idcliente.
     
     // Ingrear la moneda y la con la opcion correcta.
@@ -108,10 +110,9 @@ void Prestamos::ingresar_prestamoPersonal() {
             cout << "El plazo debe ser mayor a 0. Inténtelo de nuevo.\n";
         }
     } while (plazo < 1 || !cin.good());
-    int id;
+
     id = generar_id_prestamo(); // llamada a la funcion para generar el id del prestamo.
-    cout << "Ingrese el tipo de interés (fijo/variable): ";
-    cin >> tipoInteres;
+    tipoInteres = ingresarTipoInteres(); // llamada a la funcion para validar el tipo de interes.
 
     cout << "Ingrese la tasa de interés (%): ";
     cin >> tasaActual;
@@ -172,7 +173,8 @@ void Prestamos::ingresar_prestamoHipotecario() {
     int seleccion;
     std::string tipoCambio;
     float tasaActual;
-
+    std::string tipoInteres;
+    int id;
     // Seleccion del tipo de moneda
     do {
         std::cout << "Seleccione el tipo de cambio:" << std::endl;
@@ -200,8 +202,11 @@ void Prestamos::ingresar_prestamoHipotecario() {
         default:
             return;
     }
-    int id;
+
     id = generar_id_prestamo(); // llamada a la funcion para generar el id del prestamo.
+    tipoInteres = ingresarTipoInteres();
+
+
     // Solicitando al usuario los detalles del prestamo
     std::cout << "****Solicitud de Prestamo Hipotecario****" << std::endl;
     std::cout << "Ingrese el monto del préstamo: ";
@@ -274,6 +279,8 @@ void Prestamos::ingresar_prestamoPrendario() {
     int seleccion;
     std::string tipoCambio;
     float tasaActual;
+    int id;
+    std::string tipoInteres;
     // Seleccion del tipo de moneda
     do {
         std::cout << "Seleccione el tipo de cambio:" << std::endl;
@@ -300,9 +307,9 @@ void Prestamos::ingresar_prestamoPrendario() {
             
             return;
     }
-    int id;
-    id = generar_id_prestamo(); // llamada a la funcion para generar el id del prestamo.
 
+    id = generar_id_prestamo(); // llamada a la funcion para generar el id del prestamo.
+    tipoInteres = ingresarTipoInteres();
 
     // Solicitando el monto
     std::cout << "****Solicitud de Préstamo Prendario****" << std::endl;
@@ -452,3 +459,32 @@ void Prestamos::agregarID_lista(int ID_prestamo){
 
 
 
+/*****************************************************
+ * **********Validando ingreso de datos***************
+******************************************************/
+
+string Prestamos::ingresarTipoInteres(){
+    string tipoInteres;
+    cout << "Ingrese el tipo de interés (fijo/variable): ";
+    cin >> tipoInteres;
+
+    cin.clear();
+    cin.ignore(numeric_limits<streamsize>::max(), '\n');
+    // Convertir a minúsculas para hacer la comparación sin importar mayúsculas/minúsculas
+    for (char &minuscula : tipoInteres) {
+        minuscula = tolower(minuscula);
+    }
+
+    // Validar la entrada
+    while (tipoInteres != "fijo" && tipoInteres != "variable") {
+        cout << "Tipo de interés no válido. Ingrese 'fijo' o 'variable': ";
+        cin >> tipoInteres;
+
+
+        cin.clear();
+        cin.ignore(numeric_limits<streamsize>::max(), '\n');
+
+    }
+
+    return tipoInteres;
+}
