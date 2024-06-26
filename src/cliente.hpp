@@ -132,6 +132,9 @@ class Cliente: public EntidadBancaria{
         /// @details Consultar el saldo de las cuentas en colones , dolares o ambos
          void consultarSaldo();
 
+         /// @brief  Metodo para transferir dinero entre cuentas
+         void transferir();
+
         
 
 };

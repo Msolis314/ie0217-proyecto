@@ -176,6 +176,26 @@ int crearDB(){
         std::cout << "............." << std::endl;
     }
 
+    //Crear tabla de depositos a plazo
+    sql = "CREATE TABLE IF NOT EXISTS DEPOSITO_PLAZO(" \
+    "ID_DEPOSITO INT PRIMARY KEY NOT NULL," \
+    "ID_CLIENTE INT NOT NULL," \
+    "MONTO REAL NOT NULL," \
+    "PLAZO INT NOT NULL," \
+    "FECHA_INICIO DATETIME NOT NULL," \
+    "FECHA_FIN DATETIME NOT NULL," \
+    "FOREIGN KEY (ID_CLIENTE) REFERENCES CUSTOMERS(ID)," \
+    "FOREIGN KEY (ID_DEPOSITO) REFERENCES CUENTA_BANCARIA(ID_CUENTA));";
+
+    rc = sqlite3_exec(db, sql, callback, 0, &zErrMsg);
+    if (rc != SQLITE_OK) {
+        std::cout << "SQL ERROR: " << zErrMsg << std::endl;
+        sqlite3_free(zErrMsg);
+    } else {
+        std::cout << "............" << std::endl;
+    }
+    
+
     sqlite3_close(db);
     system("clear");
 

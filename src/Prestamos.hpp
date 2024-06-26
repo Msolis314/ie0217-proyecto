@@ -23,7 +23,7 @@ private:
     int idCliente;  
     std::string TipoPrestamo;
 public:
-    Prestamos(std::string tipoInteres, float tasaActual, std::string plazo, float capital,std::string TipoPrestamo, Cliente cliente);
+    Prestamos(std::string tipoInteres, float tasaActual, std::string plazo, float capital,std::string TipoPrestamo);
 
     // Métodos
     void pagarCuota(double monto);

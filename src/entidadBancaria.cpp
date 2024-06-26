@@ -138,7 +138,7 @@ bool EntidadBancaria::validarEntrada(std::string dato, int* valor){
             throw std::invalid_argument("El dato ingresado no es un numero");
         }
         else if (*valor < 0){
-            throw std::invalid_argument("El monto no puede ser negativo");
+            throw std::invalid_argument("La  opcion no puede ser negativo");
         }
         return true;
     }
