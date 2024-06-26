@@ -37,15 +37,15 @@ void Prestamos::solicitarPrestamo() {
 
     // Dependiendo de la opcion seleccionada, llama a la funcion correspondiente
     switch (opcion) {
-        case 1:
+        case PERSONAL:
             // Llamando a la funcion para ingresar un prestamo personal
             ingresar_prestamoPersonal();
             break;
-        case 2:
+        case HIPOTECARIO :
             // Llamando a la función para ingresar un prestamo hipotecario
             ingresar_prestamoHipotecario();
             break;
-        case 3:
+        case PRENDARIO:
             // Llamando a la función para ingresar un prestamo prendario
             ingresar_prestamoPrendario();
             break;
@@ -79,13 +79,13 @@ void Prestamos::ingresar_prestamoPersonal() {
         cin >> seleccion;
 
         // Verificando que sea valido
-        if (seleccion < 1 || seleccion > 2) {
+        if (seleccion < COLON || seleccion > DOLAR) {
             cout << "Opción inválida. Inténtelo de nuevo.\n";
         }
-    } while (seleccion < 1 || seleccion > 2 || !cin.good());
+    } while (seleccion < COLON || seleccion > DOLAR || !cin.good());
 
     // Asigna el tipo de cambio segun la selecciin
-    tipoCambio = (seleccion == 1) ? "Colones" : "Dólares";
+    tipoCambio = (seleccion == COLON) ? "Colones" : "Dólares";
 
     // Solicita al usuario los detalles del prestamo personal
     cout << "****Solicitud de Prestamo Personal****" << endl;
@@ -182,10 +182,10 @@ void Prestamos::ingresar_prestamoHipotecario() {
         std::cin >> seleccion;
 
         // Verificando si la selección es valida
-        if (seleccion < 1 || seleccion > 2) {
+        if (seleccion < COLON || seleccion > DOLAR) {
             std::cout << "Opción inválida. Inténtelo de nuevo." << std::endl;
         }
-    } while (seleccion < 1 || seleccion > 2);
+    } while (seleccion < COLON || seleccion > DOLAR);
 
     // Asignando el tipo de cambio y la tasa de interes segun la selección
     switch (seleccion) {
@@ -282,10 +282,10 @@ void Prestamos::ingresar_prestamoPrendario() {
         std::cout << "Ingrese su opción: ";
         std::cin >> seleccion; // guardando la opcion sleccionada
 
-        if (seleccion < 1 || seleccion > 2) {
+        if (seleccion < COLON || seleccion > DOLAR) {
             std::cout << "Opción inválida. Inténtelo de nuevo." << std::endl;
         }
-    } while (seleccion < 1 || seleccion > 2);
+    } while (seleccion < COLON || seleccion > DOLAR);
 
     switch (seleccion) {
         case 1:
@@ -385,7 +385,11 @@ void Prestamos::setActualIDPrestamos(){
 
 };
 
-// Procesando los datos de la consulta sql
+
+
+/*****************************************************
+ * ***********Procesar la consulta de datos***********
+******************************************************/
 int Prestamos::callbackPrestamos(void *data, int argc, char **argv, char **azColName){ // data apunta a prestamos, argc num de columnas, argv arreglo de punteros val columnas
     int i;
     Prestamos* prestamos = static_cast<Prestamos*>(data);                                    
@@ -399,6 +403,10 @@ int Prestamos::callbackPrestamos(void *data, int argc, char **argv, char **azCol
 }
 
 
+
+/*****************************************************
+ * ************Generando un ID prestamo***************
+******************************************************/
 int Prestamos::generar_id_prestamo() {
     int ID_prestamo = 1; // Empezamos con el ID número 1
     while (checkID_PRESTAMO(ID_prestamo)) {
@@ -409,7 +417,12 @@ int Prestamos::generar_id_prestamo() {
 }
 
 
-// Generando el verificador de ids
+
+
+
+/*****************************************************
+ * *******Verificando que no exista en la base********
+******************************************************/
 bool Prestamos::checkID_PRESTAMO(int ID_prestamo){
     std:: vector<int>:: iterator it;
     // desde el inicio de la lista hasta el final, se compara el valor de iterador it con el valor del id proporcionado.
@@ -421,6 +434,13 @@ bool Prestamos::checkID_PRESTAMO(int ID_prestamo){
     return false;
 }
 
+
+
+
+
+/*****************************************************
+ * *******Agregando el id generado a la lista*********
+******************************************************/
 void Prestamos::agregarID_lista(int ID_prestamo){
     if (!checkID_PRESTAMO(ID_prestamo)){
         std::cout << "ID agregado con exito" << std::endl;

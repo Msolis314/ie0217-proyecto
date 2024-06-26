@@ -10,6 +10,16 @@
 
 
 
+enum TipoPretamo{
+    PERSONAL = 1,
+    HIPOTECARIO = 2,
+    PRENDARIO = 3
+};
+enum DC{
+    COLON = 1,
+    DOLAR = 2
+};
+
 class Prestamos : public EntidadBancaria{
 private:
     std::string tipoInteres;
@@ -39,10 +49,8 @@ public:
     void ingresar_prestamoPersonal();
     void ingresar_prestamoHipotecario();
     void ingresar_prestamoPrendario();
-    void generar_id_prestamoPerso();
-    void generar_id_prestamoHipo();
-    void generar_id_prestamoPren();
-    
+    void generar_id_prestamo();
+
 
     static int callbackPrestamos(void *data, int argc, char **argv, char **azColName);
     void setActualIDPrestamos();
