@@ -3,10 +3,23 @@
 
 #include <iostream>
 #include <string>
+#include <sqlite3.h>
 #include "entidadBancaria.hpp"
 #include "menu.hpp"
 #include "cliente.hpp"
 
+struct functionVars{
+    int opcion;
+    float monto;
+    std::string dato;
+    int tries;
+    int rightChoice;
+    sqlite3 *db;
+    std::string sql;
+    char *zErrMsg = 0;
+    int rc;
+
+} typedef functionVars;
 
 /// @brief Clase que realiza las operaciones bancarias.
 /// @details Esta clase realiza las operaciones bancarias como depositar, retirar, transferir, pagar prestamo, solicitar prestamo, consultar saldo, escribir historial, consultar movimientos y consultar prestamos.
@@ -44,8 +57,10 @@ class Operaciones {
         /// @return Saldo de la cuenta.
         float consultarSaldo(int idCuenta);
         void escribirHistorial();
+        int checkAcountCurrency(int idCuenta);
         void consultarMovimientos();
         void consultarPrestamos();
+        int pedirMonto(float &monto);
 
 
 };

@@ -338,6 +338,24 @@ int Operaciones::checkAcountCurrency(int cuenta){
     }
 
 }
+
+int Operaciones::pedirMonto(float &monto){
+    functionVars vars;
+    try {
+        std::cout << "Ingrese el monto" << std::endl;
+        std::cin >> vars.dato;
+        if (!cliente.validarDatos(vars.dato, &monto)){
+            throw std::invalid_argument("El monto ingresado no es valido");
+        }
+    } catch (std::invalid_argument &e){
+        
+        vars.rightChoice = cliente.returnMain(e.what());
+        if (vars.rightChoice == RETURN){
+            return RETURN;
+        }
+    }
+    return 0;
+}
 void Operaciones::transferir(){
     // Transferir dinero de una cuenta a otra
     functionVars vars;
@@ -348,46 +366,30 @@ void Operaciones::transferir(){
     int idCuentaDestino;
 
     //Inicialmente se pide el monto a transferir
-    try {
-        std::cout << "Ingrese el monto a transferir" << std::endl;
-        std::cin >> vars.dato;
-        if (!cliente.validarDatos(vars.dato, &vars.monto)){
-            throw std::invalid_argument("El monto ingresado no es valido");
-        }
-    } catch (std::invalid_argument &e){
-        std::cout << e.what() << std::endl;
-        vars.rightChoice = cliente.returnMain("Desea intentar de nuevo?");
+    do {
+        vars.rightChoice = pedirMonto(vars.monto);
         if (vars.rightChoice == RETURN){
             return;
+        } else {
+            break;
         }
-    }
+    } while (vars.rightChoice != RETURN) ;
     do {
         //Si ha habido mas de un intneto se repite el proceso
         if (vars.tries > 0){
-            std::cout << "Monto a transferir: " << std::endl;
-            std::cin >> vars.dato;
-            try{
-                if(!cliente.validarDatos(vars.dato, &vars.monto)){
-                    throw std::invalid_argument("El monto ingresado no es valido");
-                }
-            }   
-            catch (std::invalid_argument &e){
-                std::cout << e.what() << std::endl;
-                vars.rightChoice = cliente.returnMain("Desea intentar de nuevo?");
-                if (vars.rightChoice == RETURN){
-                    return;
-                }
-                else {
-                    vars.tries++;
-                    continue;
-                }
-            }
+            vars.rightChoice = pedirMonto(vars.monto);        
+            
         }
 
         do {
             //Pedir el ID de la cuenta destino
-            std::cout << "Ingrese el ID de la cuenta destino" << std::endl;
-            std::cin >> idCuentaDestino;
+            std::cout << "Ingrese el ID de la cuenta destino:" << std::endl;
+            while (!(std::cin >> idCuentaDestino) || idCuentaDestino < 0){
+                std::cout << "Ingrese un ID valido" << std::endl;
+                std::cin.clear();
+                std::cin.ignore(12300000000, '\n');
+
+            }
             //Verificar si la cuenta destino es la misma que la del cliente
             if (idCuentaDestino == cliente.idCuentaC || idCuentaDestino == cliente.idCuentaD){
                 vars.rightChoice = cliente.returnMain("No puede transferir a su propia cuenta");
@@ -396,20 +398,20 @@ void Operaciones::transferir(){
 
                 }
                 else {
-                        vars.tries++;
-                        break;
+                    continue;
                 }
-            } else if (!cliente.checkIDCuentaExists(idCuentaDestino, COLON) && !cliente.checkIDCuentaExists(idCuentaDestino, DOLAR)){
+            } 
+            if (!cliente.checkIDCuentaExists(idCuentaDestino, COLON) && !cliente.checkIDCuentaExists(idCuentaDestino, DOLAR)){
                     vars.rightChoice = cliente.returnMain("La cuenta destino no existe"); //La cuenta destino no existe
                     if (vars.rightChoice == RETURN){
                         return;
                     }
                     else {
-                        vars.tries++;
-                        break;
+                        
+                        continue;
                     }
             }
-            
+            break;
         } while (vars.rightChoice != RETURN);
         
         do {
@@ -431,7 +433,10 @@ void Operaciones::transferir(){
                         break;
                     }
                 }
+                //Convertir la moneda del monton si es necesario
+                cliente.convertirMoneda(vars.monto, COLON);
                 
+
                 //Consultar el saldo de la cuenta
                 saldo = consultarSaldo(cliente.idCuentaC);
                 if (saldo < vars.monto){
@@ -445,11 +450,11 @@ void Operaciones::transferir(){
                         break;
                     }
                 }
-                
-                //Convertir la moneda del monton si es necesario
-                cliente.convertirMoneda(vars.monto, COLON);
+
                 //Actualizar el saldo de la cuenta
                 saldo -= vars.monto;
+                
+                
 
 
                 vars.rc = sqlite3_open("SistemaBancario.db", &vars.db);
@@ -468,11 +473,22 @@ void Operaciones::transferir(){
                     std::cout << "SQL ERROR: " << vars.zErrMsg << std::endl;
                     sqlite3_free(vars.zErrMsg);
                 }
-
-                //Consultar el saldo de la cuenta destino
-                saldoDestino = consultarSaldo(idCuentaDestino);
-                //Actualizar el saldo de la cuenta destino
-                saldoDestino += vars.monto;
+                //Consultar el tipo de moneda de la cuenta destino
+                
+                if (checkAcountCurrency(idCuentaDestino)== COLON){
+                    //Consultar el saldo de la cuenta destino
+                    saldoDestino = consultarSaldo(idCuentaDestino);
+                    //Actualizar el saldo de la cuenta destino
+                    saldoDestino += vars.monto;
+                } else {
+                    //Consultar el saldo de la cuenta destino
+                    saldoDestino = consultarSaldo(idCuentaDestino);
+                    //Convertir el monto de colones a dolares
+                    cliente.convertirMoneda(vars.monto, DOLAR);
+                    //Actualizar el saldo de la cuenta destino
+                    saldoDestino += vars.monto;
+                }
+                
 
                 //Actualizar el saldo de la cuenta destino
                 vars.sql = "UPDATE CUENTA_BANCARIA SET AHORROS = " + std::to_string(saldoDestino) + " WHERE ID_CUENTA = " + std::to_string(idCuentaDestino);
@@ -488,7 +504,7 @@ void Operaciones::transferir(){
                 vars.tries++;
                 break;
             case DOLAR:
-
+                // Parte de consulta de la cuenta del cliente
                 if (cliente.idCuentaD == 0){
                     vars.rightChoice = cliente.returnMain("No se ha generado una cuenta dolares");
                     if (vars.rightChoice == RETURN){
@@ -499,6 +515,7 @@ void Operaciones::transferir(){
                         break;
                     }
                 }
+                //Consultar el saldo de la cuenta
                 saldo = consultarSaldo(cliente.idCuentaD);
                 if (saldo < vars.monto){
                     vars.rightChoice = cliente.returnMain("No tiene suficiente saldo en la cuenta");
@@ -510,6 +527,7 @@ void Operaciones::transferir(){
                         break;
                     }
                 }
+                //Convertir la moneda del monto si es necesario
                 cliente.convertirMoneda(vars.monto, DOLAR);
                 saldo -= vars.monto;
 
@@ -529,7 +547,18 @@ void Operaciones::transferir(){
                     std::cout << "SQL ERROR: " << vars.zErrMsg << std::endl;
                     sqlite3_free(vars.zErrMsg);
                 }
-
+                //Consultar el tipo de moneda de la cuenta destino
+                /*Si la cuenta destino es en colones se convierte el monto a colones y se actualiza el saldo de la cuenta destino
+                */
+                if (checkAcountCurrency(idCuentaDestino)== DOLAR){
+                    saldoDestino = consultarSaldo(idCuentaDestino);
+                    saldoDestino += vars.monto;
+                } else {
+                    //Si la cuenta destino es en dolares se actualiza el saldo de la cuenta destino 
+                    saldoDestino = consultarSaldo(idCuentaDestino);
+                    cliente.convertirMoneda(vars.monto, COLON);
+                    saldoDestino += vars.monto;
+                }
                 saldoDestino = consultarSaldo(idCuentaDestino);
                 saldoDestino += vars.monto;
 
