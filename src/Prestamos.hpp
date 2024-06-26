@@ -28,7 +28,7 @@ private:
     double interesesAbonados;
     float capital;
     Cliente cliente;
-
+    float tasaBanco;
     std::vector<int> actualIDPrestamos; 
 
     std::string nombre;
@@ -36,7 +36,7 @@ private:
     int idCliente;  
     std::string TipoPrestamo;
 public:
-    Prestamos(std::string tipoInteres, float tasaActual, std::string plazo, float capital,std::string TipoPrestamo);
+    Prestamos(std::string tipoInteres, float tasaActual, std::string plazo, float capital,std::string TipoPrestamo,float tasaBanco);
 
     // Métodos
     void pagarCuota(double monto);
@@ -56,6 +56,9 @@ public:
     void setActualIDPrestamos();
     bool checkID_PRESTAMO(int id);
     void agregarID_lista(int id);
+    static int floatCallback();
+    // @brief establecer el tipo de cambio
+    void setTipoCambioBank(void *data, int argc, char **argv, char **azColName);
 
 
     std::string getTipoInteres() const;
