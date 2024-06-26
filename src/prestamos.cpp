@@ -108,8 +108,8 @@ void Prestamos::ingresar_prestamoPersonal() {
             cout << "El plazo debe ser mayor a 0. Inténtelo de nuevo.\n";
         }
     } while (plazo < 1 || !cin.good());
-    
-    
+    int id;
+    id = generar_id_prestamo(); // llamada a la funcion para generar el id del prestamo.
     cout << "Ingrese el tipo de interés (fijo/variable): ";
     cin >> tipoInteres;
 
@@ -143,7 +143,7 @@ void Prestamos::ingresar_prestamoPersonal() {
     }
     // consulta SQL para insertar los datos del prestamo a la tabla prestamo
     string sqlInsert = "INSERT INTO PRESTAMO (ID_CLIENTE, TIPO_CAMBIO, TIPO_INTERES, CUOTA, PLAZO, TASA_INTERES, CAPITAL_OG, CAPITAL_ACTUAL) VALUES (" +
-                       to_string(this->cliente.id) + ", '" + tipoCambio + "', '" + tipoInteres + "', " + to_string(cuota) + ", " + to_string(plazo) + ", " + to_string(tasaActual) + ", " + to_string(capital) + ", " + to_string(capital) + ");";
+                        std::to_string(id) + ","to_string(this->cliente.id) + ", '" + tipoCambio + "', '" + tipoInteres + "', " + to_string(cuota) + ", " + to_string(plazo) + ", " + to_string(tasaActual) + ", " + to_string(capital) + ", " + to_string(capital) + ");";
 
     // Ejecuta la consulta SQL y verifica si hubo errores
     rc = sqlite3_exec(db, sqlInsert.c_str(), 0, 0, &zErrMsg);
@@ -200,7 +200,8 @@ void Prestamos::ingresar_prestamoHipotecario() {
         default:
             return;
     }
-
+    int id;
+    id = generar_id_prestamo(); // llamada a la funcion para generar el id del prestamo.
     // Solicitando al usuario los detalles del prestamo
     std::cout << "****Solicitud de Prestamo Hipotecario****" << std::endl;
     std::cout << "Ingrese el monto del préstamo: ";
@@ -236,9 +237,11 @@ void Prestamos::ingresar_prestamoHipotecario() {
         std::cout << "Base de datos abierta" << std::endl;
     }
 
-    // Construye la consulta para insertar los datos del prestamo
-    std::string sqlInsert = "INSERT INTO PRESTAMO (ID_CLIENTE, TIPO_CAMBIO, TIPO_INTERES, CUOTA, PLAZO, TASA_INTERES, CAPITAL_OG, CAPITAL_ACTUAL) VALUES (" +
-                            std::to_string(cliente.id) + ", '" + tipoCambio + "', '" + tipoInteres + "', " + std::to_string(cuota) + ", " + plazo + ", " + std::to_string(tasaActual) + ", " + std::to_string(capital) + ", " + std::to_string(capital) + ");";
+    // Construir la consulta SQL para insertar los datos del préstamo
+    std::string sqlInsert = "INSERT INTO PRESTAMO (ID_PRESTAMO, ID_CLIENTE, TIPO_CAMBIO, TIPO_INTERES, CUOTA, PLAZO, TASA_INTERES, CAPITAL_OG, CAPITAL_ACTUAL) VALUES (" +
+                            std::to_string(id) + ", " + std::to_string(cliente.id) + ", '" + tipoCambio + "', '" + tipoInteres + "', " +
+                            std::to_string(cuota) + ", " + std::to_string(plazo) + ", " + std::to_string(tasaActual) + ", " +
+                            std::to_string(capital) + ", " + std::to_string(capital) + ");";
 
     // Ejecuta la consulta SQL y verifica errores
     rc = sqlite3_exec(db, sqlInsert.c_str(), 0, 0, &zErrMsg);
@@ -297,6 +300,10 @@ void Prestamos::ingresar_prestamoPrendario() {
             
             return;
     }
+    int id;
+    id = generar_id_prestamo(); // llamada a la funcion para generar el id del prestamo.
+
+
     // Solicitando el monto
     std::cout << "****Solicitud de Préstamo Prendario****" << std::endl;
     std::cout << "Ingrese el monto del préstamo: ";
@@ -328,10 +335,11 @@ void Prestamos::ingresar_prestamoPrendario() {
         std::cout << "Base de datos abierta" << std::endl;
     }
 
-    // Construir la consult para insertar los datos 
-    std::string sqlInsert = "INSERT INTO PRESTAMO (ID_CLIENTE, TIPO_CAMBIO, TIPO_INTERES, CUOTA, PLAZO, TASA_INTERES, CAPITAL_OG, CAPITAL_ACTUAL) VALUES (" +
-                            std::to_string(cliente.id) + ", '" + tipoCambio + "', '" + tipoInteres + "', " + std::to_string(cuota) + ", " + plazo + ", " + std::to_string(tasaActual) + ", " + std::to_string(capital) + ", " + std::to_string(capital) + ");";
-
+    // Construir la consulta SQL para insertar los datos del préstamo
+    std::string sqlInsert = "INSERT INTO PRESTAMO (ID_PRESTAMO, ID_CLIENTE, TIPO_CAMBIO, TIPO_INTERES, CUOTA, PLAZO, TASA_INTERES, CAPITAL_OG, CAPITAL_ACTUAL) VALUES (" +
+                            std::to_string(id) + ", " + std::to_string(cliente.id) + ", '" + tipoCambio + "', '" + tipoInteres + "', " +
+                            std::to_string(cuota) + ", " + std::to_string(plazo) + ", " + std::to_string(tasaActual) + ", " +
+                            std::to_string(capital) + ", " + std::to_string(capital) + ");";
     rc = sqlite3_exec(db, sqlInsert.c_str(), 0, 0, &zErrMsg);
     if (rc != SQLITE_OK) {
         std::cerr << "SQL error: " << zErrMsg << std::endl;
@@ -391,7 +399,7 @@ int Prestamos::callbackPrestamos(void *data, int argc, char **argv, char **azCol
 }
 
 
-int Prestamos::generar_id_prestamoPerso() {
+int Prestamos::generar_id_prestamo() {
     int ID_prestamo = 1; // Empezamos con el ID número 1
     while (checkID_PRESTAMO(ID_prestamo)) {
         ID_prestamo++; // Incrementando el ID hasta encontrar uno disponible
