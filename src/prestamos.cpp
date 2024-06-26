@@ -70,7 +70,7 @@ void Prestamos::ingresar_prestamoPersonal() {
     string tipoCambio;
     int rightChoice;
     std::string tipoInteres;
-    int id;
+    int id_P;
     std::string TipoPrestamo;
    //  Clase Cliente para el atributo idcliente.
     
@@ -113,7 +113,7 @@ void Prestamos::ingresar_prestamoPersonal() {
         }
     } while (plazo < 1 || !cin.good());
 
-    id = generar_id_prestamo(); // llamada a la funcion para generar el id del prestamo.
+    id_P = generar_id_prestamo(); // llamada a la funcion para generar el id del prestamo.
     tipoInteres = ingresarTipoInteres(); // llamada a la funcion para validar el tipo de interes.
     TipoPrestamo = "Personal";
     cout << "Ingrese la tasa de interés (%): ";
@@ -147,7 +147,7 @@ void Prestamos::ingresar_prestamoPersonal() {
     }
     // consulta SQL para insertar los datos del prestamo a la tabla prestamo
     string sqlInsert = "INSERT INTO PRESTAMO (ID_PRESTAMO,ID_CLIENTE, TIPO_PRESTAMO, TIPO_CAMBIO, TIPO_INTERES, CUOTA, PLAZO, TASA_INTERES, CAPITAL_OG, CAPITAL_ACTUAL) VALUES (" +
-                        std::to_string(id) + ","+ std::to_string(this->cliente.id) +  "," + std::to_string(TipoPrestamo)  + ", '" + tipoCambio + "', '" + tipoInteres + "', " + to_string(cuota) + ", " + to_string(plazo) + ", " + to_string(tasaActual) + ", " + to_string(capital) + ", " + to_string(capital) + ");";
+                        std::to_string(id_P) + ","+ std::to_string(this->cliente.id) +  "," + std::to_string(TipoPrestamo)  + ", '" + tipoCambio + "', '" + tipoInteres + "', " + to_string(cuota) + ", " + to_string(plazo) + ", " + to_string(tasaActual) + ", " + to_string(capital) + ", " + to_string(capital) + ");";
 
     // Ejecuta la consulta SQL y verifica si hubo errores
     rc = sqlite3_exec(db, sqlInsert.c_str(), 0, 0, &zErrMsg);
@@ -177,7 +177,7 @@ void Prestamos::ingresar_prestamoHipotecario() {
     std::string tipoCambio;
     float tasaActual;
     std::string tipoInteres;
-    int id;
+    int id_P;
     std::string TipoPrestamo;
     // Seleccion del tipo de moneda
     do {
@@ -207,7 +207,7 @@ void Prestamos::ingresar_prestamoHipotecario() {
             return;
     }
 
-    id = generar_id_prestamo(); // llamada a la funcion para generar el id del prestamo.
+    id_P = generar_id_prestamo(); // llamada a la funcion para generar el id del prestamo.
     tipoInteres = ingresarTipoInteres();
     TipoPrestamo = "Hipotecario";
 
@@ -246,7 +246,7 @@ void Prestamos::ingresar_prestamoHipotecario() {
         std::cout << "Base de datos abierta" << std::endl;
     }
     std::string sqlInsert = "INSERT INTO PRESTAMO (ID_PRESTAMO, ID_CLIENTE, TIPO_PRESTAMO, TIPO_CAMBIO, TIPO_INTERES, CUOTA, PLAZO, TASA_INTERES, CAPITAL_OG, CAPITAL_ACTUAL) VALUES (" +
-                        std::to_string(id) + ", " + std::to_string(cliente.id) + ", " + std::to_string(TipoPrestamo) + ", '" + tipoCambio + "', '" + tipoInteres + "', " +
+                        std::to_string(id_P) + ", " + std::to_string(cliente.id) + ", " + std::to_string(TipoPrestamo) + ", '" + tipoCambio + "', '" + tipoInteres + "', " +
                         std::to_string(cuota) + ", " + std::to_string(plazo) + ", " + std::to_string(tasaActual) + ", " +
                         std::to_string(capital) + ", " + std::to_string(capital) + ");";
 
@@ -281,7 +281,7 @@ void Prestamos::ingresar_prestamoPrendario() {
     int seleccion;
     std::string tipoCambio;
     float tasaActual;
-    int id;
+    int id_P;
     std::string tipoInteres;
     std::string TipoPrestamo;
     // Seleccion del tipo de moneda
@@ -311,7 +311,7 @@ void Prestamos::ingresar_prestamoPrendario() {
             return;
     }
 
-    id = generar_id_prestamo(); // llamada a la funcion para generar el id del prestamo.
+    id_P = generar_id_prestamo(); // llamada a la funcion para generar el id del prestamo.
     tipoInteres = ingresarTipoInteres();
     TipoPrestamo = "Prendario"; //Definiendo el tipo de prestamo.
     // Solicitando el monto
@@ -347,7 +347,7 @@ void Prestamos::ingresar_prestamoPrendario() {
 
     // Construir la consulta SQL para insertar los datos del préstamo
     std::string sqlInsert = "INSERT INTO PRESTAMO (ID_PRESTAMO, ID_CLIENTE, TIPO_PRESTAMO, TIPO_CAMBIO, TIPO_INTERES, CUOTA, PLAZO, TASA_INTERES, CAPITAL_OG, CAPITAL_ACTUAL) VALUES (" +
-                        std::to_string(id) + ", " + std::to_string(cliente.id) + ", " + std::to_string(TipoPrestamo) + ", '" + tipoCambio + "', '" + tipoInteres + "', " +
+                        std::to_string(id_P) + ", " + std::to_string(cliente.id) + ", " + std::to_string(TipoPrestamo) + ", '" + tipoCambio + "', '" + tipoInteres + "', " +
                         std::to_string(cuota) + ", " + std::to_string(plazo) + ", " + std::to_string(tasaActual) + ", " +
                         std::to_string(capital) + ", " + std::to_string(capital) + ");";
     rc = sqlite3_exec(db, sqlInsert.c_str(), 0, 0, &zErrMsg);
@@ -536,3 +536,43 @@ int floatCallback(void* data, int argc, char** argv, char** azColName) {
     return 0;  
 }
 
+
+
+/*****************************************************
+ * *****  Consultar los prestamos del cliente    *****
+******************************************************/
+void Prestamos::consultarPrestamo(int id_P){
+    sqlite3* db;
+    char* error;
+    int rc;
+    float saldo;
+    rc = sqlite3_open("SistemaBancario.db", &db);
+
+    if (rc){
+        std::cout << "No se pudo abrir la base de datos" << std::endl;
+    }
+    else{
+        std::cout << "...." << std::endl;
+    }
+
+    std::string sql = "SELECT AHORROS FROM CUENTA_BANCARIA WHERE ID_CUENTA = " + std::to_string(idCuenta);
+    rc = sqlite3_exec(db, sql.c_str(), callback, &saldo, &error);
+    if (rc != SQLITE_OK){
+        std::cout << "SQL ERROR: " << error << std::endl;
+        sqlite3_free(error);
+    }
+
+    sqlite3_close(db);
+    if (!cliente.checkIDCuentaExists(idCuenta, COLON) && !cliente.checkIDCuentaExists(idCuenta, DOLAR)){
+        return 0;
+    }
+    return saldo;
+}
+
+int callback(void* data, int argc, char** argv, char** azColName){
+    if (argc > 0){
+        float* saldo = static_cast<float*>(data);
+        *saldo = std::stof(argv[0]);
+    }
+    return 0;
+}

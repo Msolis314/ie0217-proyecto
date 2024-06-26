@@ -59,7 +59,8 @@ public:
     static int floatCallback();
     // @brief establecer el tipo de cambio
     void setTipoCambioBank(void *data, int argc, char **argv, char **azColName);
-
+    void consultarPrestamo(int id_P);
+    int callbackConsultaPrestamos(void *data, int argc, char **argv, char **azColName);
 
     std::string getTipoInteres() const;
     void setTipoInteres(const std::string &tipoInteres);
