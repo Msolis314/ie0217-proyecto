@@ -4,92 +4,99 @@
 #include <cmath>
 #include "consulta.hpp"
 
+/// @brief Muestra el menú principal de consulta
 void Consulta::mostrarMenuConsulta() {
     int opcion;
 
     do {
         system("clear");
         std::cout << "Seleccione el tipo de consulta:" << std::endl;
-        std::cout << "1. Personalizado (Ingrese monto, cuotas y tasa)" << std::endl;
-        std::cout << "2. Préstamos Hipotecarios" << std::endl;
-        std::cout << "3. Préstamos Prendarios" << std::endl;
-        std::cout << "4. Préstamos Personales" << std::endl;
+        std::cout << "1. Préstamos Hipotecarios" << std::endl;
+        std::cout << "2. Préstamos Prendarios" << std::endl;
+        std::cout << "3. Préstamos Personales" << std::endl;
+        std::cout << "4. Préstamo Personalizado" << std::endl;
         std::cout << "5. Salir" << std::endl;
 
-        std::cin >> opcion;
-        std::cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n'); // Limpiar el buffer de entrada
+        if (!obtenerEntradaNumerica(opcion, "Ingrese una opción: ")) {
+            continue;
+        }
 
-        switch (opcion) {
-            case 1:
-                generarTablaPagosPersonalizado();
+        switch (static_cast<TipoPrestamo>(opcion)) {
+            case TipoPrestamo::Hipotecario:
+                seleccionarTipoPrestamo(TipoPrestamo::Hipotecario);
                 break;
-            case 2:
-                seleccionarTipoPrestamo(TipoPrestamo::HipotecarioColones);
+            case TipoPrestamo::Prendario:
+                seleccionarTipoPrestamo(TipoPrestamo::Prendario);
                 break;
-            case 3:
-                seleccionarTipoPrestamo(TipoPrestamo::PrendarioColones);
-                break;
-            case 4:
+            case TipoPrestamo::Personal:
                 seleccionarTipoPrestamo(TipoPrestamo::Personal);
                 break;
-            case 5:
+            case TipoPrestamo::Personalizado:
+                seleccionarTipoPrestamo(TipoPrestamo::Personalizado);
+                break;
+            case TipoPrestamo::Salir:
                 std::cout << "Saliendo del menú de consultas..." << std::endl;
                 break;
             default:
                 std::cout << "Opción no válida. Intente de nuevo." << std::endl;
                 break;
         }
-    } while (opcion != 5);
+    } while (static_cast<TipoPrestamo>(opcion) != TipoPrestamo::Salir);
 }
 
+/// @brief Selecciona el tipo de préstamo y obtiene la tasa de interés anual
+/// @param tipoPrestamo Tipo de préstamo seleccionado
 void Consulta::seleccionarTipoPrestamo(TipoPrestamo tipoPrestamo) {
     std::cout << "Seleccione la moneda del préstamo:" << std::endl;
     std::cout << "1. Colones" << std::endl;
     std::cout << "2. Dólares" << std::endl;
 
-    int moneda;
-    std::cin >> moneda;
+    int opcionMoneda;
+    if (!obtenerEntradaNumerica(opcionMoneda, "Ingrese una opción: ")) {
+        return;
+    }
 
-    switch (moneda) {
-        case 1:
-            if (tipoPrestamo == TipoPrestamo::HipotecarioColones)
-                generarTablaPagos(TipoPrestamo::HipotecarioColones, 8.5, 3, 10.09);
-            else if (tipoPrestamo == TipoPrestamo::PrendarioColones)
-                generarTablaPagos(TipoPrestamo::PrendarioColones, 11.5, 2, 16.34);
-            else if (tipoPrestamo == TipoPrestamo::Personal)
-                generarTablaPagosPersonalizado(); // Cambio aquí
+    Moneda moneda = static_cast<Moneda>(opcionMoneda);
+    if (moneda != Moneda::Colones && moneda != Moneda::Dolares) {
+        std::cout << "Opción no válida. Volviendo al menú principal..." << std::endl;
+        return;
+    }
+
+    float tasaInteresAnual;
+    switch (tipoPrestamo) {
+        case TipoPrestamo::Hipotecario:
+            tasaInteresAnual = (moneda == Moneda::Colones) ? 8.5 : 7.5;
             break;
-        case 2:
-            if (tipoPrestamo == TipoPrestamo::HipotecarioColones)
-                generarTablaPagos(TipoPrestamo::HipotecarioDolares, 7.5, 7, 8.39);
-            else if (tipoPrestamo == TipoPrestamo::PrendarioColones)
-                generarTablaPagos(TipoPrestamo::PrendarioDolares, 6.5, 2, 11.08);
-            else if (tipoPrestamo == TipoPrestamo::Personal)
-                generarTablaPagosPersonalizado(); // Cambio aquí
+        case TipoPrestamo::Prendario:
+            tasaInteresAnual = (moneda == Moneda::Colones) ? 11.5 : 6.5;
             break;
+        case TipoPrestamo::Personal:
+            tasaInteresAnual = 15.0;
+            break;
+        case TipoPrestamo::Personalizado:
+            generarTablaPagosPersonalizado();
+            return;
         default:
             std::cout << "Opción no válida. Volviendo al menú principal..." << std::endl;
             return;
     }
+
+    generarTablaPagos(tasaInteresAnual);
 }
 
-void Consulta::generarTablaPagos(TipoPrestamo tipoPrestamo, float tasaInteresAnual, int duracionAnios, float tasaInteresTotalAnual) {
+/// @brief Genera la tabla de pagos para un préstamo con una tasa de interés anual específica
+/// @param tasaInteresAnual Tasa de interés anual del préstamo
+void Consulta::generarTablaPagos(float tasaInteresAnual) {
     float monto;
     int cuotas;
 
-    std::cout << "Ingrese el monto del préstamo: ";
-    std::cin >> monto;
-
-    // Calcular la cantidad de cuotas basada en el tipo de préstamo
-    if (tipoPrestamo == TipoPrestamo::HipotecarioColones || tipoPrestamo == TipoPrestamo::HipotecarioDolares)
-        cuotas = duracionAnios * 12; // Se asume pago mensual para hipotecarios
-    else if (tipoPrestamo == TipoPrestamo::PrendarioColones || tipoPrestamo == TipoPrestamo::PrendarioDolares)
-        cuotas = duracionAnios * 6; // Se asume pago semestral para prendarios
-    else
-        cuotas = duracionAnios; // Para préstamos personales
+    if (!obtenerEntradaNumerica(monto, "Ingrese el monto del préstamo: ") ||
+        !obtenerEntradaNumerica(cuotas, "Ingrese el plazo en meses: ")) {
+        return;
+    }
 
     std::cout << std::fixed << std::setprecision(2);
-    std::cout << "Generando tabla de pagos para el préstamo " << tipoPrestamoToString(tipoPrestamo) << ":" << std::endl;
+    std::cout << "Generando tabla de pagos:" << std::endl;
     std::cout << "Monto del préstamo: $" << monto << std::endl;
     std::cout << "Duración en meses: " << cuotas << std::endl;
     std::cout << "Tasa de interés anual: " << tasaInteresAnual << "%" << std::endl;
@@ -112,22 +119,22 @@ void Consulta::generarTablaPagos(TipoPrestamo tipoPrestamo, float tasaInteresAnu
     std::cin.get();
 }
 
+/// @brief Genera la tabla de pagos personalizada permitiendo al usuario ingresar la tasa de interés anual
 void Consulta::generarTablaPagosPersonalizado() {
     float monto;
     int cuotas;
     float tasaInteres;
 
-    std::cout << "Ingrese el monto del préstamo: ";
-    std::cin >> monto;
-    std::cout << "Ingrese la cantidad de cuotas: ";
-    std::cin >> cuotas;
-    std::cout << "Ingrese la tasa de interés (%): ";
-    std::cin >> tasaInteres;
+    if (!obtenerEntradaNumerica(monto, "Ingrese el monto del préstamo: ") ||
+        !obtenerEntradaNumerica(cuotas, "Ingrese el plazo en meses: ") ||
+        !obtenerEntradaNumerica(tasaInteres, "Ingrese la tasa de interés anual (%): ")) {
+        return;
+    }
 
     std::cout << std::fixed << std::setprecision(2);
     std::cout << "Generando tabla de pagos personalizada:" << std::endl;
     std::cout << "Monto del préstamo: $" << monto << std::endl;
-    std::cout << "Cantidad de cuotas: " << cuotas << std::endl;
+    std::cout << "Duración en meses: " << cuotas << std::endl;
     std::cout << "Tasa de interés anual: " << tasaInteres << "%" << std::endl;
 
     // Calcular el pago mensual basado en la fórmula de cuota fija
@@ -148,19 +155,78 @@ void Consulta::generarTablaPagosPersonalizado() {
     std::cin.get();
 }
 
+/// @brief Convierte el tipo de préstamo a string
+/// @param tipoPrestamo Tipo de préstamo
+/// @return Cadena que representa el tipo de préstamo
 std::string Consulta::tipoPrestamoToString(TipoPrestamo tipoPrestamo) {
     switch (tipoPrestamo) {
-        case TipoPrestamo::HipotecarioColones:
-            return "Hipotecario en colones";
-        case TipoPrestamo::HipotecarioDolares:
-            return "Hipotecario en dólares";
-        case TipoPrestamo::PrendarioColones:
-            return "Prendario en colones";
-        case TipoPrestamo::PrendarioDolares:
-            return "Prendario en dólares";
+        case TipoPrestamo::Hipotecario:
+            return "Préstamo Hipotecario";
+        case TipoPrestamo::Prendario:
+            return "Préstamo Prendario";
         case TipoPrestamo::Personal:
-            return "Personal";
+            return "Préstamo Personal";
+        case TipoPrestamo::Personalizado:
+            return "Préstamo Personalizado";
         default:
             return "Desconocido";
+    }
+}
+
+/// @brief Convierte la moneda a string
+/// @param moneda Moneda
+/// @return Cadena que representa la moneda
+std::string Consulta::monedaToString(Moneda moneda) {
+    switch (moneda) {
+        case Moneda::Colones:
+            return "Colones";
+        case Moneda::Dolares:
+            return "Dólares";
+        default:
+            return "Desconocida";
+    }
+}
+
+/// @brief Obtiene una entrada numérica flotante del usuario
+/// @param valor Referencia al valor flotante a obtener
+/// @param mensaje Mensaje a mostrar al usuario
+/// @return true si la entrada es válida, false en caso contrario
+bool Consulta::obtenerEntradaNumerica(float &valor, const std::string &mensaje) {
+    std::string entrada;
+    std::cout << mensaje;
+    std::getline(std::cin, entrada);
+
+    // Intentar convertir la entrada a float
+    try {
+        valor = std::stof(entrada);
+        return true;
+    } catch (const std::invalid_argument &ex) {
+        std::cerr << "Entrada no válida. Intente de nuevo." << std::endl;
+        return false;
+    } catch (const std::out_of_range &ex) {
+        std::cerr << "Número fuera de rango. Intente con un valor más pequeño." << std::endl;
+        return false;
+    }
+}
+
+/// @brief Obtiene una entrada numérica entera del usuario
+/// @param valor Referencia al valor entero a obtener
+/// @param mensaje Mensaje a mostrar al usuario
+/// @return true si la entrada es válida, false en caso contrario
+bool Consulta::obtenerEntradaNumerica(int &valor, const std::string &mensaje) {
+    std::string entrada;
+    std::cout << mensaje;
+    std::getline(std::cin, entrada);
+
+    // Intentar convertir la entrada a int
+    try {
+        valor = std::stoi(entrada);
+        return true;
+    } catch (const std::invalid_argument &ex) {
+        std::cerr << "Entrada no válida. Intente de nuevo." << std::endl;
+        return false;
+    } catch (const std::out_of_range &ex) {
+        std::cerr << "Número fuera de rango. Intente con un valor más pequeño." << std::endl;
+        return false;
     }
 }
