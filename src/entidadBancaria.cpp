@@ -26,7 +26,7 @@ void EntidadBancaria::setFecha(){
     int month = date->tm_mon + 1; 
     int day = date->tm_mday;
     std::string  yearMonth = std::to_string(month) + "/" + std::to_string(day) + "/" + std::to_string(year);
-
+    this->fechaActual = yearMonth;
     sqlite3 *db;
     char *zErrMsg = 0;
     int rc;
@@ -47,6 +47,9 @@ void EntidadBancaria::setFecha(){
 
 }
 
+std::string EntidadBancaria::getFecha(){
+    return fechaActual;
+}
 void EntidadBancaria::setTipoCambio(){
     //Consultar la base de datos para obtener el tipo de cambio.
     sqlite3 *db;

@@ -56,6 +56,7 @@ class Cliente: public EntidadBancaria{
         //Declarar la clase operaciones como amiga de la clase cliente
         friend class Operaciones;
         friend class Prestamos; 
+        friend class CDP;
             /**
          * @brief constructor de la clase cliente.
          * @param nombre nombre del cliente.

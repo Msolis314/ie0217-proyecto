@@ -24,6 +24,7 @@ enum TipoTransaccion{
     CONSULTARSALDO,
     CONSULTARMOVIMIENTOS,
     CONSULTARPRESTAMOS,
+    OPERACIONESCDP,
     SALIRMENUT
 
 };
@@ -38,6 +39,7 @@ enum Respuesta{
 class EntidadBancaria{
     private:
         char* fecha = new char[80];
+        std::string fechaActual;
         float* tipoCambio = new float(0);
     public:
 

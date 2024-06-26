@@ -10,6 +10,7 @@
 #include <type_traits>
 #include "entidadBancaria.hpp"
 #include "banco.hpp"
+#include "CDP.hpp"
 #include "db.hpp"
 #include "cliente.hpp"
 #include "transaciones.hpp"
@@ -336,6 +337,7 @@ void Cliente::transaccion(){
     std::string monto;
     float montoF;
     Operaciones op(this->nombre, this->apellido, this->id);
+    CDP cdp(this->nombre, this->apellido, this->id);
 
     do {
         std::cout << "\n------ Menú de Transacciones ------" << std::endl;
@@ -347,7 +349,8 @@ void Cliente::transaccion(){
         std::cout << "6. Consultar saldo" << std::endl;
         std::cout << "7. Consultar movimientos" << std::endl;
         std::cout << "8. Consultar préstamos" << std::endl;
-        std::cout << "9. Salir del menú" << std::endl;
+        std::cout << "9.Operaciones con CDP" << std::endl;
+        std::cout << "10. Salir del menú" << std::endl;
         std::cout << "Elija una opción: ";
 
         do {
@@ -404,6 +407,10 @@ void Cliente::transaccion(){
         case CONSULTARPRESTAMOS:
             // xxxx
             break;
+        case OPERACIONESCDP:
+            cdp.displayMenuCDP();
+            break;
+
         case SALIRMENUT:
             std::cout << "Saliendo del menú de transacciones..." << std::endl;
             break;
