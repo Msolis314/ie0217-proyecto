@@ -147,7 +147,7 @@ void Prestamos::ingresar_prestamoPersonal() {
     }
     // consulta SQL para insertar los datos del prestamo a la tabla prestamo
     string sqlInsert = "INSERT INTO PRESTAMO (ID_PRESTAMO,ID_CLIENTE, TIPO_PRESTAMO, TIPO_CAMBIO, TIPO_INTERES, CUOTA, PLAZO, TASA_INTERES, CAPITAL_OG, CAPITAL_ACTUAL) VALUES (" +
-                        std::to_string(id_P) + ","+ std::to_string(this->cliente.id) +  "," + std::to_string(TipoPrestamo)  + ", '" + tipoCambio + "', '" + tipoInteres + "', " + to_string(cuota) + ", " + to_string(plazo) + ", " + to_string(tasaActual) + ", " + to_string(capital) + ", " + to_string(capital) + ");";
+                        std::to_string(id_P) + ","+ std::to_string(this->cliente.id) +  "," + TipoPrestamo + ", '" + tipoCambio + "', '" + tipoInteres + "', " + to_string(cuota) + ", " + to_string(plazo) + ", " + to_string(tasaActual) + ", " + to_string(capital) + ", " + to_string(capital) + ");";
 
     // Ejecuta la consulta SQL y verifica si hubo errores
     rc = sqlite3_exec(db, sqlInsert.c_str(), 0, 0, &zErrMsg);
@@ -246,8 +246,8 @@ void Prestamos::ingresar_prestamoHipotecario() {
         std::cout << "Base de datos abierta" << std::endl;
     }
     std::string sqlInsert = "INSERT INTO PRESTAMO (ID_PRESTAMO, ID_CLIENTE, TIPO_PRESTAMO, TIPO_CAMBIO, TIPO_INTERES, CUOTA, PLAZO, TASA_INTERES, CAPITAL_OG, CAPITAL_ACTUAL) VALUES (" +
-                        std::to_string(id_P) + ", " + std::to_string(cliente.id) + ", " + std::to_string(TipoPrestamo) + ", '" + tipoCambio + "', '" + tipoInteres + "', " +
-                        std::to_string(cuota) + ", " + std::to_string(plazo) + ", " + std::to_string(tasaActual) + ", " +
+                        std::to_string(id_P) + ", " + std::to_string(cliente.id) + ", " + TipoPrestamo + ", '" + tipoCambio + "', '" + tipoInteres + "', " +
+                        std::to_string(cuota) + ", " + plazo + ", " + std::to_string(tasaActual) + ", " +
                         std::to_string(capital) + ", " + std::to_string(capital) + ");";
 
     // Ejecuta la consulta SQL y verifica errores
@@ -347,8 +347,8 @@ void Prestamos::ingresar_prestamoPrendario() {
 
     // Construir la consulta SQL para insertar los datos del préstamo
     std::string sqlInsert = "INSERT INTO PRESTAMO (ID_PRESTAMO, ID_CLIENTE, TIPO_PRESTAMO, TIPO_CAMBIO, TIPO_INTERES, CUOTA, PLAZO, TASA_INTERES, CAPITAL_OG, CAPITAL_ACTUAL) VALUES (" +
-                        std::to_string(id_P) + ", " + std::to_string(cliente.id) + ", " + std::to_string(TipoPrestamo) + ", '" + tipoCambio + "', '" + tipoInteres + "', " +
-                        std::to_string(cuota) + ", " + std::to_string(plazo) + ", " + std::to_string(tasaActual) + ", " +
+                        std::to_string(id_P) + ", " + std::to_string(cliente.id) + ", " + TipoPrestamo + ", '" + tipoCambio + "', '" + tipoInteres + "', " +
+                        std::to_string(cuota) + ", " + plazo + ", " + std::to_string(tasaActual) + ", " +
                         std::to_string(capital) + ", " + std::to_string(capital) + ");";
     rc = sqlite3_exec(db, sqlInsert.c_str(), 0, 0, &zErrMsg);
     if (rc != SQLITE_OK) {
@@ -513,7 +513,7 @@ void Prestamos::setTipoCambioBank(){
     }
 
     const char* sql = "SELECT TASA_BANCO_CENTRAL FROM BANKINFO";
-    rc = sqlite3_exec(db, sql, floatCallback, this->tasaBanco, &zErrMsg);
+    rc = sqlite3_exec(db, sql, floatCallback, &tasaBanco, &zErrMsg);
     if (rc != SQLITE_OK){
         std::cout << "SQL ERROR: " << zErrMsg << std::endl;
         sqlite3_free(zErrMsg);
@@ -528,20 +528,14 @@ void Prestamos::setTipoCambioBank(){
 /*****************************************************
  * **********  Callback para procesar    *************
 ******************************************************/
-int floatCallback(void* data, int argc, char** argv, char** azColName) {
-    if (argc > 0 && argv[0] != nullptr) {
-        float* tasaBanco = static_cast<float*>(data);
-        *tasaBanco = std::stof(argv[0]);  // se espera obtener el valor flotante
-    }
-    return 0;  
-}
+
 
 
 
 /*****************************************************
  * *****  Consultar los prestamos del cliente    *****
 ******************************************************/
-void Prestamos::consultarPrestamo(int id_P){
+float Prestamos::consultarPrestamo(int id_P){
     sqlite3* db;
     char* error;
     int rc;
@@ -555,7 +549,7 @@ void Prestamos::consultarPrestamo(int id_P){
         std::cout << "...." << std::endl;
     }
 
-    std::string sql = "SELECT AHORROS FROM CUENTA_BANCARIA WHERE ID_CUENTA = " + std::to_string(idCuenta);
+    std::string sql = "SELECT AHORROS FROM CUENTA_BANCARIA WHERE ID_CUENTA = " + std::to_string(cliente.idCuentaC) + "OR"+ std::to_string(cliente.idCuentaD) + ";" ;
     rc = sqlite3_exec(db, sql.c_str(), callback, &saldo, &error);
     if (rc != SQLITE_OK){
         std::cout << "SQL ERROR: " << error << std::endl;
@@ -563,7 +557,7 @@ void Prestamos::consultarPrestamo(int id_P){
     }
 
     sqlite3_close(db);
-    if (!cliente.checkIDCuentaExists(idCuenta, COLON) && !cliente.checkIDCuentaExists(idCuenta, DOLAR)){
+    if (!cliente.checkIDCuentaExists(cliente.idCuentaC, COLON) && !cliente.checkIDCuentaExists(cliente.idCuentaD, DOLAR)){
         return 0;
     }
     return saldo;

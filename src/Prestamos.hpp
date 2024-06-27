@@ -7,6 +7,7 @@
 #include "entidadBancaria.hpp"
 #include "menu.hpp"
 #include "cliente.hpp"
+#include "db.hpp"
 
 
 
@@ -15,10 +16,7 @@ enum TipoPretamo{
     HIPOTECARIO = 2,
     PRENDARIO = 3
 };
-enum DC{
-    COLON = 1,
-    DOLAR = 2
-};
+
 
 class Prestamos : public EntidadBancaria{
 private:
@@ -49,17 +47,17 @@ public:
     void ingresar_prestamoPersonal();
     void ingresar_prestamoHipotecario();
     void ingresar_prestamoPrendario();
-    void generar_id_prestamo();
+    int generar_id_prestamo();
     string ingresarTipoInteres();
 
     static int callbackPrestamos(void *data, int argc, char **argv, char **azColName);
     void setActualIDPrestamos();
     bool checkID_PRESTAMO(int id);
     void agregarID_lista(int id);
-    static int floatCallback();
+    
     // @brief establecer el tipo de cambio
-    void setTipoCambioBank(void *data, int argc, char **argv, char **azColName);
-    void consultarPrestamo(int id_P);
+    void setTipoCambioBank();
+    float consultarPrestamo(int id_P);
     int callbackConsultaPrestamos(void *data, int argc, char **argv, char **azColName);
 
     std::string getTipoInteres() const;
