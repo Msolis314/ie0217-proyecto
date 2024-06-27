@@ -9,6 +9,43 @@
 #include "transaciones.hpp"
 
 
+// Función para obtener la fecha y hora actual en formato string
+std::string obtenerFechaHoraActual() {
+    std::time_t tiempoActual = std::time(nullptr);
+    char buffer[100];
+    std::strftime(buffer, sizeof(buffer), "%Y-%m-%d %H:%M:%S", std::localtime(&tiempoActual));
+    return std::string(buffer);
+}
+
+// Función para registrar una transacción en la base de datos
+void registrarTransaccion(int idCliente, const std::string& tipoTransaccion, int idCuenta, int idCuentaDestino, float monto) {
+    sqlite3* db;
+    char* zErrMsg = 0;
+    int rc;
+    rc = sqlite3_open("SistemaBancario.db", &db);
+
+    if (rc) {
+        std::cerr << "No se pudo abrir la base de datos: " << sqlite3_errmsg(db) << std::endl;
+        return;
+    }
+
+    std::string fechaHora = obtenerFechaHoraActual();
+    std::string sql = "INSERT INTO HISTORIAL_TRANSACCIONES (ID_CLIENTE, TIPO_TRANSACCION, ID_CUENTA, ID_CUENTA_DESTINO, MONTO, FECHA) "
+                      "VALUES (" + std::to_string(idCliente) + ", '" + tipoTransaccion + "', " + 
+                      (idCuenta == 0 ? "NULL" : std::to_string(idCuenta)) + ", " + 
+                      (idCuentaDestino == 0 ? "NULL" : std::to_string(idCuentaDestino)) + ", " + 
+                      std::to_string(monto) + ", '" + fechaHora + "');";
+
+    rc = sqlite3_exec(db, sql.c_str(), NULL, 0, &zErrMsg);
+    if (rc != SQLITE_OK) {
+        std::cerr << "SQL ERROR: " << zErrMsg << std::endl;
+        sqlite3_free(zErrMsg);
+    }
+
+    sqlite3_close(db);
+}   
+
+
 Operaciones:: Operaciones(std::string nombre,std::string apellido,int id):cliente(nombre,apellido,id){
     Cliente cliente(nombre,apellido,id);
 }
@@ -66,7 +103,7 @@ void Operaciones::depositar(Monedas cambio,float monto){
             vars.rc = sqlite3_open("SistemaBancario.db", &vars.db);
 
             if (vars.rc){
-                std::cout << "No se pudo abrir la base de datos" << std::endl;
+                std::cerr << "No se pudo abrir la base de datos" << std::endl;
             }
             else{
                 std::cout << "...." << std::endl;
@@ -75,16 +112,20 @@ void Operaciones::depositar(Monedas cambio,float monto){
             vars.sql = "UPDATE CUENTA_BANCARIA SET AHORROS = " + std::to_string(saldo) + " WHERE ID_CUENTA = " + std::to_string(cliente.idCuentaC);
             vars.rc = sqlite3_exec(vars.db, vars.sql.c_str(), NULL, 0, &vars.zErrMsg);
 
-            if (vars.rc != SQLITE_OK){
-                std::cout << "SQL ERROR: " << vars.zErrMsg << std::endl;
-                sqlite3_free(vars.zErrMsg);
-            }
+            if (vars.rc != SQLITE_OK) {
+                    std::cerr << "SQL ERROR: " << vars.zErrMsg << std::endl;
+                    sqlite3_free(vars.zErrMsg);
+                } else {
+                    registrarTransaccion(cliente.id, "Deposito", cliente.idCuentaC, 0, vars.monto); // Registro de deposito
+                }
+
             vars.rightChoice = cliente.returnMain("Deposito exitoso");
             vars.monto = 0;
             vars.tries++;
             //Cerrar la base de datos
             sqlite3_close(vars.db);
             break;
+
         case DOLAR:
             if (cliente.idCuentaD == 0){
             
@@ -102,7 +143,7 @@ void Operaciones::depositar(Monedas cambio,float monto){
             vars.rc = sqlite3_open("SistemaBancario.db", &vars.db);
 
             if (vars.rc){
-                std::cout << "No se pudo abrir la base de datos" << std::endl;
+                std::cerr << "No se pudo abrir la base de datos" << std::endl;
             }
             else{
                 std::cout << "...." << std::endl;
@@ -111,10 +152,12 @@ void Operaciones::depositar(Monedas cambio,float monto){
             vars.sql = "UPDATE CUENTA_BANCARIA SET AHORROS = " + std::to_string(saldo) + " WHERE ID_CUENTA = " + std::to_string(cliente.idCuentaD);
             vars.rc = sqlite3_exec(vars.db, vars.sql.c_str(), NULL, 0, &vars.zErrMsg);
 
-            if (vars.rc != SQLITE_OK){
-                std::cout << "SQL ERROR: " << vars.zErrMsg << std::endl;
-                sqlite3_free(vars.zErrMsg);
-            }
+            if (vars.rc != SQLITE_OK) {
+                    std::cerr << "SQL ERROR: " << vars.zErrMsg << std::endl;
+                    sqlite3_free(vars.zErrMsg);
+                } else {
+                    registrarTransaccion(cliente.id, "Deposito", cliente.idCuentaD, 0, vars.monto); // Regsitro de deposito
+                }
             vars.rightChoice = cliente.returnMain("Deposito exitoso");
             vars.monto = 0;
             vars.tries++;
@@ -201,7 +244,7 @@ void Operaciones::retirar(Monedas cambio,float monto){
                 rc = sqlite3_open("SistemaBancario.db", &db);
 
                 if (rc){
-                    std::cout << "No se pudo abrir la base de datos" << std::endl;
+                    std::cerr << "No se pudo abrir la base de datos" << std::endl;
                 }
                 else{
                     std::cout << "...." << std::endl;
@@ -210,10 +253,13 @@ void Operaciones::retirar(Monedas cambio,float monto){
                 sql = "UPDATE CUENTA_BANCARIA SET AHORROS = " + std::to_string(saldo) + " WHERE ID_CUENTA = " + std::to_string(cliente.idCuentaC);
                 rc = sqlite3_exec(db, sql.c_str(), NULL, 0, &error);
 
-                if (rc != SQLITE_OK){
-                    std::cout << "SQL ERROR: " << error << std::endl;
+                if (rc != SQLITE_OK) {
+                    std::cerr << "SQL ERROR: " << error << std::endl;
                     sqlite3_free(error);
+                } else {
+                    registrarTransaccion(cliente.id, "Retiro", cliente.idCuentaC, 0, monto); // Regsitro de retiro
                 }
+
                 rightChoice = cliente.returnMain("Retiro exitoso");
                 tries++;
                 sqlite3_close(db);
@@ -246,7 +292,7 @@ void Operaciones::retirar(Monedas cambio,float monto){
                 rc = sqlite3_open("SistemaBancario.db", &db);
 
                 if (rc){
-                    std::cout << "No se pudo abrir la base de datos" << std::endl;
+                    std::cerr << "No se pudo abrir la base de datos" << std::endl;
                 }
                 else{
                     std::cout << "...." << std::endl;
@@ -255,10 +301,13 @@ void Operaciones::retirar(Monedas cambio,float monto){
                 sql = "UPDATE CUENTA_BANCARIA SET AHORROS = " + std::to_string(saldo) + " WHERE ID_CUENTA = " + std::to_string(cliente.idCuentaD);
                 rc = sqlite3_exec(db, sql.c_str(), NULL, 0, &error);
 
-                if (rc != SQLITE_OK){
-                    std::cout << "SQL ERROR: " << error << std::endl;
+                if (rc != SQLITE_OK) {
+                    std::cerr << "SQL ERROR: " << error << std::endl;
                     sqlite3_free(error);
+                } else {
+                    registrarTransaccion(cliente.id, "Retiro", cliente.idCuentaD, 0, monto); // Registro de retiro
                 }
+
                 //Cerrar la base de datos
                 sqlite3_close(db);
                 rightChoice = cliente.returnMain("Retiro exitoso");
@@ -279,7 +328,7 @@ float Operaciones::consultarSaldo(int idCuenta){
     rc = sqlite3_open("SistemaBancario.db", &db);
 
     if (rc){
-        std::cout << "No se pudo abrir la base de datos" << std::endl;
+        std::cerr << "No se pudo abrir la base de datos" << std::endl;
     }
     else{
         std::cout << "...." << std::endl;
@@ -288,7 +337,7 @@ float Operaciones::consultarSaldo(int idCuenta){
     std::string sql = "SELECT AHORROS FROM CUENTA_BANCARIA WHERE ID_CUENTA = " + std::to_string(idCuenta);
     rc = sqlite3_exec(db, sql.c_str(), callback, &saldo, &error);
     if (rc != SQLITE_OK){
-        std::cout << "SQL ERROR: " << error << std::endl;
+        std::cerr << "SQL ERROR: " << error << std::endl;
         sqlite3_free(error);
     }
 
@@ -316,7 +365,7 @@ int Operaciones::checkAcountCurrency(int cuenta){
     rc = sqlite3_open("SistemaBancario.db", &db);
 
     if (rc){
-        std::cout << "No se pudo abrir la base de datos" << std::endl;
+        std::cerr << "No se pudo abrir la base de datos" << std::endl;
     }
     else{
         std::cout << "...." << std::endl;
@@ -325,7 +374,7 @@ int Operaciones::checkAcountCurrency(int cuenta){
     std::string sql = "SELECT MONEDA FROM CUENTA_BANCARIA WHERE ID_CUENTA = " + std::to_string(cuenta);
     rc = sqlite3_exec(db, sql.c_str(), floatCallback, &moneda, &error);
     if (rc != SQLITE_OK){
-        std::cout << "SQL ERROR: " << error << std::endl;
+        std::cerr << "SQL ERROR: " << error << std::endl;
         sqlite3_free(error);
     }
 
@@ -460,7 +509,7 @@ void Operaciones::transferir(){
                 vars.rc = sqlite3_open("SistemaBancario.db", &vars.db);
 
                 if (vars.rc){
-                    std::cout << "No se pudo abrir la base de datos" << std::endl;
+                    std::cerr << "No se pudo abrir la base de datos" << std::endl;
                 }
                 else{
                     std::cout << "...." << std::endl;
@@ -470,7 +519,7 @@ void Operaciones::transferir(){
                 vars.rc = sqlite3_exec(vars.db, vars.sql.c_str(), NULL, 0, &vars.zErrMsg);
 
                 if (vars.rc != SQLITE_OK){
-                    std::cout << "SQL ERROR: " << vars.zErrMsg << std::endl;
+                    std::cerr << "SQL ERROR: " << vars.zErrMsg << std::endl;
                     sqlite3_free(vars.zErrMsg);
                 }
                 //Consultar el tipo de moneda de la cuenta destino
@@ -495,11 +544,15 @@ void Operaciones::transferir(){
                 vars.rc = sqlite3_exec(vars.db, vars.sql.c_str(), NULL, 0, &vars.zErrMsg);
 
                 if (vars.rc != SQLITE_OK){
-                    std::cout << "SQL ERROR: " << vars.zErrMsg << std::endl;
+                    std::cerr << "SQL ERROR: " << vars.zErrMsg << std::endl;
                     sqlite3_free(vars.zErrMsg);
                 }
                 //Cerrar la base de datos
                 sqlite3_close(vars.db);
+
+                // Registrar la transferencia
+                registrarTransaccion(cliente.id, "Transferencia", cliente.idCuentaC, idCuentaDestino, vars.monto);
+
                 vars.rightChoice = cliente.returnMain("Transferencia exitosa");
                 vars.tries++;
                 break;
@@ -534,7 +587,7 @@ void Operaciones::transferir(){
                 vars.rc = sqlite3_open("SistemaBancario.db", &vars.db);
 
                 if (vars.rc){
-                    std::cout << "No se pudo abrir la base de datos" << std::endl;
+                    std::cerr << "No se pudo abrir la base de datos" << std::endl;
                 }
                 else{
                     std::cout << "...." << std::endl;
@@ -544,7 +597,7 @@ void Operaciones::transferir(){
                 vars.rc = sqlite3_exec(vars.db, vars.sql.c_str(), NULL, 0, &vars.zErrMsg);
 
                 if (vars.rc != SQLITE_OK){
-                    std::cout << "SQL ERROR: " << vars.zErrMsg << std::endl;
+                    std::cerr << "SQL ERROR: " << vars.zErrMsg << std::endl;
                     sqlite3_free(vars.zErrMsg);
                 }
                 //Consultar el tipo de moneda de la cuenta destino
@@ -566,10 +619,14 @@ void Operaciones::transferir(){
                 vars.rc = sqlite3_exec(vars.db, vars.sql.c_str(), NULL, 0, &vars.zErrMsg);
 
                 if (vars.rc != SQLITE_OK){
-                    std::cout << "SQL ERROR: " << vars.zErrMsg << std::endl;
+                    std::cerr << "SQL ERROR: " << vars.zErrMsg << std::endl;
                     sqlite3_free(vars.zErrMsg);
                 }
                 sqlite3_close(vars.db);
+
+                // Registrar la tranferencia
+                registrarTransaccion(cliente.id, "Transferencia", cliente.idCuentaD, idCuentaDestino, vars.monto);
+
                 vars.rightChoice = cliente.returnMain("Transferencia exitosa");
                 vars.tries++;
                 break;
@@ -579,7 +636,3 @@ void Operaciones::transferir(){
 
     } while (vars.rightChoice != RETURN);
 }
-
-
-
-            
