@@ -70,6 +70,10 @@ static int floatCallback(void *data, int argc, char **argv, char **azColName){
 /// @return string con la fecha actual
 std::string getFecha();
 
+/// @brief Funcion para retorn indice aleatorio
+/// @return double con indice
+double generarIndiceAleatorio();
+
 /// @brief Funcion para actualizar la fecha y el tipo de cambio en la base de datos
 
 /// @return Codigo de error

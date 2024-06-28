@@ -39,7 +39,7 @@ void Banco::setActualIDs(){
     rc = sqlite3_open("SistemaBancario.db", &db);                      // Abriendo la base de datos    
 
     if (rc){                                                           // se ejecuta un if, si no genera errores, mostrar mensaje de exito, sino de error
-        std::cout << "No se pudo abrir la base de datos" << std::endl;
+        std::cerr << "No se pudo abrir la base de datos" << std::endl;
     }else{
         std::cout << "...." << std::endl;   // Base de datos abierta
     }
@@ -47,7 +47,7 @@ void Banco::setActualIDs(){
     const char* sql = "SELECT ID FROM CUSTOMERS;";                      // Tomando todos los ids de la tabla customers
     rc = sqlite3_exec(db, sql, callbackIDs, this, &zErrMsg);              // db puntero,consulta sql, callback toma filas.
     if (rc != SQLITE_OK){                                              // Si no es sqlite_ok ocurrio un error y se muestra,
-        std::cout << "SQL ERROR: " << zErrMsg << std::endl;
+        std::cerr << "SQL ERROR: " << zErrMsg << std::endl;
         sqlite3_free(zErrMsg);
     }else{
         std::cout << "IDs obtenidos con exito" << std::endl;           // si se obtuvieron bien los ids.
@@ -65,7 +65,7 @@ void Banco::setActualIDCuentas(){
     int rc;                                                             // Codigos de retorno, indicando si se ejecuto bien
     rc = sqlite3_open("SistemaBancario.db", &db);                       // Abriendo la base de datos  
     if (rc){                                                            // se ejecuta un if, si no genera errores, mostrar mensaje de exito, sino de error
-        std::cout << "No se pudo abrir la base de datos" << std::endl;
+        std::cerr << "No se pudo abrir la base de datos" << std::endl;
     }else{
         std::cout << "...." << std::endl;
     }
@@ -73,7 +73,7 @@ void Banco::setActualIDCuentas(){
     const char* sql = "SELECT ID_CUENTA FROM CUSTOMERS";                // Tomando todos los ids_cuentas de la tabla customers
     rc = sqlite3_exec(db, sql, callbackCuentas, this, &zErrMsg);        // db puntero,consulta sql, callback toma filas.
     if (rc != SQLITE_OK){                                               // Si no es sqlite_ok ocurrio un error y se muestra,
-        std::cout << "SQL ERROR: " << zErrMsg << std::endl;
+        std::cerr << "SQL ERROR: " << zErrMsg << std::endl;
         sqlite3_free(zErrMsg);
     }else{
         std::cout << "IDs de cuentas obtenidos con exito" << std::endl; // si se obtuvieron bien los ids de las cuentas.
@@ -119,7 +119,7 @@ int Banco::callbackClientes(void *data, int argc, char **argv, char **azColName)
     int i;
     Banco* banco = static_cast<Banco*>(data);                                     //  accediendo al objeto banco.
     if (argc == 0){                                                               // si argc es cero significa que no se encontraron clientes con esos datos
-        std::cout << "No se encontraron clientes con esos datos" << std::endl;
+        std::cerr << "No se encontraron clientes con esos datos" << std::endl;
         return 1;
     } else {
         return 0;
@@ -136,7 +136,7 @@ void Banco::setActualIDPrestamos(){
     int rc;                                                                // Codigos de retorno, indicando si se ejecuto bien
     rc = sqlite3_open("SistemaBancario.db", &db);                          // abre la base de datos sistema bancario, con el puntero db
     if (rc){                                                               // ejecuta el if, para comprobar si se pudo abrir la base de datos
-        std::cout << "No se pudo abrir la base de datos" << std::endl;  
+        std::cerr << "No se pudo abrir la base de datos" << std::endl;  
     }else{
         std::cout << "....." << std::endl;
     }
@@ -144,7 +144,7 @@ void Banco::setActualIDPrestamos(){
     const char* sql = "SELECT ID_PRESTAMO_C FROM CUSTOMERS";               // Selecciona de la tabla customers los ids_prestamos
     rc = sqlite3_exec(db, sql, callbackPrestamos, this, &zErrMsg);
     if (rc != SQLITE_OK){                                                  // si la funcion sqlite es ok  significa que no hubo errores, entoces se obtiene los ids prestamos.
-        std::cout << "SQL ERROR: " << zErrMsg << std::endl;                // mensaje de error
+        std::cerr << "SQL ERROR: " << zErrMsg << std::endl;                // mensaje de error
         sqlite3_free(zErrMsg);
     }else{
         std::cout << "IDs de prestamos obtenidos con exito" << std::endl;
@@ -208,7 +208,7 @@ void Banco::agregarCliente(std::string nombre, std::string apellido,std::string 
     int rc;                                                             // codigo de retorno, indicador de si se ejecuto bien
     rc = sqlite3_open("SistemaBancario.db", &db);                       // abriendo la base de datos sistema bancario
     if (rc){                                                            // if para verificar que se abrio correctamente
-        std::cout << "No se pudo abrir la base de datos" << std::endl;
+        std::cerr << "No se pudo abrir la base de datos" << std::endl;
     }else{
         std::cout << "...." << std::endl;
     }
@@ -234,7 +234,7 @@ void Banco::agregarCliente(std::string nombre, std::string apellido,std::string 
     const char* data = sql.c_str();                                     // Usando Sqlite
     rc = sqlite3_exec(db, data, NULL, 0, &zErrMsg);     
     if (rc != SQLITE_OK){                                               // si todo se ejecuta bien en el if, el cliente se agrega con exito, sino msj error
-        std::cout << "SQL ERROR: " << zErrMsg << std::endl;
+        std::cerr << "SQL ERROR: " << zErrMsg << std::endl;
         sqlite3_free(zErrMsg);
     }else{
         std::cout << "Cliente agregado con exito" << std::endl;         //cliente agregado.
@@ -255,7 +255,7 @@ bool Banco::consultarClientes(std::string nombre, std::string apellido){ // dos 
     bool found = false;                                                             // codigo de retorno
     rc = sqlite3_open("SistemaBancario.db", &db);                        // abriendo base de datos
     if (rc){                                                             // verificando que se abre la db correctamente.
-        std::cout << "No se pudo abrir la base de datos" << std::endl;
+        std::cerr << "No se pudo abrir la base de datos" << std::endl;
     }else{
         std::cout << "...." << std::endl;
     }
@@ -269,7 +269,7 @@ bool Banco::consultarClientes(std::string nombre, std::string apellido){ // dos 
     }, &found, &zErrMsg);
 
     if (rc != SQLITE_OK) {
-        std::cout << "Error en la consulta SQL: " << zErrMsg << std::endl;
+        std::cerr << "Error en la consulta SQL: " << zErrMsg << std::endl;
         sqlite3_free(zErrMsg);
     }
 
@@ -333,7 +333,7 @@ bool Banco::checkifClienteExists(std::string nombre, std::string apellido,std::s
 
     rc = sqlite3_open("SistemaBancario.db", &db);
     if (rc) {
-        std::cout << "No se pudo abrir la base de datos" << std::endl;
+        std::cerr << "No se pudo abrir la base de datos" << std::endl;
         return false;
     } else {
         std::cout << "...." << std::endl;
@@ -355,7 +355,7 @@ bool Banco::checkifClienteExists(std::string nombre, std::string apellido,std::s
     }, &found, &zErrMsg);
 
     if (rc != SQLITE_OK) {
-        std::cout << "Error en la consulta SQL: " << zErrMsg << std::endl;
+        std::cerr << "Error en la consulta SQL: " << zErrMsg << std::endl;
         sqlite3_free(zErrMsg);
     }
 

@@ -3,6 +3,7 @@
 #include <vector>
 #include <string>
 #include <ctime>
+#include <iomanip> // Para std::setprecision y std::fixed
 #include <sqlite3.h>
 #include "db.hpp"
 
@@ -51,9 +52,15 @@ int crearDB(){
 
     // Crear tabla de informacion Bancaria
     sql = "CREATE TABLE IF NOT EXISTS BANKINFO(" \
-        "FECHA           TEXT    NOT NULL," \
-        "TIPO_CAMBIO    REAL    NOT NULL," \
-        " TASA_BANCO_CENTRAL NOT NULL);";
+    "FECHA                   TEXT    NOT NULL," \
+    "TIPO_CAMBIO            REAL    NOT NULL," \
+    "PERSONAL_DOLARES        REAL    NOT NULL," \
+    "PERSONAL_COLONES        REAL    NOT NULL," \
+    "HIPOTECARIO_DOLARES     REAL    NOT NULL," \
+    "HIPOTECARIO_COLONES     REAL    NOT NULL," \
+    "PRENDARIO_DOLARES       REAL    NOT NULL," \
+    "PRENDARIO_COLONES       REAL    NOT NULL," \
+    "INDICE_REFERENCIA          REAL    NOT NULL);";
     
     rc = sqlite3_exec(db, sql, callback, 0, &zErrMsg);
     if (rc != SQLITE_OK){
@@ -121,7 +128,7 @@ int crearDB(){
     }
 
     // Tabla de historial de prestamos
-    sql = "CREATE TABLE IF NOT EXISTS HISTORIA_PRESTAMOS ("
+    sql = "CREATE TABLE IF NOT EXISTS HISTORIAL_PRESTAMOS ("
     "ID_HISTORIA INTEGER PRIMARY KEY AUTOINCREMENT,"
     "ID_CLIENTE INT NOT NULL,"
     "ID_PRESTAMO INT NOT NULL,"
@@ -234,15 +241,28 @@ int intCallback(void *data, int argc, char **argv, char **azColName){
     return 0;
 }
 */
-std::string getFecha(){
-    time_t now = time(0);
+// Función para generar un número aleatorio decimal entre -8% y +8%
+double generarIndiceAleatorio() {
+    // Inicializar la semilla del generador de números aleatorios
+    srand(time(0)); 
+    // Generar un número aleatorio entre -8.00 y +8.00
+    double aleatorio = (rand() % 1601 - 800) / 100.0; // Rango: -8.00 a +8.00
+    return aleatorio;
+}
+
+// Función para obtener la fecha actual en formato MM/DD/YYYY
+std::string getFecha() {
+    time_t now = time(nullptr);
     char *dt = ctime(&now);
     return dt;
 }
 
+// Función para actualizar los datos en la tabla BANKINFO
+int updateFecha() {
+    // Generar índice aleatorio
+    double indice = generarIndiceAleatorio();
 
-int updateFecha(){
-    std::string fecha;
+    // Obtener fecha actual en formato MM/DD/YYYY
     time_t t = time(nullptr);
     std::tm* date = std::localtime(&t);
     int year = date->tm_year + 1900;
@@ -255,23 +275,28 @@ int updateFecha(){
     int rc;
 
     rc = sqlite3_open("SistemaBancario.db", &db);
-    if (rc){
+    if (rc) {
         std::cout << "No se pudo abrir la base de datos" << std::endl;
-    }else{
-        std::cout << "...." << std::endl;
+        return 1;
     }
 
-    std::string sql = "INSERT INTO BANKINFO (FECHA, TIPO_CAMBIO, TASA_BANCO_CENTRAL) VALUES ('" + yearMonth + "', " + std::to_string(TIPO_CAMBIO) + ", 0.05);";
+    // Insertar datos en la tabla BANKINFO
+    std::string sql = "INSERT INTO BANKINFO (FECHA, TIPO_CAMBIO, PERSONAL_DOLARES, PERSONAL_COLONES, "
+                      "HIPOTECARIO_DOLARES, HIPOTECARIO_COLONES, PRENDARIO_DOLARES, PRENDARIO_COLONES, "
+                      "INDICE_REFERENCIA) VALUES ('" + yearMonth + "', " + std::to_string(TIPO_CAMBIO) + ", "
+                      "16.3, 16.3, 8.39, 16.34, 11.08, 16.34, " + std::to_string(indice) + ");";
+
     rc = sqlite3_exec(db, sql.c_str(), NULL, 0, &zErrMsg);
-    if (rc != SQLITE_OK){
-        std::cout << "SQL ERROR: " << zErrMsg << std::endl;
+    if (rc != SQLITE_OK) {
+        std::cerr << "SQL ERROR (INSERT INTO): " << zErrMsg << std::endl;
         sqlite3_free(zErrMsg);
+        sqlite3_close(db);
+        return 1;
     }
 
     sqlite3_close(db);
     return 0;
 }
-
 
 int cleanBankInfo(){
     sqlite3 *db;
@@ -280,7 +305,7 @@ int cleanBankInfo(){
 
     rc = sqlite3_open("SistemaBancario.db", &db);
     if (rc){
-        std::cout << "No se pudo abrir la base de datos" << std::endl;
+        std::cerr << "No se pudo abrir la base de datos" << std::endl;
     }else{
         std::cout << "...." << std::endl;
     }
@@ -288,7 +313,7 @@ int cleanBankInfo(){
     std::string sql = "DELETE FROM BANKINFO";
     rc = sqlite3_exec(db, sql.c_str(), NULL, 0, &zErrMsg);
     if (rc != SQLITE_OK){
-        std::cout << "SQL ERROR: " << zErrMsg << std::endl;
+        std::cerr << "SQL ERROR: " << zErrMsg << std::endl;
         sqlite3_free(zErrMsg);
     }
 
