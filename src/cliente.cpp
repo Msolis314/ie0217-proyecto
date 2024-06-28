@@ -134,7 +134,7 @@ void Cliente::agregarCuentaC(int idCuentaC) {
     }
 
     // Generar un nuevo ID de cuenta
-    int id_cuentaC = generarIDCuentaC();
+    unsigned long int id_cuentaC = generarIDCuentaC();
 
     // Preparar la consulta SQL para insertar el ID de cuenta en colones
     std::string sql= "UPDATE CUSTOMERS SET ID_CUENTA_C = " + std::to_string(id_cuentaC) + " WHERE ID = " + std::to_string(id) + ";";
@@ -216,7 +216,7 @@ void Cliente::agregarCuentaD(int idCuentaD) {
 
 
 
-int Cliente::generarIDCuentaC() {
+unsigned long int Cliente::generarIDCuentaC() {
     unsigned long int minDigits = 1000000000000000; // Min 16 digitos
     unsigned long int maxDigits = 9999999999999999; // Max 16 digitos
 
