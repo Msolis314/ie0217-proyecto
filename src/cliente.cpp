@@ -16,6 +16,7 @@
 #include "db.hpp"
 #include "cliente.hpp"
 #include "transaciones.hpp"
+#include "Prestamos.hpp"
 
 #define AMBAST 3
 #define SALIRCONSULTA 4
@@ -348,6 +349,7 @@ void Cliente::transaccion(){
     float montoF;
     Operaciones op(this->nombre, this->apellido, this->id);
     CDP cdp(this->nombre, this->apellido, this->id);
+    Prestamos prestamo(this->nombre, this->apellido, this->id);
 
     do {
         std::cout << "\n------ Menú de Transacciones ------" << std::endl;
@@ -406,7 +408,7 @@ void Cliente::transaccion(){
             // xxxx
             break;
         case SOLICITUDPRESTAMO:
-            // xxxx
+            prestamo.solicitarPrestamo();
             break;
         case CONSULTARSALDO:
             consultarSaldo();

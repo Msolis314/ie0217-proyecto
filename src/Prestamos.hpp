@@ -4,6 +4,8 @@
 
 #include <iostream>
 #include <string>
+#include <vector>
+#include <utility> // Para std::pair
 #include "entidadBancaria.hpp"
 #include "menu.hpp"
 #include "cliente.hpp"
@@ -20,21 +22,21 @@ enum TipoPretamo{
 
 class Prestamos : public EntidadBancaria{
 private:
+    Cliente cliente;
+    std::string nombreCliente;
+    std::string apellidoCliente;
+    int idCliente;
     std::string tipoInteres;
     float tasaActual;
     int plazo;
     double interesesAbonados;
     float capital;
-    Cliente cliente;
     float tasaBanco;
     std::vector<int> actualIDPrestamos; 
-
-    std::string nombre;
-    std::string apellido;
-    int idCliente;  
     std::string TipoPrestamo;
+    std::vector<std::pair<int, float>> tasaVariable; // Vector para almacenar las tasas variables
 public:
-    Prestamos(std::string tipoInteres, float tasaActual, std::string plazo, float capital,std::string TipoPrestamo,float tasaBanco);
+    Prestamos(std::string nombre, std::string apellido, int idCliente);;
 
     // Métodos
     void pagarCuota(double monto);
@@ -48,15 +50,15 @@ public:
     void ingresar_prestamoHipotecario();
     void ingresar_prestamoPrendario();
     int generar_id_prestamo();
-    string ingresarTipoInteres();
+    std::string ingresarTipoInteres();
 
     static int callbackPrestamos(void *data, int argc, char **argv, char **azColName);
     void setActualIDPrestamos();
     bool checkID_PRESTAMO(int id);
     void agregarID_lista(int id);
     
-    // @brief establecer el tipo de cambio
-    void setTipoCambioBank();
+    // @brief establecer tasa de cambio del banco
+    void setTasaBank();
     float consultarPrestamo(int id_P);
     int callbackConsultaPrestamos(void *data, int argc, char **argv, char **azColName);
 
@@ -73,6 +75,10 @@ public:
     
     std::string getPlazoActual() const;
     void setPlazoActual(const std::string &plazoActual);
+
+    float calcularCuotaVariable(float tasaInteres, float indiceReferencia, float capital, int plazo);
+
+    void actualizarCuotas();
 };
 
 #endif 
