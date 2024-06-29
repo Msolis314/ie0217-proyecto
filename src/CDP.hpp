@@ -13,7 +13,7 @@
 #include "entidadBancaria.hpp"
 #include "menu.hpp"
 #include "db.hpp"
-
+#include "transaciones.hpp"
 #include "cliente.hpp"
 
 
@@ -144,12 +144,35 @@ class CDP: public EntidadBancaria{
 
         /// @brief Metodo para obtener el interes de un CDP.
         /// @return  float Retorna el interes de un CDP.
-        float getInteres();
+        float getInteres(int idCDP);
 
         /// @brief Metodo para combrobar que la fecha corresponda al periodo de pago de un CDP.
         /// @param fecha  Fecha a comprobar.
         /// @return  bool Retorna true si la fecha corresponde al periodo de pago de un CDP.
-        bool comprobarFecha(std::string fecha);
+        bool comprobarFecha(std::string fecha,int idCDP);
+
+        /// @brief Metodo para obtener el plazo de un CDP.
+        /// @return  int Retorna el plazo de un CDP.
+        int getPlazo(int idCDP);
+
+        /// @brief Metodo para obtener el periodo de pago de un CDP.
+        /// @return  PERIODOS_PAGO Retorna el periodo de pago de un CDP.
+        std::string getPeriodoPago(int idCDP);
+
+        /// @brief Metodo para mostrar los id, la moneda y el monto de los CDP de un cliente.
+        void mostrarCDP();
+
+        /// @brief Metodo para obtener el id_deposito de un CDP.
+        /// @return  int Retorna el id_deposito de un CDP.
+        int getIDDeposito(int idCDP);
+
+        /// @brief Metodo para comprobar si un CDP existe.
+        /// @param idCDP  ID del CDP a comprobar.
+        /// @return  bool Retorna true si el CDP existe.
+        bool checkIDCDPExists(int idCDP);
+
+        std::string getMoneda(int idCDP);
+
         ~CDP() = default;
 
 

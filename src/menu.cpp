@@ -52,7 +52,8 @@ int Menu::showMainMenu(){
                 
                 break;
             case SALIRMENU:
-                cout << "Saliendo...\n";
+                system("cowsay -f dragon 'Saliendo...'");
+                
                 break;
             default:
                 cout << "Opcion invalida\n";

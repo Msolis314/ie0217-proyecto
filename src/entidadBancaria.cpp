@@ -20,11 +20,18 @@ void EntidadBancaria::setFecha(){
     //Establecer la fecha en la base de datos
     //mes/dia/año
 
+    // Obtener la fecha actual
     time_t t = time(nullptr);
+
+    // Convertir la fecha a una estructura de tiempo
     std::tm* date = std::localtime(&t);
+
+    // Obtener el año, mes y dia
     int year = date->tm_year + 1900;
     int month = date->tm_mon + 1; 
     int day = date->tm_mday;
+
+    // Crear un string con la fecha
     std::string  yearMonth = std::to_string(month) + "/" + std::to_string(day) + "/" + std::to_string(year);
     this->fechaActual = yearMonth;
     sqlite3 *db;
@@ -78,6 +85,7 @@ void EntidadBancaria::setTipoCambio(){
 
 
 int EntidadBancaria::returnMain(std::string mensaje){
+    //Funcion para retornar al menu anterior
     std::cout << mensaje << std::endl;
     std::cout << "Que desea hacer?" << std::endl;
     int opcion;
@@ -113,6 +121,11 @@ bool EntidadBancaria::validarDatos(std::string dato, float* monto){
 float EntidadBancaria::getTipoCambio(){
     return *tipoCambio;
 }
+
+/// @details Metodo que convierte un monto de una moneda a otra
+/// @param monto Monto a convertir
+/// @param moneda Moneda a la que se va a convertir
+
 void EntidadBancaria::convertirMoneda(float &monto, Monedas moneda){
     int tipoMonedaMonto;
 
@@ -132,7 +145,7 @@ void EntidadBancaria::convertirMoneda(float &monto, Monedas moneda){
     }
 }
 
-
+/// @note Metodo que se utiliza para combrar las entradas de ints en el menu
 bool EntidadBancaria::validarEntrada(std::string dato, int* valor){
     try {
         std::istringstream stream(dato);

@@ -52,6 +52,7 @@ Operaciones:: Operaciones(std::string nombre,std::string apellido,int id):client
 void Operaciones::depositar(Monedas cambio,float monto){
     functionVars vars;
     float saldo;
+    vars.monto = monto;
     vars.tries = 0;
     float montoDeposito;
     std::string montoDepositoStr;
@@ -63,6 +64,8 @@ void Operaciones::depositar(Monedas cambio,float monto){
         if (vars.tries > 0){
             std::cout << "Monto a depositar: " << std::endl;
             std::cin >> vars.dato;
+
+            //Validar el monto ingresado
             try{
                 if(!cliente.validarDatos(vars.dato, &vars.monto)){
                     throw std::invalid_argument("El monto ingresado no es valido");
@@ -81,10 +84,33 @@ void Operaciones::depositar(Monedas cambio,float monto){
             }
         }
         do {
+            //Seleccionar el tipo de moneda
             std::cout << "Seleccione el tipo de moneda de la cuenta" << std::endl;
             std::cout << "1.Colones" << std::endl;
             std::cout << "2.Dolares" << std::endl;
-        } while (!(std::cin >> vars.opcion) || vars.opcion < COLON || vars.opcion > DOLAR);
+            std::cin >> vars.dato;
+            try {
+                if (!cliente.validarEntrada(vars.dato, &vars.opcion)){
+                    throw std::invalid_argument("La opcion ingresada no es valida");
+                }
+                if (vars.opcion < COLON || vars.opcion > DOLAR){
+                    throw std::invalid_argument("La opcion ingresada no es valida");
+                }
+                break;
+
+            }
+            catch (std::invalid_argument &e){
+                std::cout << e.what() << std::endl;
+                vars.rightChoice = cliente.returnMain("Desea intentar de nuevo?");
+                if (vars.rightChoice == RETURN){
+                    return;
+                }
+                else {
+                    vars.tries++;
+                    continue;
+                }
+            }
+        } while (true);
 
         switch (vars.opcion)
         {
@@ -99,8 +125,13 @@ void Operaciones::depositar(Monedas cambio,float monto){
                     break;
                 }
             }
+
+            //Convertir el monto a colones
             cliente.convertirMoneda(vars.monto, COLON);
+
+            //Consultar el saldo de la cuenta
             saldo = consultarSaldo(cliente.idCuentaC);
+            //Actualizar el saldo de la cuenta
             saldo += vars.monto;
 
             
@@ -131,8 +162,9 @@ void Operaciones::depositar(Monedas cambio,float monto){
             break;
 
         case DOLAR:
+        //Parte de la cuenta en dolares
             if (cliente.idCuentaD == 0){
-            
+                
                 vars.rightChoice = cliente.returnMain("No se ha generado una cuenta dolares");
                 if (vars.rightChoice == RETURN){
                     return;
@@ -140,7 +172,11 @@ void Operaciones::depositar(Monedas cambio,float monto){
                     break;
                 }
             }
+
+            //Convertir el monto a dolares
             cliente.convertirMoneda(vars.monto, DOLAR);
+
+            //Consultar el saldo de la cuenta
             saldo = consultarSaldo(cliente.idCuentaD);
             saldo += vars.monto;
 
@@ -176,7 +212,8 @@ void Operaciones::depositar(Monedas cambio,float monto){
 }
 
 
-
+/// @note Se ha modificado la función para que el monto sea un parámetro de entrada
+/// @details Función para retirar dinero de la cuenta, monto tambien se modifica adentro
 void Operaciones::retirar(Monedas cambio,float monto){
     int opcion;
     float saldo;
@@ -187,6 +224,8 @@ void Operaciones::retirar(Monedas cambio,float monto){
     std::string sql;
     int rc;
     do {
+
+        // EN caso que este sea un segundo intento
         if (tries > 0){
             std::cout << "Monto a retirar: " << std::endl;
             std::cin >> monto;
@@ -207,7 +246,8 @@ void Operaciones::retirar(Monedas cambio,float monto){
                 }
             }
         }
-    
+
+        //Seleccionar el tipo de moneda
         do {
             std::cout << "Seleccione el tipo de moneda de la cuenta" << std::endl;
             std::cout << "1.Colones" << std::endl;
@@ -324,11 +364,15 @@ void Operaciones::retirar(Monedas cambio,float monto){
     } while (rightChoice != RETURN);
 }
 
+
+/// @details Función para consultar el saldo de la cuenta, se utilza en depositar y retirar
 float Operaciones::consultarSaldo(int idCuenta){
     sqlite3* db;
     char* error;
     int rc;
     float saldo;
+
+    //Abrir la base de datos
     rc = sqlite3_open("SistemaBancario.db", &db);
 
     if (rc){
@@ -346,6 +390,7 @@ float Operaciones::consultarSaldo(int idCuenta){
     }
 
     sqlite3_close(db);
+    //Si la cuenta no existe
     if (!cliente.checkIDCuentaExists(idCuenta, COLON) && !cliente.checkIDCuentaExists(idCuenta, DOLAR)){
         return 0;
     }

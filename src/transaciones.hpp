@@ -56,10 +56,21 @@ class Operaciones {
         /// @param idCuenta ID de la cuenta.
         /// @return Saldo de la cuenta.
         float consultarSaldo(int idCuenta);
+
+        /// @brief Escribir el historial de las transacciones.
         void escribirHistorial();
+
+        /// @brief  Verificar si la cuenta tiene la moneda correcta.
+        /// @param idCuenta 
+        /// @return  1 si la cuenta es de la moneda correcta, 0 si no lo es.
         int checkAcountCurrency(int idCuenta);
+
         void consultarMovimientos();
         void consultarPrestamos();
+
+        /// @brief  Pedir el monto de la transaccion.
+        /// @param monto 
+        /// @return  1 si el monto es valido, 0 si no lo es.
         int pedirMonto(float &monto);
 
 

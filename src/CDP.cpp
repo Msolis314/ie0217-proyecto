@@ -199,6 +199,9 @@ void CDP::displayMenuCDP() {
     do {
         do {
 
+            std::cout << "------------------" << std::endl;
+            std::cout << "Certificados de Deposito a Plazo" << std::endl;
+            std::cout << "------------------" << std::endl;
             std::cout << "\n1. Agregar CDP" << std::endl;
             std::cout << "2. Retirar CDP" << std::endl;
             std::cout << "3. Desplegar CDP" << std::endl;
@@ -227,7 +230,7 @@ void CDP::displayMenuCDP() {
            
             break;
         case RETIRAR_CDP:
-            ///
+            depositarIntereses();
             break;
         case DESPLEGAR_CDP:
             desplegarCDP();
@@ -254,6 +257,9 @@ void CDP::displayMenuOptions() {
     int rightChoice = 0;
     do {
         do {
+            std::cout << "------------------" << std::endl;
+            std::cout << "Tipos de interes:" << std::endl;
+            std::cout << "------------------" << std::endl;
             std::cout << "1. Interes Simple tasa fija" << std::endl;
             std::cout << "2. Interes Compuesto tasa fija" << std::endl;
             std::cout << "3. Interes Simple tasa variable" << std::endl;
@@ -274,8 +280,9 @@ void CDP::displayMenuOptions() {
         } while (rightChoice != RETURN);
 
         do {
-            std::cout << "Ingrese el monto de la inversion" << std::endl;
+            std::cout << "Ingrese el monto de la inversion:";
             std::cin >> montoStr;
+            std::cout << std::endl;
             try{
                 if (!cliente.validarDatos(montoStr,&monto)){
                     throw std::invalid_argument("Monto invalido");
@@ -290,7 +297,7 @@ void CDP::displayMenuOptions() {
         this->fechaCreacion = (this->cliente).getFecha();
 
         do {
-            std::cout << "Ingrese el plazo de la inversion" << std::endl;
+            std::cout << "Ingrese el plazo de la inversion en meses:" ;
             std::cin >> opcionStr;
             try {
                 if (!cliente.validarEntrada(opcionStr,&plazo)){
@@ -688,6 +695,331 @@ int CDP::generarID(){
 
 }
 
-float CDP::getInteres(){
+void CDP::mostrarCDP(){
+    // Muestra el id, la moneda, el monto y el interes de los CDP de un cliente
+    sqlite3 *db;
+    char *zErrMsg = 0;
+    int rc;
+    std::string sql = "SELECT ID_CDP, MONEDA, MONTO, INTERES FROM DEPOSITO_PLAZO WHERE ID_CLIENTE = " + std::to_string(cliente.id) + ";";
+    rc = sqlite3_open("SistemaBancario.db", &db);
+    if (rc) {
+        std::cerr << "Error al abrir la base de datos: " << sqlite3_errmsg(db) << std::endl;
+        sqlite3_close(db);
+        return;
+    }
 
+    rc = sqlite3_exec(db, sql.c_str(), callbackgetCDP, 0, &zErrMsg);
+    if (rc != SQLITE_OK) {
+        std::cerr << "Error al desplegar datos " << zErrMsg << std::endl;
+        sqlite3_free(zErrMsg);
+    } else {
+        std::cout << "..." << std::endl;
+    }
+    sqlite3_close(db);
+}
+
+int CDP::getIDDeposito(int idCDP){
+    // Obtiene el ID de un deposito
+    sqlite3 *db;
+    char *zErrMsg = 0;
+    int rc;
+    int id = 0;
+    std::string sql = "SELECT ID_DEPOSITO FROM DEPOSITO_PLAZO WHERE ID_CLIENTE = " + std::to_string(cliente.id) + " AND ID_CDP = " + std::to_string(idCDP) + ";";
+    rc = sqlite3_open("SistemaBancario.db", &db);
+    if (rc) {
+        std::cerr << "Error al abrir la base de datos: " << sqlite3_errmsg(db) << std::endl;
+        sqlite3_close(db);
+        return 0;
+    }
+
+    rc = sqlite3_exec(db, sql.c_str(), intCallback, &id, &zErrMsg);
+    if (rc != SQLITE_OK) {
+        std::cerr << "Error al obtener ID de deposito " << zErrMsg << std::endl;
+        sqlite3_free(zErrMsg);
+    }
+
+    sqlite3_close(db);
+    return id;
+}
+
+bool CDP::checkIDCDPExists(int idCDP){
+    // Comprueba si un CDP existe
+    sqlite3 *db;
+    char *zErrMsg = 0;
+    int rc;
+    int id = 0;
+    std::string sql = "SELECT ID_CDP FROM DEPOSITO_PLAZO WHERE ID_CLIENTE = " + std::to_string(cliente.id) + " AND ID_CDP = " + std::to_string(idCDP) + ";";
+    rc = sqlite3_open("SistemaBancario.db", &db);
+    if (rc) {
+        std::cerr << "Error al abrir la base de datos: " << sqlite3_errmsg(db) << std::endl;
+        sqlite3_close(db);
+        return false;
+    }
+
+    rc = sqlite3_exec(db, sql.c_str(), intCallback, &id, &zErrMsg);
+    if (rc != SQLITE_OK) {
+        std::cerr << "Error al obtener ID de CDP " << zErrMsg << std::endl;
+        sqlite3_free(zErrMsg);
+    }
+
+    sqlite3_close(db);
+    if (id == 0) {
+        return false;
+    }
+    return true;
+}
+void CDP::depositarIntereses(){
+    // Deposita los intereses de un CDP en la cuenta del cliente
+    sqlite3 *db;
+    char *zErrMsg = 0;
+    int rc;
+    std::string sql;
+    std::string fechaActual = (this->cliente).getFecha();
+    int idCDP;
+    float interes;
+    float saldo;
+    int rightChoice = 0;
+    int idCuenta;
+    std::string moneda;
+    std::string fechaVencimiento;
+    Operaciones operaciones((this->cliente).nombre, (this->cliente).apellido, (this->cliente).id);
+
+    //Obtener los CDPs del cliente
+    do {
+        mostrarCDP();
+        std::cout << "Ingrese el ID del CDP del cual desea retirar los intereses" << std::endl;
+        std::cin >> idCDP;
+        if (!checkIDCDPExists(idCDP)) {
+            std::cout << "ID invalido" << std::endl;
+            rightChoice = cliente.returnMain("ID invalido");
+            continue;
+        }
+
+        interes = getInteres(idCDP);
+        
+        if (!comprobarFecha(fechaActual,idCDP)) {
+            std::cout << "No es tiempo de retirar los intereses" << std::endl;
+            rightChoice = cliente.returnMain("No es tiempo de retirar los intereses");
+            continue;
+        }
+        
+        moneda = getMoneda(idCDP);
+        idCuenta = getIDDeposito(idCDP);
+        
+        saldo = operaciones.consultarSaldo(idCuenta);
+        saldo += interes;
+
+        sql = "UPDATE CUENTA_BANCARIA SET AHORROS = " + std::to_string(saldo) + " WHERE ID_CUENTA = " + std::to_string(idCuenta) + ";";
+        rc = sqlite3_open("SistemaBancario.db", &db);
+        if (rc) {
+            std::cerr << "Error al abrir la base de datos: " << sqlite3_errmsg(db) << std::endl;
+            sqlite3_close(db);
+            return;
+        }
+
+        rc = sqlite3_exec(db, sql.c_str(), NULL, 0, &zErrMsg);
+        if (rc != SQLITE_OK) {
+            std::cerr << "Error al depositar intereses " << zErrMsg << std::endl;
+            sqlite3_free(zErrMsg);
+        } else {
+            std::cout << "..." << std::endl;
+        }
+        sqlite3_close(db);
+        rightChoice = cliente.returnMain("Intereses depositados con exito");
+
+
+
+    } while (rightChoice != RETURN);
+}
+
+float CDP::getInteres(int CDP){
+    sqlite3 *db;
+    char *zErrMsg = 0;
+    int rc;
+    float id = 0;
+    std::string sql = "SELECT INTERES FROM DEPOSITO_PLAZO WHERE ID_CLIENTE = " + std::to_string(cliente.id) + " AND " + "ID_CDP = " + std::to_string(CDP) + ";";
+
+    rc = sqlite3_open("SistemaBancario.db", &db);
+    if (rc) {
+        std::cerr << "Error al abrir la base de datos: " << sqlite3_errmsg(db) << std::endl;
+        sqlite3_close(db);
+        return 0;
+    }
+
+    rc = sqlite3_exec(db, sql.c_str(), floatCallback, &id, &zErrMsg);
+    if (rc != SQLITE_OK) {
+        std::cerr << "Error al obtener interes " << zErrMsg << std::endl;
+        sqlite3_free(zErrMsg);
+    }
+
+    sqlite3_close(db);
+    return id;
+
+
+}
+
+bool CDP::comprobarFecha(std::string fecha,int idCDP){
+
+    // Comprube que la fecha actual corresponda al periodo de pago de un CDP
+    sqlite3 *db;
+    char *zErrMsg = 0;
+    int rc;
+    std::string sql = "SELECT FECHA_FIN FROM DEPOSITO_PLAZO WHERE ID_CLIENTE = " + std::to_string(cliente.id) + " AND ID_CDP = " + std::to_string(idCDP) + ";";
+    std::string fechaFin;
+    rc = sqlite3_open("SistemaBancario.db", &db);
+    if (rc) {
+        std::cerr << "Error al abrir la base de datos: " << sqlite3_errmsg(db) << std::endl;
+        sqlite3_close(db);
+        return false;
+    }
+
+    rc = sqlite3_exec(db, sql.c_str(), stringCallback, &fechaFin, &zErrMsg);
+    if (rc != SQLITE_OK) {
+        std::cerr << "Error al obtener fecha de vencimiento " << zErrMsg << std::endl;
+        sqlite3_free(zErrMsg);
+    }
+
+    sqlite3_close(db);
+
+    //Buscar la fecha de creacion del CDP
+    std::string sql2 = "SELECT FECHA_INICIO FROM DEPOSITO_PLAZO WHERE ID_CLIENTE = " + std::to_string(cliente.id) + " AND ID_CDP = " + std::to_string(idCDP) + ";";
+    std::string fechaInicio;
+    rc = sqlite3_open("SistemaBancario.db", &db);
+    if (rc) {
+        std::cerr << "Error al abrir la base de datos: " << sqlite3_errmsg(db) << std::endl;
+        sqlite3_close(db);
+        return false;
+    }
+
+    rc = sqlite3_exec(db, sql2.c_str(), stringCallback, &fechaInicio, &zErrMsg);
+    if (rc != SQLITE_OK) {
+        std::cerr << "Error al obtener fecha de creacion " << zErrMsg << std::endl;
+        sqlite3_free(zErrMsg);
+    }
+
+    sqlite3_close(db);
+
+    if (fecha == fechaFin) {
+        return true;
+    }
+
+    int plazo = getPlazo(idCDP);
+    std::string periodoPago = getPeriodoPago(idCDP);
+    int periodoPagoInt = 0;
+    std::string fechaActual = (this->cliente).getFecha();
+
+    if (periodoPago == "Mensual"){
+        periodoPagoInt = 1;
+    } else if (periodoPago == "Trimestral"){
+        periodoPagoInt = 3;
+    } else if (periodoPago == "Semestral"){
+        periodoPagoInt = 6;
+    } else if (periodoPago == "Anual"){
+        periodoPagoInt = 12;
+    } else if (periodoPago == "Fin de plazo"){
+        periodoPagoInt = plazo;
+    }
+
+    //Comprobar si la fecha actual corresponde a una de las fechas de pago
+    int year = std::stoi(fechaInicio.substr(6, 4));
+    int month = std::stoi(fechaInicio.substr(0, 2));
+    int day = std::stoi(fechaInicio.substr(3, 2));
+
+    for (int i = 0; i < plazo; i += periodoPagoInt) {
+        if (fechaActual == fechaInicio) {
+            return true;
+        }
+        month += periodoPagoInt;
+        if (month > 12) {
+            year++;
+            month -= 12;
+        }
+        std::ostringstream oss;
+        oss << std::setw(2) << std::setfill('0') << month << "/"
+            << std::setw(2) << std::setfill('0') << day << "/"
+            << year;
+        fechaInicio = oss.str();
+    }
+
+    return false;
+
+
+    // Buscar el periodo de pago
+    
+}
+
+int CDP::getPlazo(int idCDP){
+    // Obtiene el plazo de un CDP
+    sqlite3 *db;
+    char *zErrMsg = 0;
+    int rc;
+    int plazo = 0;
+    std::string sql = "SELECT PLAZO FROM DEPOSITO_PLAZO WHERE ID_CLIENTE = " + std::to_string(cliente.id) + " AND ID_CDP = " + std::to_string(idCDP) + ";";
+
+    rc = sqlite3_open("SistemaBancario.db", &db);
+    if (rc) {
+        std::cerr << "Error al abrir la base de datos: " << sqlite3_errmsg(db) << std::endl;
+        sqlite3_close(db);
+        return 0;
+    }
+
+    rc = sqlite3_exec(db, sql.c_str(), intCallback, &plazo, &zErrMsg);
+    if (rc != SQLITE_OK) {
+        std::cerr << "Error al obtener plazo " << zErrMsg << std::endl;
+        sqlite3_free(zErrMsg);
+    }
+
+    sqlite3_close(db);
+    return plazo;
+}
+
+std::string CDP::getPeriodoPago(int idCDP){
+    // Obtiene el periodo de pago de un CDP
+    sqlite3 *db;
+    char *zErrMsg = 0;
+    int rc;
+    std::string periodoPago;
+    std::string sql = "SELECT PERIODO_PAGO FROM DEPOSITO_PLAZO WHERE ID_CLIENTE = " + std::to_string(cliente.id) + " AND ID_CDP = " + std::to_string(idCDP) + ";";
+
+    rc = sqlite3_open("SistemaBancario.db", &db);
+    if (rc) {
+        std::cerr << "Error al abrir la base de datos: " << sqlite3_errmsg(db) << std::endl;
+        sqlite3_close(db);
+        return "";
+    }
+
+    rc = sqlite3_exec(db, sql.c_str(), stringCallback, &periodoPago, &zErrMsg);
+    if (rc != SQLITE_OK) {
+        std::cerr << "Error al obtener periodo de pago " << zErrMsg << std::endl;
+        sqlite3_free(zErrMsg);
+    }
+
+    sqlite3_close(db);
+    return periodoPago;
+}
+
+
+std::string CDP::getMoneda(int idCDP){
+    // Obtiene la moneda de un CDP
+    sqlite3 *db;
+    char *zErrMsg = 0;
+    int rc;
+    std::string moneda;
+    std::string sql = "SELECT MONEDA FROM DEPOSITO_PLAZO WHERE ID_CLIENTE = " + std::to_string(cliente.id) + " AND ID_CDP = " + std::to_string(idCDP) + ";";
+
+    rc = sqlite3_open("SistemaBancario.db", &db);
+    if (rc) {
+        std::cerr << "Error al abrir la base de datos: " << sqlite3_errmsg(db) << std::endl;
+        sqlite3_close(db);
+        return "";
+    }
+
+    rc = sqlite3_exec(db, sql.c_str(), stringCallback, &moneda, &zErrMsg);
+    if (rc != SQLITE_OK) {
+        std::cerr << "Error al obtener moneda " << zErrMsg << std::endl;
+        sqlite3_free(zErrMsg);
+    }
+
+    sqlite3_close(db);
+    return moneda;
 }

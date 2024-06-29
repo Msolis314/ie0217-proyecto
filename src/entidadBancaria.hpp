@@ -87,6 +87,13 @@ class EntidadBancaria{
         /// @param moneda Moneda de la transaccion
         /// @note Metodo abstracto, se debe implementar en las clases hijas
         void transaccion(float monto, Monedas moneda);
+
+        /// @brief Funcion callback para los queries
+        /// @param data  Puntero a los datos
+        /// @param argc  Numero de columnas
+        /// @param argv  Argumentos
+        /// @param azColName  Nombre de las columnas
+        /// @return  0
         static int callback(void *data, int argc, char **argv, char **azColName);
 
         /// @brief Funcion para validar la entrada de datos
