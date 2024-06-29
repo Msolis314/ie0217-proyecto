@@ -688,13 +688,13 @@ void Prestamos::consultarPrestamos() {
     // Abrir la conexión a la base de datos SQLite
     rc = sqlite3_open("SistemaBancario.db", &db);
     if (rc) {
-        // En caso de error al abrir la base de datos, mostrar mensaje de error y cerrar la conexión
+        // En caso de error 
         std::cerr << "No se pudo abrir la base de datos: " << sqlite3_errmsg(db) << std::endl;
         sqlite3_close(db);
         return;
     }
 
-    // Construir la consulta SQL para seleccionar los préstamos del cliente actual
+    // Construir la consulta SQL
     std::string sql = "SELECT ID_PRESTAMO, TIPO_PRESTAMO, PLAZO, CUOTA FROM PRESTAMO WHERE ID_CLIENTE = " + std::to_string(this->cliente.id);
 
     // Preparar la consulta SQL
@@ -710,15 +710,15 @@ void Prestamos::consultarPrestamos() {
     std::cout << "** Listado de préstamos del cliente **" << std::endl;
     std::cout << "ID\tTipo\tPlazo\tCuota" << std::endl;
 
-    bool hayPrestamos = false;  // Variable para controlar si se encontraron préstamos
+    bool hayPrestamos = false;  // Variable para controlar si se encontraron 
 
-    // Iterar a través de los resultados de la consulta
+    // Iterar de los resultados de la consulta
     while (sqlite3_step(stmt) == SQLITE_ROW) {
-        // Obtener los valores de cada columna para el préstamo actual
+        // Obtener los valores de cada columna para el actual
         int idPrestamo = sqlite3_column_int(stmt, 0);                                               // tomando la columna de idprestamo por su indice
-        std::string tipoPrestamo = reinterpret_cast<const char*>(sqlite3_column_text(stmt, 2));     
-        int plazo = sqlite3_column_int(stmt, 6);
-        float cuota = sqlite3_column_double(stmt, 5);
+        std::string tipoPrestamo = reinterpret_cast<const char*>(sqlite3_column_text(stmt, 2));     // la columna dos es el tipo de prestamode la tabla prestamos
+        int plazo = sqlite3_column_int(stmt, 6);                                                    // la seis de plazo
+        float cuota = sqlite3_column_double(stmt, 5);                                               // la cinco de cuopta
 
         // Mostrar cada préstamo encontrado
         std::cout << idPrestamo << "\t" << tipoPrestamo << "\t" << plazo << "\t" << cuota << std::endl;
