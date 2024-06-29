@@ -417,6 +417,7 @@ void Cliente::transaccion(){
             // xxxx
             break;
         case CONSULTARPRESTAMOS:
+            prestamo.consultarPrestamos();
             // xxxx
             break;
         case OPERACIONESCDP:
