@@ -19,6 +19,11 @@ enum TipoPretamo{
     PRENDARIO = 3
 };
 
+enum MonedaPrestamo {
+    COLONES_PRESTAMO = 1,
+    DOLARES_PRESTAMO = 2
+};
+
 
 class Prestamos : public EntidadBancaria{
 private:
@@ -79,6 +84,17 @@ public:
     float calcularCuotaVariable(float tasaInteres, float indiceReferencia, float capital, int plazo);
 
     void actualizarCuotas();
+
+
+    void abonarCuota(int idPrestamo, float abono, bool esAbonoExtraordinario, MonedaPrestamo tipoMoneda);
+
+    void realizarAbono();
+
+    int obtenerIdPrestamoSesion();
+
+    void restarMontoCuentaCliente(const std::string& cuenta, MonedaPrestamo moneda, float monto);
+
+    float consultarSaldoCliente(MonedaPrestamo tipoMoneda);
 };
 
 #endif 

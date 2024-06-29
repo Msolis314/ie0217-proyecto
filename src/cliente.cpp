@@ -405,7 +405,7 @@ void Cliente::transaccion(){
             op.transferir();
             break;
         case PAGOPRESTAMO:
-            // xxxx
+            prestamo.realizarAbono();
             break;
         case SOLICITUDPRESTAMO:
             prestamo.solicitarPrestamo();
