@@ -187,6 +187,7 @@ int crearDB(){
     //Crear tabla de depositos a plazo
     sql = "CREATE TABLE IF NOT EXISTS DEPOSITO_PLAZO(" \
     "ID_DEPOSITO INT  NOT NULL," \
+    "ID_CDP INT NOT NULL,"
     "ID_CLIENTE INT NOT NULL," \
     "MONTO REAL NOT NULL," \
     "MONEDA TEXT NOT NULL," \

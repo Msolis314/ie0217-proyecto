@@ -163,12 +163,13 @@ void CDP::agregarCDP(){
     char *zErrMsg = 0;
     int rc;
     std::string sql;
+    int id_CDP = generarID();
     if (moneda == COLON){
-        sql = "INSERT INTO DEPOSITO_PLAZO (ID_DEPOSITO,ID_CLIENTE,MONTO,MONEDA,PLAZO,PERIODO_PAGO,FECHA_INICIO,FECHA_FIN,TIPO_INTERES,INTERES)" 
-        "VALUES (" + std::to_string(cliente.idCuentaC) + "," + std::to_string(cliente.id) + "," + std::to_string(monto) + ",'Colones'," + std::to_string(plazo) + ",'" + periodoPago + "','" + fechaCreacion + "','" + fechaVencimiento + "','" + tipoInteres + "'," + std::to_string(interes) + ");";
+        sql = "INSERT INTO DEPOSITO_PLAZO (ID_DEPOSITO,ID_CDP,ID_CLIENTE,MONTO,MONEDA,PLAZO,PERIODO_PAGO,FECHA_INICIO,FECHA_FIN,TIPO_INTERES,INTERES)" 
+        "VALUES (" + std::to_string(cliente.idCuentaC) +  "," + std::to_string(id_CDP) +"," + std::to_string(cliente.id) + "," + std::to_string(monto) + ",'Colones'," + std::to_string(plazo) + ",'" + periodoPago + "','" + fechaCreacion + "','" + fechaVencimiento + "','" + tipoInteres + "'," + std::to_string(interes) + ");";
     } else {
         sql = "INSERT INTO DEPOSITO_PLAZO (ID_DEPOSITO,ID_CLIENTE,MONTO,MONEDA,PLAZO,PERIODO_PAGO,FECHA_INICIO,FECHA_FIN,TIPO_INTERES,INTERES)" 
-        "VALUES (" + std::to_string(cliente.idCuentaD) + "," + std::to_string(cliente.id) + "," + std::to_string(monto) + ",'Dolares'," + std::to_string(plazo) + ",'" + periodoPago + "','" + fechaCreacion + "','" + fechaVencimiento + "','" + tipoInteres + "'," + std::to_string(interes) + ");";
+        "VALUES (" + std::to_string(cliente.idCuentaD) +  "," + std::to_string(id_CDP) +"," + std::to_string(cliente.id) + "," + std::to_string(monto) + ",'Dolares'," + std::to_string(plazo) + ",'" + periodoPago + "','" + fechaCreacion + "','" + fechaVencimiento + "','" + tipoInteres + "'," + std::to_string(interes) + ");";
     }
    
 
@@ -192,6 +193,7 @@ void CDP::agregarCDP(){
 
 void CDP::displayMenuCDP() {
     int opcion;
+    std:: string opcionStr;
     int rightChoice = 0;
    
     do {
@@ -200,9 +202,23 @@ void CDP::displayMenuCDP() {
             std::cout << "\n1. Agregar CDP" << std::endl;
             std::cout << "2. Retirar CDP" << std::endl;
             std::cout << "3. Desplegar CDP" << std::endl;
-            std::cout << "4. Salir" << std::endl;
-            std::cin >> opcion;
-        } while (opcion < AGREGAR_CDP || opcion > SALIR_CDP|| std::cin.fail());
+            std::cout << "4. Eliminar" << std::endl;
+            std::cout << "5. Salir" << std::endl;
+            std::cin >> opcionStr;
+            try {
+                if (!cliente.validarEntrada(opcionStr,&opcion)){
+                    throw std::invalid_argument("Opcion invalida");
+                }
+                if (opcion < AGREGAR_CDP || opcion > SALIR_CDP){
+                    throw std::invalid_argument("Opcion invalida");
+                }
+                break;
+            }
+            catch (std::invalid_argument &e){
+                rightChoice = cliente.returnMain(e.what());
+            }
+           
+        } while (rightChoice != RETURN);
         
         switch (opcion)
         {
@@ -211,10 +227,13 @@ void CDP::displayMenuCDP() {
            
             break;
         case RETIRAR_CDP:
-            retirarCDP();
+            ///
             break;
         case DESPLEGAR_CDP:
             desplegarCDP();
+            break;
+        case ELIMINAR_CDP:
+            retirarCDP();
             break;
         default:
             break;
@@ -228,6 +247,7 @@ void CDP::displayMenuCDP() {
 #define SALIR_OP 5
 void CDP::displayMenuOptions() {
     int opcion;
+    std::string opStr;
     int opcionPlazo;
     std::string opcionStr;
     std::string montoStr;
@@ -239,8 +259,19 @@ void CDP::displayMenuOptions() {
             std::cout << "3. Interes Simple tasa variable" << std::endl;
             std::cout << "4. Interes Compuesto tasa variable" << std::endl;
             std::cout << "5. Salir" << std::endl;
-            std::cin >> opcion;
-        } while (opcion < SIMPLE || opcion > SALIR_OP|| std::cin.fail());
+            try {
+                std::cin >> opStr;
+                if (!cliente.validarEntrada(opStr,&opcion)){
+                    throw std::invalid_argument("Opcion invalida");
+                }
+                if (opcion < SIMPLE || opcion > SALIR_OP){
+                    throw std::invalid_argument("Opcion invalida");
+                }
+                break;
+            } catch (std::invalid_argument &e){
+                rightChoice = cliente.returnMain(e.what());
+            }
+        } while (rightChoice != RETURN);
 
         do {
             std::cout << "Ingrese el monto de la inversion" << std::endl;
@@ -384,6 +415,8 @@ PERIODOS_PAGO CDP::displayMenuPeriodosPago(int & opcion){
     default:
         break;
     }
+
+    return ERROR;
     
 
 
@@ -547,6 +580,11 @@ int callbackgetCDP(void *NotUsed, int argc, char **argv, char **azColName) {
     static bool headerPrinted = false;
     const int columnWidth = 15; // Ancho de las columnas
 
+    // Si no hay datos
+    if (argc == 0) {
+        std::cout << "No hay CDPs para mostrar" << std::endl;
+        return 0;
+    }
     //Imprimir los nombres de las columnas
     if (!headerPrinted) {
         for (int i = 0; i < argc; i++) {
@@ -617,5 +655,39 @@ void CDP::retirarCDP(){
     sqlite3_close(db);
     std::cout << "CDP retirado con exito" << std::endl;
     system("clear");
+
+}
+
+
+int CDP::generarID(){
+    // Genera un ID para un CDP
+    sqlite3 *db;
+    char *zErrMsg = 0;
+    int rc;
+    int id = 0;
+    std::string sql = "SELECT MAX(ID_CDP) FROM DEPOSITO_PLAZO;";
+    rc = sqlite3_open("SistemaBancario.db", &db);
+    if (rc) {
+        std::cerr << "Error al abrir la base de datos: " << sqlite3_errmsg(db) << std::endl;
+        sqlite3_close(db);
+        return 0;
+    }
+
+    rc = sqlite3_exec(db, sql.c_str(), intCallback, &id, &zErrMsg);
+    if (rc != SQLITE_OK) {
+        std::cerr << "Error al generar ID " << zErrMsg << std::endl;
+        sqlite3_free(zErrMsg);
+    }
+
+    sqlite3_close(db);
+
+    if (id == 0) {
+        return 1;
+    }
+    return id + 1;
+
+}
+
+float CDP::getInteres(){
 
 }

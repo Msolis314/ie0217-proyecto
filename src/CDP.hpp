@@ -12,20 +12,28 @@
 #include <cmath>
 #include "entidadBancaria.hpp"
 #include "menu.hpp"
+#include "db.hpp"
 
 #include "cliente.hpp"
 
+
+/// @brief Enumeracion de las operaciones de un CDP.
 enum OPERACIONES_CDP{
     AGREGAR_CDP=1,
     RETIRAR_CDP,
     DESPLEGAR_CDP,
+    ELIMINAR_CDP,
     SALIR_CDP
 };
+
+/// @brief Enumeracion de las tasas de un CDP.
 enum TASAS{
     FIJA,
     VARIABLE
 };
 
+
+/// @brief Enumeracion de las combinaciones de modalidades de interes de un CDP.
 enum TIPOS_INTERES{
     SIMPLE =1,
     COMPUESTO,
@@ -34,14 +42,20 @@ enum TIPOS_INTERES{
 
 };
 
+/// @brief Enumeracion de los periodos de pago de un CDP.
+/// @details MENSUAL = 0, TRIMESTRAL = 1, SEMESTRAL = 2, ANUAL = 3, FIN_PLAZO = 4, ERROR = -1
 enum PERIODOS_PAGO{
     MENSUAL= 0,
     TRIMESTRAL,
     SEMESTRAL,
     ANUAL, 
-    FIN_PLAZO
+    FIN_PLAZO,
+    ERROR = -1
 };
 
+
+/// @brief Estructura que contiene los datos de un CDP.
+/// @details Contiene los intereses, impuestos, montos minimos, plazos minimos y maximos de un CDP.
 struct CDPData
 {
     float Interes_Colones = 0.125; // 12.5%
@@ -58,8 +72,12 @@ struct CDPData
 
 
 /// @brief Clase que representa un Certificado de Depósito a Plazo.
+/// @details Esta clase tiene como objetivo representar un CDP y realizar operaciones sobre el mismo.
+/// @details Esta clase hereda de la clase EntidadBancaria.
+/// @details Esta clase tiene como atributos un cliente, un nombre, un apellido, un id, una fecha de creacion, una fecha de vencimiento, un CDPData, un monto, un periodo de pago, un interes, una moneda, un tipo de interes, un plazo y un periodo.
 class CDP: public EntidadBancaria{
     private:
+
         Cliente cliente;   ///< Cliente que posee el CDP.
         std::string nombre; ///< Nombre del Cliente que posee el CDP.
         std::string apellido;   ///< Apellido del Cliente que posee el CDP.
@@ -96,15 +114,42 @@ class CDP: public EntidadBancaria{
         /// @brief Metodo para desplegar las opciones de un CDP.
         void displayMenuCDP();
 
+
+        /// @brief Metodo para elegir una cuenta.
+        /// @return int Retorna la cuenta elegida. COLONES = 1, DOLARES = 2
         int elegirCuenta();
 
+
+        /// @brief Metodo para elegir uno de los periodos de pago de un CDP.
+        /// @param opcion  Opcion elegida por el usuario.
+        /// @return  PERIODOS_PAGO Retorna el periodo de pago elegido.
         PERIODOS_PAGO displayMenuPeriodosPago(int &opcion);
 
+        /// @brief Metodo para desplegar las opciones de un CDP.
         void displayMenuOptions();
 
-        
+        /// @brief Metodo para generar un ID de un CDP.
+        /// @return  int Retorna el ID generado.
+        int generarID();
 
+        
+        /// @brief Metodo para calcular la fecha de vencimiento de un CDP.
+        /// @param plazo plazo en meses del CDP.
+        /// @return  std::string Retorna la fecha de vencimiento del CDP.
         std::string calcularFechaVencimiento(int plazo);
+
+        /// @brief Metodo para depositar en la cuenta de un cliente los intereses de un CDP.
+
+        void depositarIntereses();
+
+        /// @brief Metodo para obtener el interes de un CDP.
+        /// @return  float Retorna el interes de un CDP.
+        float getInteres();
+
+        /// @brief Metodo para combrobar que la fecha corresponda al periodo de pago de un CDP.
+        /// @param fecha  Fecha a comprobar.
+        /// @return  bool Retorna true si la fecha corresponde al periodo de pago de un CDP.
+        bool comprobarFecha(std::string fecha);
         ~CDP() = default;
 
 
@@ -112,6 +157,7 @@ class CDP: public EntidadBancaria{
 
 /// @brief Clase que representa los intereses de un Certificado de Depósito a Plazo.
 /// @details Esta clase es abstracta y tiene como objetivo calcular los intereses de un CDP.
+/// @details Esta clase tiene como atributos un CDPData, un plazo, un capital, una moneda y un periodo.
 class CDPintereses{
     protected:
         CDPData data;
@@ -119,9 +165,21 @@ class CDPintereses{
         float capital;
         int moneda;
         PERIODOS_PAGO periodo;
-    public:
+    public: 
+
+        /// @brief  Constructor de la clase CDPintereses.
+        /// @param plazo  plazo en meses del CDP.
+        /// @param periodo  periodo de pago del CDP.
+        /// @param moneda  COLONES = 1, DOLARES = 2
+        /// @param capital  capital invertido en  el CDP.
         CDPintereses(int plazo, PERIODOS_PAGO periodo,int moneda, float capital);
+
+        /// @brief Metodo para calcular los intereses de un CDP.
+        /// @return  float Retorna los intereses de un CDP.
         virtual float calcularInteres() = 0;
+
+        /// @brief Metodo para obtener el plazo de un CDP.
+        /// @return  int Retorna el plazo de un CDP.
         int getMeses() ;
         ~CDPintereses() = default;
 
@@ -131,8 +189,20 @@ class CDPintereses{
 /// @details Formula  Interes = Monto * Tasa * Plazo
 class CDPfijaSimple: public CDPintereses{
     public:
+
+        /// @brief Constructor de la clase CDPfijaSimple.
+        /// @param plazo plazo en meses del CDP.
+        /// @param periodo periodo de pago del CDP.
+        /// @param moneda moneda del CDP.
+        /// @param capital  monton invertido en el CDP.
         CDPfijaSimple(int plazo, PERIODOS_PAGO periodo,int moneda,float capital);
+
+        /// @brief Metodo para calcular los intereses de un CDP.
+        /// @return  float Retorna los intereses de un CDP.
+        /// @details funcion sobrecargada de la clase CDPintereses.
         float calcularInteres() override;
+
+        /// @brief Destructor de la clase CDPfijaSimple.
         ~CDPfijaSimple() = default;
 };
 
@@ -141,8 +211,21 @@ class CDPfijaSimple: public CDPintereses{
 /// @details Formula  Interes = Monto * (1 + Tasa)^Plazo - Monto
 class CDPfijaCompuesto: public CDPintereses{
     public:
+
+        /// @brief Constructor de la clase CDPfijaCompuesto.
+        /// @param plazo  plazo en meses del CDP.
+        /// @param periodo  periodo de pago del CDP.
+        /// @param moneda  moneda del CDP.
+        /// @param capital  capital invertido en el CDP.
         CDPfijaCompuesto(int plazo, PERIODOS_PAGO periodo,int moneda,float capital);
+
+        /// @brief Metodo para calcular los intereses de un CDP.
+        /// @return  float Retorna los intereses de un CDP.
+        /// @details funcion sobrecargada de la clase CDPintereses.
+
         float calcularInteres() override;
+
+        /// @brief Destructor de la clase CDPfijaCompuesto.
         ~CDPfijaCompuesto() = default;
 };
 
@@ -150,7 +233,11 @@ class CDPfijaCompuesto: public CDPintereses{
 /// @details Formula  Interes = Monto * Tasa * Plazo
 class CDPvariableSimple: public CDPintereses{
     public:
+
+        /// @brief Constructor de la clase CDPvariableSimple.
         CDPvariableSimple(int plazo, PERIODOS_PAGO periodo,int moneda,float capital);
+
+        /// @brief Metodo para calcular los intereses de un CDP.
         float calcularInteres() override;
         ~CDPvariableSimple() = default;
 };
@@ -159,10 +246,24 @@ class CDPvariableSimple: public CDPintereses{
 /// @details Formula  Interes = Monto * (1 + Tasa)^Plazo - Monto
 class CDPvariableCompuesto: public CDPintereses{
     public:
+
+        /// @brief Constructor de la clase CDPvariableCompuesto.
         CDPvariableCompuesto(int plazo, PERIODOS_PAGO periodo,int moneda,float capital);
+
+        /// @brief Metodo para calcular los intereses de un CDP.
         float calcularInteres() override;
+
         ~CDPvariableCompuesto() = default;
 };
 
+/// @brief Metodo para imprimir los CDP de un cliente.
+/// @param NotUsed  No se utiliza.
+/// @param argc  Numero de columnas.
+/// @param argv  Valores de las columnas.
+/// @param azColName  Nombres de las columnas.
+/// @return int Retorna 0 si la operacion fue exitosa.
 int callbackgetCDP(void *NotUsed, int argc, char **argv, char **azColName);
+
+
+
 #endif // CDP_HPP

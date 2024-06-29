@@ -96,9 +96,19 @@ int Banco::callbackIDs(void *data, int argc, char **argv, char **azColName){ // 
 // Procesando los datos de la consulta sql
 int Banco::callbackPrestamos(void *data, int argc, char **argv, char **azColName){ // data apunta a banco, argc num de columnas, argv arreglo de punteros val columnas
     int i;
+    try {
+        if (argc == 0){
+            throw std::string("...");
+        }
+    }
+    catch (std::string& e) {
+        std::cout << e << std::endl;
+        return 1;
+    }
     Banco* banco = static_cast<Banco*>(data);                                      //  accediendo al objeto banco. 
     for(i = 0;i <argc; i++){                                                       //ciclo for que va iterando desde 0 hasta argc -1
         if (argv[i]){
+
             banco->actualIDPrestamos.push_back(std::stoi(argv[i]));                // agregando los valores de las columnas al vector actualIDPrestamos.
         }                   // agregando los valores de las columnas al vector actualIDPrestamos.
 
@@ -108,6 +118,15 @@ int Banco::callbackPrestamos(void *data, int argc, char **argv, char **azColName
 // Procesando los datos de la consulta sql
 int Banco::callbackCuentas(void *data, int argc, char **argv, char **azColName){ // data apunta a banco, argc num de columnas, argv arreglo de punteros val columnas
     int i;
+    try {
+        if (argc == 0){
+            throw std::string("...");
+        }
+    }
+    catch (std::string& e) {
+        std::cout << e << std::endl;
+        return 1;
+    }
     Banco* banco = static_cast<Banco*>(data);                                    //  accediendo al objeto banco.
     for(i = 0;i <argc; i++){                                                     //ciclo for que va iterando desde 0 hasta argc -1
         banco->actualIDCuentas.push_back(std::stoi(argv[i]));                    // agregando los valores de las columnas al vector actualIDPrestamos.
@@ -499,7 +518,7 @@ void Banco::login(){
         std::cout << "\nIngrese la identificacion del cliente: ";
         std::cin >> id;
         if (checkifClienteExists(nombre, apellido, id)){
-            this->idCliente = std::stoi(id);
+            std::stringstream(id) >> this->idCliente;
             this->nombreCliente = nombre;
             this->apellidoCliente = apellido;
             cliente= Cliente(this->nombreCliente, this->apellidoCliente, this->idCliente);
@@ -544,6 +563,7 @@ void Banco::signUp(){
     } while (!validarID(id));
     
     try {
+        
         if (checkIDExists(std::stoi(id))){
             throw std::string("El ID ya existe, el cliente ya esta registrado");
         }

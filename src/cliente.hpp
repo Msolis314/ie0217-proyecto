@@ -93,7 +93,7 @@ class Cliente: public EntidadBancaria{
          * @brief Genera un  ID para una cuenta en colones.
          * @return El ID generado para la cuenta.
          */
-        unsigned long int generarIDCuentaC();
+         int generarIDCuentaC();
          /**
          * @brief Genera un  ID para una cuenta en dolares.
          * @return El ID generado para la cuenta.

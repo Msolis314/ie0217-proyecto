@@ -16,7 +16,6 @@
 #include "db.hpp"
 #include "cliente.hpp"
 #include "transaciones.hpp"
-#include "Prestamos.hpp"
 
 #define AMBAST 3
 #define SALIRCONSULTA 4
@@ -134,7 +133,7 @@ void Cliente::agregarCuentaC(int idCuentaC) {
     }
 
     // Generar un nuevo ID de cuenta
-    unsigned long int id_cuentaC = generarIDCuentaC();
+    int id_cuentaC = generarIDCuentaC();
 
     // Preparar la consulta SQL para insertar el ID de cuenta en colones
     std::string sql= "UPDATE CUSTOMERS SET ID_CUENTA_C = " + std::to_string(id_cuentaC) + " WHERE ID = " + std::to_string(id) + ";";
@@ -216,15 +215,15 @@ void Cliente::agregarCuentaD(int idCuentaD) {
 
 
 
-unsigned long int Cliente::generarIDCuentaC() {
-    unsigned long int minDigits = 1000000000000000; // Min 16 digitos
-    unsigned long int maxDigits = 9999999999999999; // Max 16 digitos
+int Cliente::generarIDCuentaC() {
+    int minDigits = 10000000000; 
+    int maxDigits = 99999999999; 
 
     std::random_device rd; // Numero aleatorio
     std::mt19937 gen(rd()); 
-    std::uniform_int_distribution<unsigned long int> distr(minDigits, maxDigits); //  distribucion de numeros aleatorios
+    std::uniform_int_distribution<unsigned int> distr(minDigits, maxDigits); //  distribucion de numeros aleatorios
 
-    unsigned long int idnum = distr(gen); // Generate a random number within the range
+    int idnum = distr(gen); // Generate a random number within the range
 
     // Verificar si el ID generado ya existe en la base de datos
     while (checkIDCuentaExists(idnum, COLON)) {
@@ -349,7 +348,6 @@ void Cliente::transaccion(){
     float montoF;
     Operaciones op(this->nombre, this->apellido, this->id);
     CDP cdp(this->nombre, this->apellido, this->id);
-    Prestamos prestamo(this->nombre, this->apellido, this->id);
 
     do {
         std::cout << "\n------ Menú de Transacciones ------" << std::endl;
@@ -408,7 +406,7 @@ void Cliente::transaccion(){
             // xxxx
             break;
         case SOLICITUDPRESTAMO:
-            prestamo.solicitarPrestamo();
+            // xxxx
             break;
         case CONSULTARSALDO:
             consultarSaldo();

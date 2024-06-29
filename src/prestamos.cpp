@@ -568,6 +568,17 @@ void Prestamos::setActualIDPrestamos(){
 ******************************************************/
 int Prestamos::callbackPrestamos(void *data, int argc, char **argv, char **azColName){ // data apunta a prestamos, argc num de columnas, argv arreglo de punteros val columnas
     int i;
+    try {
+        if (argc < 0){
+            throw std::invalid_argument("...");
+
+        }
+
+    } 
+    catch (const std::invalid_argument& e){
+        std::cerr << e.what() << std::endl;
+        return 1;
+    }
     Prestamos* prestamos = static_cast<Prestamos*>(data);                                    
     for(i = 0;i <argc; i++){                                                       //ciclo for que va iterando desde 0 hasta argc -1
         if (argv[i]){

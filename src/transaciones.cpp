@@ -52,6 +52,10 @@ Operaciones:: Operaciones(std::string nombre,std::string apellido,int id):client
 void Operaciones::depositar(Monedas cambio,float monto){
     functionVars vars;
     float saldo;
+    vars.tries = 0;
+    float montoDeposito;
+    std::string montoDepositoStr;
+
 
     //Desplegar el menu de opciones
 
