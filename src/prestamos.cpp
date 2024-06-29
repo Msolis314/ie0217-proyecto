@@ -708,7 +708,7 @@ void Prestamos::consultarPrestamos() {
 
     // Mostrar encabezado de los resultados
     std::cout << "** Listado de préstamos del cliente **" << std::endl;
-    std::cout << "ID\tTipo\tPlazo\tCuota" << std::endl;
+    std::cout << "ID\tTipo\t   Plazo\tCuota" << std::endl;
 
     bool hayPrestamos = false;  // Variable para controlar si se encontraron 
 
@@ -716,9 +716,9 @@ void Prestamos::consultarPrestamos() {
     while (sqlite3_step(stmt) == SQLITE_ROW) {
         // Obtener los valores de cada columna para el actual
         int idPrestamo = sqlite3_column_int(stmt, 0);                                               // tomando la columna de idprestamo por su indice
-        std::string tipoPrestamo = reinterpret_cast<const char*>(sqlite3_column_text(stmt, 2));     // la columna dos es el tipo de prestamode la tabla prestamos
-        int plazo = sqlite3_column_int(stmt, 6);                                                    // la seis de plazo
-        float cuota = sqlite3_column_double(stmt, 5);                                               // la cinco de cuopta
+        std::string tipoPrestamo = reinterpret_cast<const char*>(sqlite3_column_text(stmt, 1));     // la columna dos es el tipo de prestamode la tabla prestamos
+        int plazo = sqlite3_column_int(stmt, 2);                                                    // la seis de plazo
+        float cuota = sqlite3_column_double(stmt, 3);                                               // la cinco de cuopta
 
         // Mostrar cada préstamo encontrado
         std::cout << idPrestamo << "\t" << tipoPrestamo << "\t" << plazo << "\t" << cuota << std::endl;
