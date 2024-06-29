@@ -59,7 +59,7 @@ public:
     
     // @brief establecer tasa de cambio del banco
     void setTasaBank();
-    float consultarPrestamo(int id_P);
+    void consultarPrestamos();
     int callbackConsultaPrestamos(void *data, int argc, char **argv, char **azColName);
 
     std::string getTipoInteres() const;
