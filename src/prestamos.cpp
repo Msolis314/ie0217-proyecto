@@ -673,77 +673,65 @@ std::string Prestamos::ingresarTipoInteres(){
 
 
 
-/*****************************************************
- * ********** COnsulta por la tasa al banco   ********
-******************************************************/
-void Prestamos::setTasaBank(){
-    //Consultar la base de datos para obtener el tipo de cambio.
-    sqlite3 *db;
-    char *zErrMsg = 0;
-    int rc;
-
-    rc = sqlite3_open("SistemaBancario.db", &db);
-    if (rc){
-        std::cerr << "No se pudo abrir la base de datos" << std::endl;
-    }else{
-        std::cout << "...." << std::endl;
-    }
-
-    const char* sql = "SELECT TASA_BANCO_CENTRAL FROM BANKINFO";
-    rc = sqlite3_exec(db, sql, floatCallback, &tasaBanco, &zErrMsg);
-    if (rc != SQLITE_OK){
-        std::cerr << "SQL ERROR: " << zErrMsg << std::endl;
-        sqlite3_free(zErrMsg);
-    }
-    
-
-    sqlite3_close(db);
-
-}
-
-
-/*****************************************************
- * **********  Callback para procesar    *************
-******************************************************/
-
 
 
 
 /*****************************************************
  * *****  Consultar los prestamos del cliente    *****
 ******************************************************/
-float Prestamos::consultarPrestamo(int id_P){
-    sqlite3* db;
-    char* error;
-    int rc;
-    float saldo;
+
+void Prestamos::consultarPrestamos() {
+    sqlite3 *db;            // Puntero a la base de datos SQLite
+    sqlite3_stmt *stmt;     // Puntero a la declaración SQL preparada
+    int rc;                 // Variable para el estado de las operaciones SQLite
+
+    // Abrir la conexión a la base de datos SQLite
     rc = sqlite3_open("SistemaBancario.db", &db);
-
-    if (rc){
-        std::cout << "No se pudo abrir la base de datos" << std::endl;
-    }
-    else{
-        std::cout << "...." << std::endl;
-    }
-
-    std::string sql = "SELECT AHORROS FROM CUENTA_BANCARIA WHERE ID_CUENTA = " + std::to_string(cliente.idCuentaC) + "OR"+ std::to_string(cliente.idCuentaD) + ";" ;
-    rc = sqlite3_exec(db, sql.c_str(), callbackPrestamos, &saldo, &error);
-    if (rc != SQLITE_OK){
-        std::cout << "SQL ERROR: " << error << std::endl;
-        sqlite3_free(error);
+    if (rc) {
+        // En caso de error 
+        std::cerr << "No se pudo abrir la base de datos: " << sqlite3_errmsg(db) << std::endl;
+        sqlite3_close(db);
+        return;
     }
 
+    // Construir la consulta SQL
+    std::string sql = "SELECT ID_PRESTAMO, TIPO_PRESTAMO, PLAZO, CUOTA FROM PRESTAMO WHERE ID_CLIENTE = " + std::to_string(this->cliente.id);
+
+    // Preparar la consulta SQL
+    rc = sqlite3_prepare_v2(db, sql.c_str(), -1, &stmt, NULL);
+    if (rc != SQLITE_OK) {
+        // En caso de error
+        std::cerr << "Error al preparar la consulta: " << sqlite3_errmsg(db) << std::endl;
+        sqlite3_close(db);
+        return;
+    }
+
+    // Mostrar encabezado de los resultados
+    std::cout << "** Listado de préstamos del cliente **" << std::endl;
+    std::cout << "ID\tTipo\tPlazo\tCuota" << std::endl;
+
+    bool hayPrestamos = false;  // Variable para controlar si se encontraron 
+
+    // Iterar de los resultados de la consulta
+    while (sqlite3_step(stmt) == SQLITE_ROW) {
+        // Obtener los valores de cada columna para el actual
+        int idPrestamo = sqlite3_column_int(stmt, 0);                                               // tomando la columna de idprestamo por su indice
+        std::string tipoPrestamo = reinterpret_cast<const char*>(sqlite3_column_text(stmt, 2));     // la columna dos es el tipo de prestamode la tabla prestamos
+        int plazo = sqlite3_column_int(stmt, 6);                                                    // la seis de plazo
+        float cuota = sqlite3_column_double(stmt, 5);                                               // la cinco de cuopta
+
+        // Mostrar cada préstamo encontrado
+        std::cout << idPrestamo << "\t" << tipoPrestamo << "\t" << plazo << "\t" << cuota << std::endl;
+
+        hayPrestamos = true;  // Indicar que se encontró al menos un préstamo
+    }
+
+    // Si no se encontraron préstamos, mostrar mensaje correspondiente
+    if (!hayPrestamos) {
+        std::cout << "El cliente no tiene préstamos registrados." << std::endl;
+    }
+
+    // Finalizar la consulta 
+    sqlite3_finalize(stmt);
     sqlite3_close(db);
-    if (!cliente.checkIDCuentaExists(cliente.idCuentaC, COLON) && !cliente.checkIDCuentaExists(cliente.idCuentaD, DOLAR)){
-        return 0;
-    }
-    return saldo;
-}
-
-int callback(void* data, int argc, char** argv, char** azColName){
-    if (argc > 0){
-        float* saldo = static_cast<float*>(data);
-        *saldo = std::stof(argv[0]);
-    }
-    return 0;
 }
