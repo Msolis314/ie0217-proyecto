@@ -1,3 +1,30 @@
+
+/*! @file banco.hpp
+ @brief Header de la clase Banco
+MIT License
+
+Copyright (c) 2024 Msolis314
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+*/
+
 #ifndef BANCO_HPP
 #define BANCO_HPP
 
@@ -86,6 +113,21 @@ class Banco: public EntidadBancaria{
          * @return verdad si el ID existe, falso si no existe en la tabla de customers
          */                                                              
         bool checkIDExists(int id); 
+
+        /// @brief  Metodo para verificar si un cliente con esos nombres y apellidos ya existe con ese ID
+        /// @param nombre nombre del cliente
+        /// @param apellido  apellido del cliente
+        /// @param id id del cliente
+        /// @return verdadero si el cliente ya existe, falso si no existe
+        bool checkID(std::string nombre, std::string apellido,int id);
+
+        /// @brief Método para agregar un ID a la lista de IDs actuales
+        void agregarID(int id);
+
+        /// @brief Metodo para validar si la ID es válida
+        /// @param id entrada de la ID
+        /// @return  verdadero si la ID es válida, falso si no lo es
+        bool validarID(std::string id);
         
          /**
          * @brief Metodo login
@@ -97,7 +139,7 @@ class Banco: public EntidadBancaria{
          * @param nombre Nombre del cliente
          * @param apellido Apellido del cliente
          */
-        void consultarClientes(std::string nombre, std::string apellido);
+        bool consultarClientes(std::string nombre, std::string apellido);
         /**
          * @brief Metodo para realizar un deposito entre cuentas
          * @param idCuentaD id de la cuenta de destino
@@ -120,7 +162,7 @@ class Banco: public EntidadBancaria{
         /// @param nombre Nombre del cliente
         /// @param apellido Apellido del cliente
         /// @return true si el cliente existe, false si no existe
-        bool checkifClienteExists(std::string nombre, std::string apellido);
+        bool checkifClienteExists(std::string nombre, std::string apellido, std::string id);
 
         /// @brief Nueva sesión de la clase Banco
         void newSession();

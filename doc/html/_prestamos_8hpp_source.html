@@ -1,0 +1,266 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="es">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=11"/>
+<meta name="generator" content="Doxygen 1.10.0"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Proyecto Final IE-0217: Archivo de código fuente src/Prestamos.hpp</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<script type="text/javascript" src="clipboard.js"></script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<script type="text/javascript" src="cookie.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr id="projectrow">
+  <td id="projectlogo"><img alt="Logo" src="pago-seguro.png"/></td>
+  <td id="projectalign">
+   <div id="projectname">Proyecto Final IE-0217<span id="projectnumber">&#160;1.0</span>
+   </div>
+   <div id="projectbrief">Sistema de gestión bancaria</div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- Generado por Doxygen 1.10.0 -->
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+var searchBox = new SearchBox("searchBox", "search/",'.html');
+/* @license-end */
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function() {
+  initMenu('',true,false,'search.php','Buscar');
+  $(function() { init_search(); });
+});
+/* @license-end */
+</script>
+<div id="main-nav"></div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function() { codefold.init(0); });
+/* @license-end */
+</script>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function(){initNavTree('_prestamos_8hpp_source.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<div id="MSearchResults">
+<div class="SRPage">
+<div id="SRIndex">
+<div id="SRResults"></div>
+<div class="SRStatus" id="Loading">Cargando...</div>
+<div class="SRStatus" id="Searching">Buscando...</div>
+<div class="SRStatus" id="NoMatches">Nada coincide</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="header">
+  <div class="headertitle"><div class="title">Prestamos.hpp</div></div>
+</div><!--header-->
+<div class="contents">
+<a href="_prestamos_8hpp.html">Ir a la documentación de este archivo.</a><div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span> </div>
+<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span><span class="preprocessor">#ifndef PRESTAMOS_HPP</span></div>
+<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span><span class="preprocessor">#define PRESTAMOS_HPP</span></div>
+<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span> </div>
+<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span><span class="preprocessor">#include &lt;iostream&gt;</span></div>
+<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span><span class="preprocessor">#include &lt;string&gt;</span></div>
+<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span><span class="preprocessor">#include &lt;vector&gt;</span></div>
+<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span><span class="preprocessor">#include &lt;utility&gt;</span> <span class="comment">// Para std::pair</span></div>
+<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span><span class="preprocessor">#include &quot;<a class="code" href="entidad_bancaria_8hpp.html">entidadBancaria.hpp</a>&quot;</span></div>
+<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span><span class="preprocessor">#include &quot;<a class="code" href="menu_8hpp.html">menu.hpp</a>&quot;</span></div>
+<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span><span class="preprocessor">#include &quot;<a class="code" href="cliente_8hpp.html">cliente.hpp</a>&quot;</span></div>
+<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span><span class="preprocessor">#include &quot;<a class="code" href="db_8hpp.html">db.hpp</a>&quot;</span></div>
+<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span> </div>
+<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span> </div>
+<div class="foldopen" id="foldopen00043" data-start="{" data-end="};">
+<div class="line"><a id="l00043" name="l00043"></a><span class="lineno"><a class="line" href="_prestamos_8hpp.html#abb59c92e27b2a2cae5e42485f5729f14">   43</a></span><span class="keyword">enum</span> <a class="code hl_enumeration" href="_prestamos_8hpp.html#abb59c92e27b2a2cae5e42485f5729f14">TipoPretamo</a> {</div>
+<div class="line"><a id="l00044" name="l00044"></a><span class="lineno"><a class="line" href="_prestamos_8hpp.html#abb59c92e27b2a2cae5e42485f5729f14a3651cd2d93ef6384b4272197a3c031e7">   44</a></span>    <a class="code hl_enumvalue" href="_prestamos_8hpp.html#abb59c92e27b2a2cae5e42485f5729f14a3651cd2d93ef6384b4272197a3c031e7">PERSONAL</a> = 1,</div>
+<div class="line"><a id="l00045" name="l00045"></a><span class="lineno"><a class="line" href="_prestamos_8hpp.html#abb59c92e27b2a2cae5e42485f5729f14a6b7dc6dc4b53bacba8f5df8121c2b187">   45</a></span>    <a class="code hl_enumvalue" href="_prestamos_8hpp.html#abb59c92e27b2a2cae5e42485f5729f14a6b7dc6dc4b53bacba8f5df8121c2b187">HIPOTECARIO</a> = 2,</div>
+<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span>    <a class="code hl_enumvalue" href="_prestamos_8hpp.html#abb59c92e27b2a2cae5e42485f5729f14a879d6232400037b4c402577d19b68d9f">PRENDARIO</a> = 3</div>
+<div class="line"><a id="l00047" name="l00047"></a><span class="lineno"><a class="line" href="_prestamos_8hpp.html#abb59c92e27b2a2cae5e42485f5729f14a879d6232400037b4c402577d19b68d9f">   47</a></span>};</div>
+</div>
+<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span> </div>
+<div class="foldopen" id="foldopen00051" data-start="{" data-end="};">
+<div class="line"><a id="l00051" name="l00051"></a><span class="lineno"><a class="line" href="_prestamos_8hpp.html#ac0e920c30125b59b702e6f166625dbe3">   51</a></span><span class="keyword">enum</span> <a class="code hl_enumeration" href="_prestamos_8hpp.html#ac0e920c30125b59b702e6f166625dbe3">MonedaPrestamo</a> {</div>
+<div class="line"><a id="l00052" name="l00052"></a><span class="lineno"><a class="line" href="_prestamos_8hpp.html#ac0e920c30125b59b702e6f166625dbe3aa3a2394ed120e3160af044d771183178">   52</a></span>    <a class="code hl_enumvalue" href="_prestamos_8hpp.html#ac0e920c30125b59b702e6f166625dbe3aa3a2394ed120e3160af044d771183178">COLONES_PRESTAMO</a> = 1,</div>
+<div class="line"><a id="l00053" name="l00053"></a><span class="lineno">   53</span>    <a class="code hl_enumvalue" href="_prestamos_8hpp.html#ac0e920c30125b59b702e6f166625dbe3a81e843df41d121953511a8927a3be4a3">DOLARES_PRESTAMO</a> = 2</div>
+<div class="line"><a id="l00054" name="l00054"></a><span class="lineno"><a class="line" href="_prestamos_8hpp.html#ac0e920c30125b59b702e6f166625dbe3a81e843df41d121953511a8927a3be4a3">   54</a></span>};</div>
+</div>
+<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span> </div>
+<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span> </div>
+<div class="foldopen" id="foldopen00059" data-start="{" data-end="};">
+<div class="line"><a id="l00059" name="l00059"></a><span class="lineno"><a class="line" href="class_prestamos.html">   59</a></span><span class="keyword">class </span><a class="code hl_class" href="class_prestamos.html">Prestamos</a> {</div>
+<div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span><span class="keyword">private</span>:</div>
+<div class="line"><a id="l00061" name="l00061"></a><span class="lineno"><a class="line" href="class_prestamos.html#a2e47e0e3a3e25c76e9b49b208079ff25">   61</a></span>    <a class="code hl_class" href="class_cliente.html">Cliente</a> <a class="code hl_variable" href="class_prestamos.html#a2e47e0e3a3e25c76e9b49b208079ff25">cliente</a>;</div>
+<div class="line"><a id="l00062" name="l00062"></a><span class="lineno"><a class="line" href="class_prestamos.html#a2d063794a814c32ffaf1ffcc0ed69d6a">   62</a></span>    std::string <a class="code hl_variable" href="class_prestamos.html#a2d063794a814c32ffaf1ffcc0ed69d6a">nombreCliente</a>;</div>
+<div class="line"><a id="l00063" name="l00063"></a><span class="lineno"><a class="line" href="class_prestamos.html#a66e21bf398d66afead145ee7df0f0ae8">   63</a></span>    std::string <a class="code hl_variable" href="class_prestamos.html#a66e21bf398d66afead145ee7df0f0ae8">apellidoCliente</a>;</div>
+<div class="line"><a id="l00064" name="l00064"></a><span class="lineno"><a class="line" href="class_prestamos.html#ad7c1be667683c37401c23e0ca0738eae">   64</a></span>    <span class="keywordtype">int</span> <a class="code hl_variable" href="class_prestamos.html#ad7c1be667683c37401c23e0ca0738eae">idCliente</a>;</div>
+<div class="line"><a id="l00065" name="l00065"></a><span class="lineno"><a class="line" href="class_prestamos.html#aa3a8c0d4e95f9ecc7c373bdfe4d91a52">   65</a></span>    std::string <a class="code hl_variable" href="class_prestamos.html#aa3a8c0d4e95f9ecc7c373bdfe4d91a52">tipoInteres</a>;</div>
+<div class="line"><a id="l00066" name="l00066"></a><span class="lineno"><a class="line" href="class_prestamos.html#a3297f3a01a41b659146ea2196f33ab56">   66</a></span>    <span class="keywordtype">float</span> <a class="code hl_variable" href="class_prestamos.html#a3297f3a01a41b659146ea2196f33ab56">tasaActual</a>;</div>
+<div class="line"><a id="l00067" name="l00067"></a><span class="lineno"><a class="line" href="class_prestamos.html#a5e5000382beae73ef1a18377b3d8fdb3">   67</a></span>    <span class="keywordtype">int</span> <a class="code hl_variable" href="class_prestamos.html#a5e5000382beae73ef1a18377b3d8fdb3">plazo</a>;</div>
+<div class="line"><a id="l00068" name="l00068"></a><span class="lineno"><a class="line" href="class_prestamos.html#a9bf32f79bb9ecb5aa562aebbfe4d8d59">   68</a></span>    <span class="keywordtype">double</span> <a class="code hl_variable" href="class_prestamos.html#a9bf32f79bb9ecb5aa562aebbfe4d8d59">interesesAbonados</a>;</div>
+<div class="line"><a id="l00069" name="l00069"></a><span class="lineno"><a class="line" href="class_prestamos.html#a83c6d15a47a20e3fc50dd148a0e6e80d">   69</a></span>    <span class="keywordtype">float</span> <a class="code hl_variable" href="class_prestamos.html#a83c6d15a47a20e3fc50dd148a0e6e80d">capital</a>;</div>
+<div class="line"><a id="l00070" name="l00070"></a><span class="lineno"><a class="line" href="class_prestamos.html#a509f9a5ac5b5bb59174b3240cf016634">   70</a></span>    <span class="keywordtype">float</span> <a class="code hl_variable" href="class_prestamos.html#a509f9a5ac5b5bb59174b3240cf016634">tasaBanco</a>;</div>
+<div class="line"><a id="l00071" name="l00071"></a><span class="lineno"><a class="line" href="class_prestamos.html#a2fe3460778fa4a1f0ce11b49d03e7116">   71</a></span>    std::vector&lt;int&gt; <a class="code hl_variable" href="class_prestamos.html#a2fe3460778fa4a1f0ce11b49d03e7116">actualIDPrestamos</a>; </div>
+<div class="line"><a id="l00072" name="l00072"></a><span class="lineno"><a class="line" href="class_prestamos.html#a3be4b296c452fea6792f0b2ee1f54c94">   72</a></span>    std::string <a class="code hl_variable" href="class_prestamos.html#a3be4b296c452fea6792f0b2ee1f54c94">TipoPrestamo</a>;</div>
+<div class="line"><a id="l00073" name="l00073"></a><span class="lineno"><a class="line" href="class_prestamos.html#aa0da1a3cf543222b237f2dc2c98796ea">   73</a></span>    std::vector&lt;std::pair&lt;int, float&gt;&gt; <a class="code hl_variable" href="class_prestamos.html#aa0da1a3cf543222b237f2dc2c98796ea">tasaVariable</a>; <span class="comment">// Vector para almacenar las tasas variables</span></div>
+<div class="line"><a id="l00074" name="l00074"></a><span class="lineno"><a class="line" href="class_prestamos.html#a46cb9af235675e64e5d670549f0616b9">   74</a></span>    <a class="code hl_class" href="class_entidad_bancaria.html">EntidadBancaria</a>* <a class="code hl_variable" href="class_prestamos.html#a46cb9af235675e64e5d670549f0616b9">entidadBancaria</a>; <span class="comment">// Añadir referencia a EntidadBancaria</span></div>
+<div class="line"><a id="l00075" name="l00075"></a><span class="lineno"><a class="line" href="class_prestamos.html#a13ffd0dc6b5deb3c66bfdadde2d6ee4d">   75</a></span>    <span class="keywordtype">int</span> <a class="code hl_variable" href="class_prestamos.html#a13ffd0dc6b5deb3c66bfdadde2d6ee4d">tipoAbono</a>;</div>
+<div class="line"><a id="l00076" name="l00076"></a><span class="lineno">   76</span><span class="keyword">public</span>:</div>
+<div class="line"><a id="l00077" name="l00077"></a><span class="lineno">   77</span> </div>
+<div class="line"><a id="l00083" name="l00083"></a><span class="lineno">   83</span>    <a class="code hl_function" href="class_prestamos.html#a6c15a823293a9f179bf9e320eeb25c82">Prestamos</a>(<a class="code hl_class" href="class_entidad_bancaria.html">EntidadBancaria</a>* <a class="code hl_variable" href="class_prestamos.html#a46cb9af235675e64e5d670549f0616b9">entidadBancaria</a>, std::string nombre, std::string apellido, <span class="keywordtype">int</span> <a class="code hl_variable" href="class_prestamos.html#ad7c1be667683c37401c23e0ca0738eae">idCliente</a>);;</div>
+<div class="line"><a id="l00084" name="l00084"></a><span class="lineno">   84</span> </div>
+<div class="line"><a id="l00085" name="l00085"></a><span class="lineno">   85</span>    <span class="comment">// Métodos</span></div>
+<div class="line"><a id="l00086" name="l00086"></a><span class="lineno">   86</span> </div>
+<div class="line"><a id="l00087" name="l00087"></a><span class="lineno">   87</span>    </div>
+<div class="line"><a id="l00089" name="l00089"></a><span class="lineno">   89</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="class_prestamos.html#a50e5a989c7d7648e53893bdabed1d4b7">solicitarPrestamo</a>();</div>
+<div class="line"><a id="l00090" name="l00090"></a><span class="lineno">   90</span> </div>
+<div class="line"><a id="l00092" name="l00092"></a><span class="lineno">   92</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="class_prestamos.html#a6c7b1e01bf014a4e39ed092794104c98">ingresar_prestamoPersonal</a>();</div>
+<div class="line"><a id="l00093" name="l00093"></a><span class="lineno">   93</span> </div>
+<div class="line"><a id="l00095" name="l00095"></a><span class="lineno">   95</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="class_prestamos.html#ad7f40329e39d9e5dc1790f7ae7f30937">ingresar_prestamoHipotecario</a>();</div>
+<div class="line"><a id="l00096" name="l00096"></a><span class="lineno">   96</span> </div>
+<div class="line"><a id="l00098" name="l00098"></a><span class="lineno">   98</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="class_prestamos.html#a7d5e32fb85359aced58eed0d21a8fc75">ingresar_prestamoPrendario</a>();</div>
+<div class="line"><a id="l00099" name="l00099"></a><span class="lineno">   99</span> </div>
+<div class="line"><a id="l00102" name="l00102"></a><span class="lineno">  102</span>    <span class="keywordtype">int</span> <a class="code hl_function" href="class_prestamos.html#ad23e7e24bffb3f0fde70b2a5867a1da1">generar_id_prestamo</a>();</div>
+<div class="line"><a id="l00103" name="l00103"></a><span class="lineno">  103</span> </div>
+<div class="line"><a id="l00106" name="l00106"></a><span class="lineno">  106</span>    std::string <a class="code hl_function" href="class_prestamos.html#a575851cdbe8eaea61c43d44c8af98ff5">ingresarTipoInteres</a>();</div>
+<div class="line"><a id="l00107" name="l00107"></a><span class="lineno">  107</span> </div>
+<div class="line"><a id="l00114" name="l00114"></a><span class="lineno">  114</span>    <span class="keyword">static</span> <span class="keywordtype">int</span> <a class="code hl_function" href="class_prestamos.html#a15cc2f34c05d3bf24fb52708c884a289">callbackPrestamos</a>(<span class="keywordtype">void</span> *data, <span class="keywordtype">int</span> argc, <span class="keywordtype">char</span> **argv, <span class="keywordtype">char</span> **azColName);</div>
+<div class="line"><a id="l00115" name="l00115"></a><span class="lineno">  115</span> </div>
+<div class="line"><a id="l00117" name="l00117"></a><span class="lineno">  117</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="class_prestamos.html#ac8f731019f84f5e698e2a9d14908855b">setActualIDPrestamos</a>();</div>
+<div class="line"><a id="l00118" name="l00118"></a><span class="lineno">  118</span> </div>
+<div class="line"><a id="l00122" name="l00122"></a><span class="lineno">  122</span>    <span class="keywordtype">bool</span> <a class="code hl_function" href="class_prestamos.html#a48abecd9fbf92bc7654548aa27262e61">checkID_PRESTAMO</a>(<span class="keywordtype">int</span> <span class="keywordtype">id</span>);</div>
+<div class="line"><a id="l00123" name="l00123"></a><span class="lineno">  123</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="class_prestamos.html#a8831d61a2a3448c9cf6f23eab729bb5b">agregarID_lista</a>(<span class="keywordtype">int</span> <span class="keywordtype">id</span>);</div>
+<div class="line"><a id="l00124" name="l00124"></a><span class="lineno">  124</span>    </div>
+<div class="line"><a id="l00126" name="l00126"></a><span class="lineno">  126</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="class_prestamos.html#a1a8020a51a9ef0ffda6016250fa1454b">consultarPrestamos</a>();</div>
+<div class="line"><a id="l00127" name="l00127"></a><span class="lineno"><a class="line" href="class_prestamos.html#ab3837202063ceb4d7db21aabb8a2d536">  127</a></span>    <span class="keywordtype">int</span> <a class="code hl_function" href="class_prestamos.html#ab3837202063ceb4d7db21aabb8a2d536">callbackConsultaPrestamos</a>(<span class="keywordtype">void</span> *data, <span class="keywordtype">int</span> argc, <span class="keywordtype">char</span> **argv, <span class="keywordtype">char</span> **azColName);</div>
+<div class="line"><a id="l00128" name="l00128"></a><span class="lineno">  128</span> </div>
+<div class="line"><a id="l00129" name="l00129"></a><span class="lineno">  129</span>   </div>
+<div class="line"><a id="l00130" name="l00130"></a><span class="lineno">  130</span>    </div>
+<div class="line"><a id="l00131" name="l00131"></a><span class="lineno">  131</span>   </div>
+<div class="line"><a id="l00133" name="l00133"></a><span class="lineno">  133</span>    <span class="keywordtype">float</span> <a class="code hl_function" href="class_prestamos.html#a3b5fbf1f880aa9a8d42553b676c61393">calcularCuotaVariable</a>(<span class="keywordtype">float</span> tasaInteres, <span class="keywordtype">float</span> indiceReferencia, <span class="keywordtype">float</span> <a class="code hl_variable" href="class_prestamos.html#a83c6d15a47a20e3fc50dd148a0e6e80d">capital</a>, <span class="keywordtype">int</span> <a class="code hl_variable" href="class_prestamos.html#a5e5000382beae73ef1a18377b3d8fdb3">plazo</a>);</div>
+<div class="line"><a id="l00134" name="l00134"></a><span class="lineno">  134</span> </div>
+<div class="line"><a id="l00135" name="l00135"></a><span class="lineno">  135</span>    </div>
+<div class="line"><a id="l00137" name="l00137"></a><span class="lineno">  137</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="class_prestamos.html#a7c5ddcc192a7f1c6de5920ecdbabb778">abonarCuota</a>(<span class="keywordtype">int</span> idPrestamo, <span class="keywordtype">float</span> abono, <span class="keywordtype">bool</span> esAbonoExtraordinario, <a class="code hl_enumeration" href="_prestamos_8hpp.html#ac0e920c30125b59b702e6f166625dbe3">MonedaPrestamo</a> tipoMoneda);</div>
+<div class="line"><a id="l00138" name="l00138"></a><span class="lineno">  138</span>    </div>
+<div class="line"><a id="l00140" name="l00140"></a><span class="lineno">  140</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="class_prestamos.html#ab05c2e220e13078c56d0c5d2d27dd8a6">realizarAbono2</a>();</div>
+<div class="line"><a id="l00141" name="l00141"></a><span class="lineno">  141</span> </div>
+<div class="line"><a id="l00144" name="l00144"></a><span class="lineno">  144</span>    <span class="keywordtype">int</span> <a class="code hl_function" href="class_prestamos.html#ab1d709086fca4034809cc8bb09a1537a">obtenerIdPrestamoSesion</a>();</div>
+<div class="line"><a id="l00145" name="l00145"></a><span class="lineno">  145</span> </div>
+<div class="line"><a id="l00149" name="l00149"></a><span class="lineno">  149</span>    <span class="keywordtype">void</span> <a class="code hl_function" href="class_prestamos.html#a4e352d600eced309a772cc63f83191c7">restarMontoCuentaCliente</a>(<a class="code hl_enumeration" href="_prestamos_8hpp.html#ac0e920c30125b59b702e6f166625dbe3">MonedaPrestamo</a> moneda, <span class="keywordtype">float</span> monto);</div>
+<div class="line"><a id="l00150" name="l00150"></a><span class="lineno">  150</span> </div>
+<div class="line"><a id="l00154" name="l00154"></a><span class="lineno">  154</span>    <span class="keywordtype">float</span> <a class="code hl_function" href="class_prestamos.html#a3637505774190718b218c0ba143dbcff">consultarSaldoCliente</a>(<a class="code hl_enumeration" href="_prestamos_8hpp.html#ac0e920c30125b59b702e6f166625dbe3">MonedaPrestamo</a> tipoMoneda);</div>
+<div class="line"><a id="l00155" name="l00155"></a><span class="lineno">  155</span> </div>
+<div class="line"><a id="l00159" name="l00159"></a><span class="lineno">  159</span>    <a class="code hl_enumeration" href="_prestamos_8hpp.html#ac0e920c30125b59b702e6f166625dbe3">MonedaPrestamo</a> <a class="code hl_function" href="class_prestamos.html#a5d0a4f93943b1228048a6289f27a2b4b">consultarTipoMonedaPrestamo</a>(<span class="keywordtype">int</span> idPrestamo);</div>
+<div class="line"><a id="l00160" name="l00160"></a><span class="lineno">  160</span> </div>
+<div class="line"><a id="l00164" name="l00164"></a><span class="lineno">  164</span>    <span class="keywordtype">double</span> <a class="code hl_function" href="class_prestamos.html#acd6eaf3359214fa7af804f0a475b9f0d">consultarCuota</a>(<span class="keywordtype">int</span> idPrestamo);</div>
+<div class="line"><a id="l00165" name="l00165"></a><span class="lineno">  165</span> </div>
+<div class="line"><a id="l00166" name="l00166"></a><span class="lineno">  166</span>};</div>
+</div>
+<div class="line"><a id="l00167" name="l00167"></a><span class="lineno">  167</span> </div>
+<div class="line"><a id="l00168" name="l00168"></a><span class="lineno">  168</span> </div>
+<div class="line"><a id="l00169" name="l00169"></a><span class="lineno">  169</span><span class="preprocessor">#endif </span></div>
+<div class="ttc" id="a_prestamos_8hpp_html_abb59c92e27b2a2cae5e42485f5729f14"><div class="ttname"><a href="_prestamos_8hpp.html#abb59c92e27b2a2cae5e42485f5729f14">TipoPretamo</a></div><div class="ttdeci">TipoPretamo</div><div class="ttdoc">Enumeracion de los tipos de prestamos /.</div><div class="ttdef"><b>Definition</b> <a href="#l00043">Prestamos.hpp:43</a></div></div>
+<div class="ttc" id="a_prestamos_8hpp_html_abb59c92e27b2a2cae5e42485f5729f14a3651cd2d93ef6384b4272197a3c031e7"><div class="ttname"><a href="_prestamos_8hpp.html#abb59c92e27b2a2cae5e42485f5729f14a3651cd2d93ef6384b4272197a3c031e7">PERSONAL</a></div><div class="ttdeci">@ PERSONAL</div><div class="ttdef"><b>Definition</b> <a href="#l00044">Prestamos.hpp:44</a></div></div>
+<div class="ttc" id="a_prestamos_8hpp_html_abb59c92e27b2a2cae5e42485f5729f14a6b7dc6dc4b53bacba8f5df8121c2b187"><div class="ttname"><a href="_prestamos_8hpp.html#abb59c92e27b2a2cae5e42485f5729f14a6b7dc6dc4b53bacba8f5df8121c2b187">HIPOTECARIO</a></div><div class="ttdeci">@ HIPOTECARIO</div><div class="ttdef"><b>Definition</b> <a href="#l00045">Prestamos.hpp:45</a></div></div>
+<div class="ttc" id="a_prestamos_8hpp_html_abb59c92e27b2a2cae5e42485f5729f14a879d6232400037b4c402577d19b68d9f"><div class="ttname"><a href="_prestamos_8hpp.html#abb59c92e27b2a2cae5e42485f5729f14a879d6232400037b4c402577d19b68d9f">PRENDARIO</a></div><div class="ttdeci">@ PRENDARIO</div><div class="ttdef"><b>Definition</b> <a href="#l00047">Prestamos.hpp:46</a></div></div>
+<div class="ttc" id="a_prestamos_8hpp_html_ac0e920c30125b59b702e6f166625dbe3"><div class="ttname"><a href="_prestamos_8hpp.html#ac0e920c30125b59b702e6f166625dbe3">MonedaPrestamo</a></div><div class="ttdeci">MonedaPrestamo</div><div class="ttdoc">Enumeracion de los tipos de interes /.</div><div class="ttdef"><b>Definition</b> <a href="#l00051">Prestamos.hpp:51</a></div></div>
+<div class="ttc" id="a_prestamos_8hpp_html_ac0e920c30125b59b702e6f166625dbe3a81e843df41d121953511a8927a3be4a3"><div class="ttname"><a href="_prestamos_8hpp.html#ac0e920c30125b59b702e6f166625dbe3a81e843df41d121953511a8927a3be4a3">DOLARES_PRESTAMO</a></div><div class="ttdeci">@ DOLARES_PRESTAMO</div><div class="ttdef"><b>Definition</b> <a href="#l00054">Prestamos.hpp:53</a></div></div>
+<div class="ttc" id="a_prestamos_8hpp_html_ac0e920c30125b59b702e6f166625dbe3aa3a2394ed120e3160af044d771183178"><div class="ttname"><a href="_prestamos_8hpp.html#ac0e920c30125b59b702e6f166625dbe3aa3a2394ed120e3160af044d771183178">COLONES_PRESTAMO</a></div><div class="ttdeci">@ COLONES_PRESTAMO</div><div class="ttdef"><b>Definition</b> <a href="#l00052">Prestamos.hpp:52</a></div></div>
+<div class="ttc" id="aclass_cliente_html"><div class="ttname"><a href="class_cliente.html">Cliente</a></div><div class="ttdoc">es un cliente de una entidad bancaria.</div><div class="ttdef"><b>Definition</b> <a href="cliente_8hpp_source.html#l00067">cliente.hpp:67</a></div></div>
+<div class="ttc" id="aclass_entidad_bancaria_html"><div class="ttname"><a href="class_entidad_bancaria.html">EntidadBancaria</a></div><div class="ttdoc">Clase padre del sistema bancario.</div><div class="ttdef"><b>Definition</b> <a href="entidad_bancaria_8hpp_source.html#l00066">entidadBancaria.hpp:66</a></div></div>
+<div class="ttc" id="aclass_prestamos_html"><div class="ttname"><a href="class_prestamos.html">Prestamos</a></div><div class="ttdoc">Clase que realiza las operaciones de prestamos.</div><div class="ttdef"><b>Definition</b> <a href="#l00059">Prestamos.hpp:59</a></div></div>
+<div class="ttc" id="aclass_prestamos_html_a13ffd0dc6b5deb3c66bfdadde2d6ee4d"><div class="ttname"><a href="class_prestamos.html#a13ffd0dc6b5deb3c66bfdadde2d6ee4d">Prestamos::tipoAbono</a></div><div class="ttdeci">int tipoAbono</div><div class="ttdef"><b>Definition</b> <a href="#l00075">Prestamos.hpp:75</a></div></div>
+<div class="ttc" id="aclass_prestamos_html_a15cc2f34c05d3bf24fb52708c884a289"><div class="ttname"><a href="class_prestamos.html#a15cc2f34c05d3bf24fb52708c884a289">Prestamos::callbackPrestamos</a></div><div class="ttdeci">static int callbackPrestamos(void *data, int argc, char **argv, char **azColName)</div><div class="ttdoc">Callback para los prestamos.</div><div class="ttdef"><b>Definition</b> <a href="prestamos_8cpp_source.html#l00601">prestamos.cpp:601</a></div></div>
+<div class="ttc" id="aclass_prestamos_html_a1a8020a51a9ef0ffda6016250fa1454b"><div class="ttname"><a href="class_prestamos.html#a1a8020a51a9ef0ffda6016250fa1454b">Prestamos::consultarPrestamos</a></div><div class="ttdeci">void consultarPrestamos()</div><div class="ttdoc">Metodo para consultar los prestamos.</div><div class="ttdef"><b>Definition</b> <a href="prestamos_8cpp_source.html#l00715">prestamos.cpp:715</a></div></div>
+<div class="ttc" id="aclass_prestamos_html_a2d063794a814c32ffaf1ffcc0ed69d6a"><div class="ttname"><a href="class_prestamos.html#a2d063794a814c32ffaf1ffcc0ed69d6a">Prestamos::nombreCliente</a></div><div class="ttdeci">std::string nombreCliente</div><div class="ttdef"><b>Definition</b> <a href="#l00062">Prestamos.hpp:62</a></div></div>
+<div class="ttc" id="aclass_prestamos_html_a2e47e0e3a3e25c76e9b49b208079ff25"><div class="ttname"><a href="class_prestamos.html#a2e47e0e3a3e25c76e9b49b208079ff25">Prestamos::cliente</a></div><div class="ttdeci">Cliente cliente</div><div class="ttdef"><b>Definition</b> <a href="#l00061">Prestamos.hpp:61</a></div></div>
+<div class="ttc" id="aclass_prestamos_html_a2fe3460778fa4a1f0ce11b49d03e7116"><div class="ttname"><a href="class_prestamos.html#a2fe3460778fa4a1f0ce11b49d03e7116">Prestamos::actualIDPrestamos</a></div><div class="ttdeci">std::vector&lt; int &gt; actualIDPrestamos</div><div class="ttdef"><b>Definition</b> <a href="#l00071">Prestamos.hpp:71</a></div></div>
+<div class="ttc" id="aclass_prestamos_html_a3297f3a01a41b659146ea2196f33ab56"><div class="ttname"><a href="class_prestamos.html#a3297f3a01a41b659146ea2196f33ab56">Prestamos::tasaActual</a></div><div class="ttdeci">float tasaActual</div><div class="ttdef"><b>Definition</b> <a href="#l00066">Prestamos.hpp:66</a></div></div>
+<div class="ttc" id="aclass_prestamos_html_a3637505774190718b218c0ba143dbcff"><div class="ttname"><a href="class_prestamos.html#a3637505774190718b218c0ba143dbcff">Prestamos::consultarSaldoCliente</a></div><div class="ttdeci">float consultarSaldoCliente(MonedaPrestamo tipoMoneda)</div><div class="ttdoc">Metodo para consultar el saldo del cliente.</div><div class="ttdef"><b>Definition</b> <a href="prestamos_8cpp_source.html#l01147">prestamos.cpp:1147</a></div></div>
+<div class="ttc" id="aclass_prestamos_html_a3b5fbf1f880aa9a8d42553b676c61393"><div class="ttname"><a href="class_prestamos.html#a3b5fbf1f880aa9a8d42553b676c61393">Prestamos::calcularCuotaVariable</a></div><div class="ttdeci">float calcularCuotaVariable(float tasaInteres, float indiceReferencia, float capital, int plazo)</div><div class="ttdoc">Metodo para calcular la cuota de un prestamo variable.</div><div class="ttdef"><b>Definition</b> <a href="prestamos_8cpp_source.html#l00053">prestamos.cpp:53</a></div></div>
+<div class="ttc" id="aclass_prestamos_html_a3be4b296c452fea6792f0b2ee1f54c94"><div class="ttname"><a href="class_prestamos.html#a3be4b296c452fea6792f0b2ee1f54c94">Prestamos::TipoPrestamo</a></div><div class="ttdeci">std::string TipoPrestamo</div><div class="ttdef"><b>Definition</b> <a href="#l00072">Prestamos.hpp:72</a></div></div>
+<div class="ttc" id="aclass_prestamos_html_a46cb9af235675e64e5d670549f0616b9"><div class="ttname"><a href="class_prestamos.html#a46cb9af235675e64e5d670549f0616b9">Prestamos::entidadBancaria</a></div><div class="ttdeci">EntidadBancaria * entidadBancaria</div><div class="ttdef"><b>Definition</b> <a href="#l00074">Prestamos.hpp:74</a></div></div>
+<div class="ttc" id="aclass_prestamos_html_a48abecd9fbf92bc7654548aa27262e61"><div class="ttname"><a href="class_prestamos.html#a48abecd9fbf92bc7654548aa27262e61">Prestamos::checkID_PRESTAMO</a></div><div class="ttdeci">bool checkID_PRESTAMO(int id)</div><div class="ttdoc">Metodo para chequear el id de prestamo.</div><div class="ttdef"><b>Definition</b> <a href="prestamos_8cpp_source.html#l00645">prestamos.cpp:645</a></div></div>
+<div class="ttc" id="aclass_prestamos_html_a4e352d600eced309a772cc63f83191c7"><div class="ttname"><a href="class_prestamos.html#a4e352d600eced309a772cc63f83191c7">Prestamos::restarMontoCuentaCliente</a></div><div class="ttdeci">void restarMontoCuentaCliente(MonedaPrestamo moneda, float monto)</div><div class="ttdoc">Metodo para restar el monto de la cuenta del cliente.</div><div class="ttdef"><b>Definition</b> <a href="prestamos_8cpp_source.html#l01095">prestamos.cpp:1095</a></div></div>
+<div class="ttc" id="aclass_prestamos_html_a509f9a5ac5b5bb59174b3240cf016634"><div class="ttname"><a href="class_prestamos.html#a509f9a5ac5b5bb59174b3240cf016634">Prestamos::tasaBanco</a></div><div class="ttdeci">float tasaBanco</div><div class="ttdef"><b>Definition</b> <a href="#l00070">Prestamos.hpp:70</a></div></div>
+<div class="ttc" id="aclass_prestamos_html_a50e5a989c7d7648e53893bdabed1d4b7"><div class="ttname"><a href="class_prestamos.html#a50e5a989c7d7648e53893bdabed1d4b7">Prestamos::solicitarPrestamo</a></div><div class="ttdeci">void solicitarPrestamo()</div><div class="ttdoc">Metodo para solicitar prestamo.</div><div class="ttdef"><b>Definition</b> <a href="prestamos_8cpp_source.html#l00061">prestamos.cpp:61</a></div></div>
+<div class="ttc" id="aclass_prestamos_html_a575851cdbe8eaea61c43d44c8af98ff5"><div class="ttname"><a href="class_prestamos.html#a575851cdbe8eaea61c43d44c8af98ff5">Prestamos::ingresarTipoInteres</a></div><div class="ttdeci">std::string ingresarTipoInteres()</div><div class="ttdoc">Metodo para ingresar el tipo de interes.</div><div class="ttdef"><b>Definition</b> <a href="prestamos_8cpp_source.html#l00678">prestamos.cpp:678</a></div></div>
+<div class="ttc" id="aclass_prestamos_html_a5d0a4f93943b1228048a6289f27a2b4b"><div class="ttname"><a href="class_prestamos.html#a5d0a4f93943b1228048a6289f27a2b4b">Prestamos::consultarTipoMonedaPrestamo</a></div><div class="ttdeci">MonedaPrestamo consultarTipoMonedaPrestamo(int idPrestamo)</div><div class="ttdoc">Metodo para consultar el tipo de moneda del prestamo.</div><div class="ttdef"><b>Definition</b> <a href="prestamos_8cpp_source.html#l00771">prestamos.cpp:771</a></div></div>
+<div class="ttc" id="aclass_prestamos_html_a5e5000382beae73ef1a18377b3d8fdb3"><div class="ttname"><a href="class_prestamos.html#a5e5000382beae73ef1a18377b3d8fdb3">Prestamos::plazo</a></div><div class="ttdeci">int plazo</div><div class="ttdef"><b>Definition</b> <a href="#l00067">Prestamos.hpp:67</a></div></div>
+<div class="ttc" id="aclass_prestamos_html_a66e21bf398d66afead145ee7df0f0ae8"><div class="ttname"><a href="class_prestamos.html#a66e21bf398d66afead145ee7df0f0ae8">Prestamos::apellidoCliente</a></div><div class="ttdeci">std::string apellidoCliente</div><div class="ttdef"><b>Definition</b> <a href="#l00063">Prestamos.hpp:63</a></div></div>
+<div class="ttc" id="aclass_prestamos_html_a6c15a823293a9f179bf9e320eeb25c82"><div class="ttname"><a href="class_prestamos.html#a6c15a823293a9f179bf9e320eeb25c82">Prestamos::Prestamos</a></div><div class="ttdeci">Prestamos(EntidadBancaria *entidadBancaria, std::string nombre, std::string apellido, int idCliente)</div><div class="ttdoc">Constructor de la clase Prestamos.</div><div class="ttdef"><b>Definition</b> <a href="prestamos_8cpp_source.html#l00046">prestamos.cpp:46</a></div></div>
+<div class="ttc" id="aclass_prestamos_html_a6c7b1e01bf014a4e39ed092794104c98"><div class="ttname"><a href="class_prestamos.html#a6c7b1e01bf014a4e39ed092794104c98">Prestamos::ingresar_prestamoPersonal</a></div><div class="ttdeci">void ingresar_prestamoPersonal()</div><div class="ttdoc">Metodo para solcitar un prestamo personal.</div><div class="ttdef"><b>Definition</b> <a href="prestamos_8cpp_source.html#l00195">prestamos.cpp:195</a></div></div>
+<div class="ttc" id="aclass_prestamos_html_a7c5ddcc192a7f1c6de5920ecdbabb778"><div class="ttname"><a href="class_prestamos.html#a7c5ddcc192a7f1c6de5920ecdbabb778">Prestamos::abonarCuota</a></div><div class="ttdeci">void abonarCuota(int idPrestamo, float abono, bool esAbonoExtraordinario, MonedaPrestamo tipoMoneda)</div><div class="ttdoc">Metodo para abonar en la base de datos.</div><div class="ttdef"><b>Definition</b> <a href="prestamos_8cpp_source.html#l00906">prestamos.cpp:906</a></div></div>
+<div class="ttc" id="aclass_prestamos_html_a7d5e32fb85359aced58eed0d21a8fc75"><div class="ttname"><a href="class_prestamos.html#a7d5e32fb85359aced58eed0d21a8fc75">Prestamos::ingresar_prestamoPrendario</a></div><div class="ttdeci">void ingresar_prestamoPrendario()</div><div class="ttdoc">Metodo para solicitar un prestamo prendario.</div><div class="ttdef"><b>Definition</b> <a href="prestamos_8cpp_source.html#l00453">prestamos.cpp:453</a></div></div>
+<div class="ttc" id="aclass_prestamos_html_a83c6d15a47a20e3fc50dd148a0e6e80d"><div class="ttname"><a href="class_prestamos.html#a83c6d15a47a20e3fc50dd148a0e6e80d">Prestamos::capital</a></div><div class="ttdeci">float capital</div><div class="ttdef"><b>Definition</b> <a href="#l00069">Prestamos.hpp:69</a></div></div>
+<div class="ttc" id="aclass_prestamos_html_a8831d61a2a3448c9cf6f23eab729bb5b"><div class="ttname"><a href="class_prestamos.html#a8831d61a2a3448c9cf6f23eab729bb5b">Prestamos::agregarID_lista</a></div><div class="ttdeci">void agregarID_lista(int id)</div><div class="ttdoc">*******Agregando el id generado a la lista*********</div><div class="ttdef"><b>Definition</b> <a href="prestamos_8cpp_source.html#l00663">prestamos.cpp:663</a></div></div>
+<div class="ttc" id="aclass_prestamos_html_a9bf32f79bb9ecb5aa562aebbfe4d8d59"><div class="ttname"><a href="class_prestamos.html#a9bf32f79bb9ecb5aa562aebbfe4d8d59">Prestamos::interesesAbonados</a></div><div class="ttdeci">double interesesAbonados</div><div class="ttdef"><b>Definition</b> <a href="#l00068">Prestamos.hpp:68</a></div></div>
+<div class="ttc" id="aclass_prestamos_html_aa0da1a3cf543222b237f2dc2c98796ea"><div class="ttname"><a href="class_prestamos.html#aa0da1a3cf543222b237f2dc2c98796ea">Prestamos::tasaVariable</a></div><div class="ttdeci">std::vector&lt; std::pair&lt; int, float &gt; &gt; tasaVariable</div><div class="ttdef"><b>Definition</b> <a href="#l00073">Prestamos.hpp:73</a></div></div>
+<div class="ttc" id="aclass_prestamos_html_aa3a8c0d4e95f9ecc7c373bdfe4d91a52"><div class="ttname"><a href="class_prestamos.html#aa3a8c0d4e95f9ecc7c373bdfe4d91a52">Prestamos::tipoInteres</a></div><div class="ttdeci">std::string tipoInteres</div><div class="ttdef"><b>Definition</b> <a href="#l00065">Prestamos.hpp:65</a></div></div>
+<div class="ttc" id="aclass_prestamos_html_ab05c2e220e13078c56d0c5d2d27dd8a6"><div class="ttname"><a href="class_prestamos.html#ab05c2e220e13078c56d0c5d2d27dd8a6">Prestamos::realizarAbono2</a></div><div class="ttdeci">void realizarAbono2()</div><div class="ttdoc">Metodo para realizar un abono.</div><div class="ttdef"><b>Definition</b> <a href="prestamos_8cpp_source.html#l00982">prestamos.cpp:982</a></div></div>
+<div class="ttc" id="aclass_prestamos_html_ab1d709086fca4034809cc8bb09a1537a"><div class="ttname"><a href="class_prestamos.html#ab1d709086fca4034809cc8bb09a1537a">Prestamos::obtenerIdPrestamoSesion</a></div><div class="ttdeci">int obtenerIdPrestamoSesion()</div><div class="ttdoc">Metodo para obtener el id de prestamo de la sesion deun cliente.</div><div class="ttdef"><b>Definition</b> <a href="prestamos_8cpp_source.html#l00851">prestamos.cpp:851</a></div></div>
+<div class="ttc" id="aclass_prestamos_html_ab3837202063ceb4d7db21aabb8a2d536"><div class="ttname"><a href="class_prestamos.html#ab3837202063ceb4d7db21aabb8a2d536">Prestamos::callbackConsultaPrestamos</a></div><div class="ttdeci">int callbackConsultaPrestamos(void *data, int argc, char **argv, char **azColName)</div></div>
+<div class="ttc" id="aclass_prestamos_html_ac8f731019f84f5e698e2a9d14908855b"><div class="ttname"><a href="class_prestamos.html#ac8f731019f84f5e698e2a9d14908855b">Prestamos::setActualIDPrestamos</a></div><div class="ttdeci">void setActualIDPrestamos()</div><div class="ttdoc">Metodo para setear el id de prestamos.</div><div class="ttdef"><b>Definition</b> <a href="prestamos_8cpp_source.html#l00573">prestamos.cpp:573</a></div></div>
+<div class="ttc" id="aclass_prestamos_html_acd6eaf3359214fa7af804f0a475b9f0d"><div class="ttname"><a href="class_prestamos.html#acd6eaf3359214fa7af804f0a475b9f0d">Prestamos::consultarCuota</a></div><div class="ttdeci">double consultarCuota(int idPrestamo)</div><div class="ttdoc">Metodo para consultar la cuota de un prestamo.</div><div class="ttdef"><b>Definition</b> <a href="prestamos_8cpp_source.html#l00813">prestamos.cpp:813</a></div></div>
+<div class="ttc" id="aclass_prestamos_html_ad23e7e24bffb3f0fde70b2a5867a1da1"><div class="ttname"><a href="class_prestamos.html#ad23e7e24bffb3f0fde70b2a5867a1da1">Prestamos::generar_id_prestamo</a></div><div class="ttdeci">int generar_id_prestamo()</div><div class="ttdoc">Metodo para generar un id de prestamo.</div><div class="ttdef"><b>Definition</b> <a href="prestamos_8cpp_source.html#l00629">prestamos.cpp:629</a></div></div>
+<div class="ttc" id="aclass_prestamos_html_ad7c1be667683c37401c23e0ca0738eae"><div class="ttname"><a href="class_prestamos.html#ad7c1be667683c37401c23e0ca0738eae">Prestamos::idCliente</a></div><div class="ttdeci">int idCliente</div><div class="ttdef"><b>Definition</b> <a href="#l00064">Prestamos.hpp:64</a></div></div>
+<div class="ttc" id="aclass_prestamos_html_ad7f40329e39d9e5dc1790f7ae7f30937"><div class="ttname"><a href="class_prestamos.html#ad7f40329e39d9e5dc1790f7ae7f30937">Prestamos::ingresar_prestamoHipotecario</a></div><div class="ttdeci">void ingresar_prestamoHipotecario()</div><div class="ttdoc">Metodo para solicitar un prestamo hipotecario.</div><div class="ttdef"><b>Definition</b> <a href="prestamos_8cpp_source.html#l00323">prestamos.cpp:323</a></div></div>
+<div class="ttc" id="acliente_8hpp_html"><div class="ttname"><a href="cliente_8hpp.html">cliente.hpp</a></div><div class="ttdoc">Header file de la clase Cliente MIT License.</div></div>
+<div class="ttc" id="adb_8hpp_html"><div class="ttname"><a href="db_8hpp.html">db.hpp</a></div><div class="ttdoc">Header file de la base de datos MIT License.</div></div>
+<div class="ttc" id="aentidad_bancaria_8hpp_html"><div class="ttname"><a href="entidad_bancaria_8hpp.html">entidadBancaria.hpp</a></div><div class="ttdoc">Clase padre del sistema bancario MIT License.</div></div>
+<div class="ttc" id="amenu_8hpp_html"><div class="ttname"><a href="menu_8hpp.html">menu.hpp</a></div><div class="ttdoc">Header file de la clase Menu MIT License.</div></div>
+</div><!-- fragment --></div><!-- contents -->
+</div><!-- doc-content -->
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="navelem"><a class="el" href="dir_68267d1309a1af8e8297ef4c3efbcdba.html">src</a></li><li class="navelem"><a class="el" href="_prestamos_8hpp.html">Prestamos.hpp</a></li>
+    <li class="footer">Generado por <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.10.0 </li>
+  </ul>
+</div>
+</body>
+</html>

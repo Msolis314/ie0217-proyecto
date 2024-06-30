@@ -1,33 +1,84 @@
+/*! @file cliente.cpp
+ @brief Implementacion de la clase cliente
+MIT License
+
+Copyright (c) 2024 Msolis314
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+*/
+
+
 // Incluyendo las librerias
 #include <iostream>
 #include <string>
 #include <vector>
 #include <ctime>
 #include <sqlite3.h>
+#include <iomanip>
+#include <stdexcept>
+#include <sstream>
+#include <type_traits>
+#include <random>
+#include <cstdlib>
 #include "entidadBancaria.hpp"
 #include "banco.hpp"
+#include "CDP.hpp"
 #include "db.hpp"
 #include "cliente.hpp"
+#include "transaciones.hpp"
+#include "Prestamos.hpp"
 
+#define AMBAST 3
+#define SALIRCONSULTA 4
 
 Cliente::Cliente(std::string nombre, std::string apellido, int id) {
     this->nombre = nombre;
     this->apellido = apellido;
     this->id = id;
+    // Obtener los IDs de las cuentas del cliente
+    this ->  idCuentaC= getIDCuenta(COLON);
+    this ->  idCuentaD= getIDCuenta(DOLAR);
+
     
 }
 
 // Generando menu
 
+/// @note Este metodo muestra el menu de opciones para el cliente.
 void Cliente::mostrarMenuC() {
     int opc;
     do {
-        std::cout << "------ Menú del Cliente ------" << std::endl;
+        std::cout << "\n------ Menú del Cliente ------" << std::endl;
         std::cout << "1. Agregar Cuenta" << std::endl;
         std::cout << "2. Realizar transacciones" << std::endl;
         std::cout << "3. Salir del menú" << std::endl;
         std::cout << "Elija una opción: ";
-        std::cin >> opc;
+        //Validar que la opcion sea un numero
+        do {
+            std::cin >> opc;
+            if (std::cin.fail()) {
+                std::cin.clear();
+                std::cin.ignore();
+                std::cout << "Opción inválida. Intente de nuevo." << std::endl;
+            }
+        } while (std::cin.fail());
 
         switch (opc) {
            case 1:
@@ -35,22 +86,33 @@ void Cliente::mostrarMenuC() {
                     // Submenú para elegir el tipo de cuenta del usuario
                     int opcionTipoCuenta;
                     do {
-                        std::cout << "Por favor, seleccione el tipo de cuenta que desea adquirir:" << std::endl;
+                        std::cout << "\nPor favor, seleccione el tipo de cuenta a adquirir:" << std::endl;
                         std::cout << "1. Cuenta en colones" << std::endl;
                         std::cout << "2. Cuenta en dólares" << std::endl;
 
                         std::cout << "Elija una opción: ";
-                        std::cin >> opcionTipoCuenta;
+                        //Validar que la opcion sea un numero
+                        do {
+                            std::cin >> opcionTipoCuenta;
+                            if (std::cin.fail()) {
+                                std::cin.clear();
+                                std::cin.ignore();
+                                std::cout << "Opción inválida. Intente de nuevo." << std::endl;
+                            }
+                        } while (std::cin.fail() || opcionTipoCuenta < 1 || opcionTipoCuenta > 2);
+                        
 
                         if (opcionTipoCuenta == DOLAR) {
+                            // Generar un nuevo ID de cuenta en dólares
                             int id_newD = generarIDCuentaD();
                             agregarCuentaD(id_newD);
-                            std::cout << "Cuenta exitosamente agregada en dólares." << std::endl;
+                            
 
                         } else if (opcionTipoCuenta == COLON) {
+                            // Generar un nuevo ID de cuenta en colones
                             int id_newC = generarIDCuentaC();
                             agregarCuentaC(id_newC);
-                            std::cout << "Cuenta exitosamente agregada en colones." << std::endl;
+                            
                         } else {
                             std::cout << "Opción inválida. Intente de nuevo." << std::endl;
                         }
@@ -58,9 +120,10 @@ void Cliente::mostrarMenuC() {
                 }
                 break;
             case TRANS:
+                std::cout << "\n**********************************************" << std::endl;
+                std::cout << "*** Bienvenido al sistema de transacciones.***" << std::endl;
                 std::cout << "**********************************************" << std::endl;
-                std::cout << "*** Bienvenida al sistema de transacciones.***" << std::endl;
-                std::cout << "**********************************************" << std::endl;
+                transaccion();
                 break;
             case SALIRMENUC:
                 std::cout << "Saliendo del menú del cliente..." << std::endl;
@@ -70,6 +133,7 @@ void Cliente::mostrarMenuC() {
                 std::cout << "Opción inválida. Intente de nuevo." << std::endl;
         }
     } while (opc != SALIRMENUC);
+    system("clear");
     return;
 }
 
@@ -85,6 +149,12 @@ void Cliente::agregarCuentaC(int idCuentaC) {
     char *zErrMsg = 0;
     int rc;
 
+    //No puede haber mas de una cuenta en colones
+    if (this->idCuentaC != 0) {
+        std::cout << "El cliente ya tiene una cuenta en colones." << std::endl;
+        return;
+    }
+    
     rc = sqlite3_open("SistemaBancario.db", &db);
     if (rc) {
         std::cout << "...." << std::endl;
@@ -103,9 +173,7 @@ void Cliente::agregarCuentaC(int idCuentaC) {
     if (rc != SQLITE_OK) {
         std::cout << "Error al insertar el ID de cuenta en colones: " << zErrMsg << std::endl;
         sqlite3_free(zErrMsg);
-    } else {
-        std::cout << "ID de cuenta en colones agregado exitosamente." << std::endl;
-    }
+    } 
 
     //Insertar id en la tabla de cuentas
     sql = "INSERT INTO CUENTA_BANCARIA(ID_CUENTA,TIPO_MONEDA,AHORROS,ID_CLIENTE) VALUES (" + std::to_string(id_cuentaC) + ",'colones',0," + std::to_string(id) + ");";
@@ -119,6 +187,7 @@ void Cliente::agregarCuentaC(int idCuentaC) {
         std::cout << "ID de cuenta en colones agregado exitosamente." << std::endl;
     }
 
+    this->idCuentaC = id_cuentaC;
     sqlite3_close(db);
 }
 
@@ -128,6 +197,12 @@ void Cliente::agregarCuentaD(int idCuentaD) {
     sqlite3 *db;
     char *zErrMsg = 0;
     int rc;
+
+    //No puede haber mas de una cuenta en dolares
+    if (this->idCuentaD != 0) {
+        std::cout << "El cliente ya tiene una cuenta en dólares." << std::endl;
+        return;
+    }
 
     rc = sqlite3_open("SistemaBancario.db", &db);
     if (rc) {
@@ -147,9 +222,7 @@ void Cliente::agregarCuentaD(int idCuentaD) {
     if (rc != SQLITE_OK) {
         std::cout << "Error al insertar el ID de cuenta en dólares: " << zErrMsg << std::endl;
         sqlite3_free(zErrMsg);
-    } else {
-        std::cout << "ID de cuenta en dólares agregado exitosamente." << std::endl;
-    }
+    } 
 
     //Insertar id en la tabla de cuentas
     sql = "INSERT INTO CUENTA_BANCARIA(ID_CUENTA,TIPO_MONEDA,AHORROS,ID_CLIENTE) VALUES (" + std::to_string(id_cuentaD) + ",'dolares',0," + std::to_string(id) + ");";
@@ -163,27 +236,39 @@ void Cliente::agregarCuentaD(int idCuentaD) {
         std::cout << "ID de cuenta en dólares agregado exitosamente." << std::endl;
     }
 
+    this->idCuentaD = id_cuentaD;
+
     sqlite3_close(db);
 }
 
 
 
+/// @note Este metodo genera un ID de cuenta en colones. entre 10000000000 y 99999999999
 
 int Cliente::generarIDCuentaC() {
-// definiendo un rango
-    long int minDigits = 1000000000000000; // si queremos que contenga al menos 16 digitos 
-    long int maxDigits = 9999999999999999;  
+    int minDigits = 10000000000; 
+    int maxDigits = 99999999999; 
 
-    int idnum = minDigits + rand() % (maxDigits - minDigits + 1); // generamos un numero aleatorio y tomamos el resto del modulo entero
+    std::random_device rd; // Numero aleatorio
+    std::mt19937 gen(rd()); 
+    std::uniform_int_distribution<unsigned int> distr(minDigits, maxDigits); //  distribucion de numeros aleatorios
+
+    int idnum = distr(gen); // Generate a random number within the range
 
     // Verificar si el ID generado ya existe en la base de datos
-    while (checkIDCuentaExists(idnum,COLON)) {
+    while (checkIDCuentaExists(idnum, COLON)) {
         // Si el ID ya existe, generamos otro número aleatorio y lo volvemos a probar
-        idnum = minDigits + rand() % (maxDigits - minDigits + 1);
+        idnum = distr(gen);
+    }
+
+    // Asegurarse que no sea un número negativo
+    if (idnum < 0) {
+        idnum *= -1;
     }
     return idnum;
 }
 
+/// @note Este metodo genera un ID de cuenta en dolares entre 10000 y 99999
 int Cliente::generarIDCuentaD() {
     // definiendo un rango
     long int minDigits = 10000; // si queremos que contenga al menos 5 digitos                                          
@@ -200,6 +285,7 @@ int Cliente::generarIDCuentaD() {
 }
 
 
+/// @note Este metodo verifica si un ID de cuenta ya existe en la base de datos.
 bool Cliente::checkIDCuentaExists(int idCuenta,Monedas moneda) {
     sqlite3 *db;
     int rc;                                           // verificador de que la todo funciona
@@ -213,7 +299,7 @@ bool Cliente::checkIDCuentaExists(int idCuenta,Monedas moneda) {
     } else {
         std::cout << "...." << std::endl;
     }
-
+    // Consulta SQL para verificar si el ID de cuenta ya existe en la base de datos
     if (moneda == DOLAR) {
         sql = "SELECT COUNT(*) FROM CUSTOMERS WHERE ID_CUENTA_D = " + std::to_string(idCuenta); // se va buscar en el parametro que se le pase
     } else {
@@ -232,19 +318,213 @@ bool Cliente::checkIDCuentaExists(int idCuenta,Monedas moneda) {
         sqlite3_free(zErrMsg);                          // liberar memoria            
     }
 
+    sqlite3_close(db);                                  // cerrar la base de datos
     return found;                                      // devuelve true si se encontro en la base de datos, fase si no.
 }
 
 
+int Cliente::getIDCuenta(Monedas moneda){
+    sqlite3 *db;
+    int rc;
+    char* zErrMsg = 0;
+    int idCuenta = 0; // Inicializar idCuenta a 0
+    std::string sql;
 
-void Cliente::agregarPrestamo(int idPrestamo) {
-    // xxxx
+    //Abriendo la base de datos
+    rc = sqlite3_open("SistemaBancario.db", &db);
+    if (rc) {
+        std::cout << "No se pudo abrir la base de datos" << std::endl;
+        return 0;
+    } else {
+        std::cout << "...." << std::endl;
+    }
+
+    //Obteniendo el ID de la cuenta en la moneda especificada
+    if (moneda == DOLAR) {
+        sql = "SELECT ID_CUENTA_D FROM CUSTOMERS WHERE ID = " + std::to_string(this->id);
+    } else {
+        sql = "SELECT ID_CUENTA_C FROM CUSTOMERS WHERE ID = " + std::to_string(this->id);
+    }
+
+    rc = sqlite3_exec(db, sql.c_str(), [](void* idCuentaPtr, int argc, char** argv, char** azColName) -> int {
+        int* idCuenta = static_cast<int*>(idCuentaPtr);
+        if (argc > 0 && argv[0] != nullptr) {
+            *idCuenta = std::stoi(argv[0]);
+        } else {
+            *idCuenta = 0; // Si no se encuentra el ID de la cuenta, se establece a 0
+        }
+        return *idCuenta;
+    }, &idCuenta, &zErrMsg);
+
+    
+    
+    sqlite3_close(db);
+    return idCuenta; // Return idCuenta
 }
 
-void Cliente::consultarCuentas() {
-    // xxxx
+
+
+/// @brief Metodo para realizar transacciones
+void Cliente::transaccion(){
+    // Menu con todas las transacciones posibles para el cliente
+    int opc;
+    std::string monto;
+    float montoF;
+    Operaciones op(this->nombre, this->apellido, this->id);
+    CDP cdp(this->nombre, this->apellido, this->id);
+    EntidadBancaria entidadBancaria;
+    // Luego puedes crear la instancia de Prestamos de esta manera:
+    Prestamos prestamo(&entidadBancaria, this->nombre, this->apellido, this->id);
+
+    do {
+        std::cout << "\n**********************************************" << std::endl;
+        std::cout << "------ Menú de Transacciones ------" << std::endl;
+        std::cout << "**********************************************" << std::endl;
+        std::cout << "1. Depositar dinero" << std::endl;
+        std::cout << "2. Retirar dinero" << std::endl;
+        std::cout << "3. Transferir dinero" << std::endl;
+        std::cout << "4. Pagar préstamo" << std::endl;
+        std::cout << "5. Solicitar préstamo" << std::endl;
+        std::cout << "6. Consultar saldo" << std::endl;
+        std::cout << "7. Consultar movimientos" << std::endl;
+        std::cout << "8. Consultar préstamos" << std::endl;
+        std::cout << "9.Operaciones con CDP" << std::endl;
+        std::cout << "10. Salir del menú" << std::endl;
+        std::cout << "Elija una opción: ";
+
+        do {
+            std::cin >> opc;
+            if (std::cin.fail()) {
+                std::cin.clear();
+                std::cin.ignore();
+                std::cout << "Opción inválida. Intente de nuevo." << std::endl;
+            }
+        } while (std::cin.fail());
+
+        switch (opc)
+        {
+        case DEPOSITO :
+            try{
+                std::cout << "Ingrese el monto a depositar:";
+                std::cin >> monto;
+                if (this->validarDatos(monto, &montoF)) {
+                    op.depositar(COLON, montoF);
+                }
+                throw std::invalid_argument("Monto inválido");
+            } catch (std::invalid_argument &e) {
+                std::cerr << e.what() << std::endl;
+            }
+            break;
+        case RETIRO:
+            
+            try{
+                std::cout << "Ingrese el monto a retirar:";
+                std::cin >> monto;
+                if (this->validarDatos(monto, &montoF)) {
+                    op.retirar(COLON, montoF);
+                }
+                throw std::invalid_argument("Monto inválido");
+            } catch (std::invalid_argument &e) {
+                std::cerr << e.what() << std::endl;
+            }
+            break;
+        case TRANSFERENCIA:                    
+            op.transferir();
+            break;
+        case PAGOPRESTAMO:
+            prestamo.realizarAbono2();
+            break;
+        case SOLICITUDPRESTAMO:
+            prestamo.solicitarPrestamo();
+            break;
+        case CONSULTARSALDO:
+            consultarSaldo();
+            break;
+        case CONSULTARMOVIMIENTOS:
+            op.imprimirHistorialTransacciones(id);
+            break;
+        case CONSULTARPRESTAMOS:
+            prestamo.consultarPrestamos();
+            // xxxx
+            break;
+        case OPERACIONESCDP:
+            cdp.displayMenuCDP();
+            break;
+
+        case SALIRMENUT:
+            std::cout << "Saliendo del menú de transacciones..." << std::endl;
+            break;
+        default:
+            break;
+        }
+    } while ( opc != SALIRMENUT);
+    system("clear");
+    return;
+
+    
 }
 
-void Cliente::consultarPrestamos() {
-    // xxxx
+/// @details se le da al cliente la opcion de consultar su saldo en colones, dolares o en ambas monedas
+void Cliente::consultarSaldo(){
+    int opc; 
+    Operaciones op(this->nombre, this->apellido, this->id);
+    //Desplegar el menu de consulta de saldo
+    do {
+        std::cout << "\n------ Menú de Consulta de Saldo ------" << std::endl;
+        std::cout << "1. Consultar saldo en colones" << std::endl;
+        std::cout << "2. Consultar saldo en dólares" << std::endl;
+        std::cout << "3. Consultar saldo en ambas monedas" << std::endl;
+        std::cout << "4. Salir del menú" << std::endl;
+        std::cout << "Elija una opción: ";
+
+        do {
+            std::cin >> opc;
+            if (std::cin.fail()) {
+                std::cin.clear();
+                std::cin.ignore();
+                std::cout << "Opción inválida. Intente de nuevo." << std::endl;
+            }
+        } while (std::cin.fail());
+
+        float saldoColones = op.consultarSaldo(this->idCuentaC);
+        float saldoDolares = op.consultarSaldo(this->idCuentaD);
+
+        // Header
+        if (opc != SALIRCONSULTA) {
+            std::cout << std::left << std::setw(15) << "ID Cliente" 
+                      << std::setw(10) << "Moneda" 
+                      << std::setw(10) << "Monto" << std::endl;
+            std::cout << std::string(35, '-') << std::endl;
+        }
+
+        // Impresión de saldos
+        switch (opc) {
+            case COLON:
+                std::cout << std::left << std::setw(15) << this->id 
+                          << std::setw(10) << "Colones" 
+                          << std::setw(10) << saldoColones << std::endl;
+                break;
+            case DOLAR:
+                std::cout << std::left << std::setw(15) << this->id 
+                          << std::setw(10) << "Dólares" 
+                          << std::setw(10) << saldoDolares << std::endl;
+                break;
+            case AMBAST:
+                std::cout << std::left << std::setw(15) << this->id 
+                          << std::setw(10) << "Colones" 
+                          << std::setw(10) << saldoColones << std::endl;
+
+                std::cout << std::left << std::setw(15) << this->id 
+                          << std::setw(10) << "Dólares" 
+                          << std::setw(10) << saldoDolares << std::endl;
+                break;
+            case SALIRCONSULTA:
+                std::cout << "Saliendo del menú de consulta de saldo..." << std::endl;
+                break;
+            default:
+                std::cout << "Opción inválida. Intente de nuevo." << std::endl;
+                break;
+        }
+    } while (opc != SALIRCONSULTA);
+    system("clear");
 }

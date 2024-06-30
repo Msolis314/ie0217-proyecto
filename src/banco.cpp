@@ -1,3 +1,30 @@
+/*! @file banco.cpp
+ @brief Implementacion de la clase Banco
+MIT License
+
+Copyright (c) 2024 Msolis314
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+*/
+
+
 // Incluyendo las librerias
 #include <iostream>
 #include <string>
@@ -39,7 +66,7 @@ void Banco::setActualIDs(){
     rc = sqlite3_open("SistemaBancario.db", &db);                      // Abriendo la base de datos    
 
     if (rc){                                                           // se ejecuta un if, si no genera errores, mostrar mensaje de exito, sino de error
-        std::cout << "No se pudo abrir la base de datos" << std::endl;
+        std::cerr << "No se pudo abrir la base de datos" << std::endl;
     }else{
         std::cout << "...." << std::endl;   // Base de datos abierta
     }
@@ -47,13 +74,13 @@ void Banco::setActualIDs(){
     const char* sql = "SELECT ID FROM CUSTOMERS;";                      // Tomando todos los ids de la tabla customers
     rc = sqlite3_exec(db, sql, callbackIDs, this, &zErrMsg);              // db puntero,consulta sql, callback toma filas.
     if (rc != SQLITE_OK){                                              // Si no es sqlite_ok ocurrio un error y se muestra,
-        std::cout << "SQL ERROR: " << zErrMsg << std::endl;
+        std::cerr << "SQL ERROR: " << zErrMsg << std::endl;
         sqlite3_free(zErrMsg);
     }else{
         std::cout << "IDs obtenidos con exito" << std::endl;           // si se obtuvieron bien los ids.
     }
 
-    
+    sqlite3_close(db);                                                 // cerrando la base de datos.
 };
 
 
@@ -65,7 +92,7 @@ void Banco::setActualIDCuentas(){
     int rc;                                                             // Codigos de retorno, indicando si se ejecuto bien
     rc = sqlite3_open("SistemaBancario.db", &db);                       // Abriendo la base de datos  
     if (rc){                                                            // se ejecuta un if, si no genera errores, mostrar mensaje de exito, sino de error
-        std::cout << "No se pudo abrir la base de datos" << std::endl;
+        std::cerr << "No se pudo abrir la base de datos" << std::endl;
     }else{
         std::cout << "...." << std::endl;
     }
@@ -73,11 +100,13 @@ void Banco::setActualIDCuentas(){
     const char* sql = "SELECT ID_CUENTA FROM CUSTOMERS";                // Tomando todos los ids_cuentas de la tabla customers
     rc = sqlite3_exec(db, sql, callbackCuentas, this, &zErrMsg);        // db puntero,consulta sql, callback toma filas.
     if (rc != SQLITE_OK){                                               // Si no es sqlite_ok ocurrio un error y se muestra,
-        std::cout << "SQL ERROR: " << zErrMsg << std::endl;
+        std::cerr << "SQL ERROR: " << zErrMsg << std::endl;
         sqlite3_free(zErrMsg);
     }else{
         std::cout << "IDs de cuentas obtenidos con exito" << std::endl; // si se obtuvieron bien los ids de las cuentas.
     }
+    
+    sqlite3_close(db);                                                  // cerrando la base de datos.
 
     
 };  
@@ -96,9 +125,19 @@ int Banco::callbackIDs(void *data, int argc, char **argv, char **azColName){ // 
 // Procesando los datos de la consulta sql
 int Banco::callbackPrestamos(void *data, int argc, char **argv, char **azColName){ // data apunta a banco, argc num de columnas, argv arreglo de punteros val columnas
     int i;
+    try {
+        if (argc == 0){
+            throw std::string("...");
+        }
+    }
+    catch (std::string& e) {
+        std::cout << e << std::endl;
+        return 1;
+    }
     Banco* banco = static_cast<Banco*>(data);                                      //  accediendo al objeto banco. 
     for(i = 0;i <argc; i++){                                                       //ciclo for que va iterando desde 0 hasta argc -1
         if (argv[i]){
+
             banco->actualIDPrestamos.push_back(std::stoi(argv[i]));                // agregando los valores de las columnas al vector actualIDPrestamos.
         }                   // agregando los valores de las columnas al vector actualIDPrestamos.
 
@@ -108,6 +147,15 @@ int Banco::callbackPrestamos(void *data, int argc, char **argv, char **azColName
 // Procesando los datos de la consulta sql
 int Banco::callbackCuentas(void *data, int argc, char **argv, char **azColName){ // data apunta a banco, argc num de columnas, argv arreglo de punteros val columnas
     int i;
+    try {
+        if (argc == 0){
+            throw std::string("...");
+        }
+    }
+    catch (std::string& e) {
+        std::cout << e << std::endl;
+        return 1;
+    }
     Banco* banco = static_cast<Banco*>(data);                                    //  accediendo al objeto banco.
     for(i = 0;i <argc; i++){                                                     //ciclo for que va iterando desde 0 hasta argc -1
         banco->actualIDCuentas.push_back(std::stoi(argv[i]));                    // agregando los valores de las columnas al vector actualIDPrestamos.
@@ -116,10 +164,9 @@ int Banco::callbackCuentas(void *data, int argc, char **argv, char **azColName){
 }
 
 int Banco::callbackClientes(void *data, int argc, char **argv, char **azColName){ // data apunta a banco, argc num de columnas, argv arreglo de punteros val columnas
-    int i;
-    Banco* banco = static_cast<Banco*>(data);                                     //  accediendo al objeto banco.
+                                      //  accediendo al objeto banco.
     if (argc == 0){                                                               // si argc es cero significa que no se encontraron clientes con esos datos
-        std::cout << "No se encontraron clientes con esos datos" << std::endl;
+        std::cerr << "No se encontraron clientes con esos datos" << std::endl;
         return 1;
     } else {
         return 0;
@@ -136,7 +183,7 @@ void Banco::setActualIDPrestamos(){
     int rc;                                                                // Codigos de retorno, indicando si se ejecuto bien
     rc = sqlite3_open("SistemaBancario.db", &db);                          // abre la base de datos sistema bancario, con el puntero db
     if (rc){                                                               // ejecuta el if, para comprobar si se pudo abrir la base de datos
-        std::cout << "No se pudo abrir la base de datos" << std::endl;  
+        std::cerr << "No se pudo abrir la base de datos" << std::endl;  
     }else{
         std::cout << "....." << std::endl;
     }
@@ -144,11 +191,13 @@ void Banco::setActualIDPrestamos(){
     const char* sql = "SELECT ID_PRESTAMO_C FROM CUSTOMERS";               // Selecciona de la tabla customers los ids_prestamos
     rc = sqlite3_exec(db, sql, callbackPrestamos, this, &zErrMsg);
     if (rc != SQLITE_OK){                                                  // si la funcion sqlite es ok  significa que no hubo errores, entoces se obtiene los ids prestamos.
-        std::cout << "SQL ERROR: " << zErrMsg << std::endl;                // mensaje de error
+        std::cerr << "SQL ERROR: " << zErrMsg << std::endl;                // mensaje de error
         sqlite3_free(zErrMsg);
     }else{
         std::cout << "IDs de prestamos obtenidos con exito" << std::endl;
     }
+
+    sqlite3_close(db);                                                     // cerrando la base de datos.
 
     
 };
@@ -168,6 +217,18 @@ int Banco::generarID(){
     }
 }
 
+bool Banco::validarID(std::string id){
+    std::regex regex("^[0-9]+$"); // Expresion regular para validar el ID
+    if (std::regex_match(id, regex)){ // Si el ID cumple con la expresion regular
+        return true;
+    } else {
+        std::cout << "El ID solo puede contener números." << std::endl;
+        return false;
+    }
+    
+    return true;
+}
+
 // Generando el verificador de ids
 bool Banco::checkIDExists(int id){
     std:: vector<int>:: iterator it;
@@ -180,6 +241,15 @@ bool Banco::checkIDExists(int id){
     return false;
 }
 
+void Banco::agregarID(int id){
+    if (!checkIDExists(id)){
+        std::cout << "ID agregado con exito" << std::endl;
+        actualIDs.push_back(id);
+    }
+    std::cout << "El ID ya existe" << std::endl;
+    return;
+}
+
 // Generando la logica de la funcion para agregar clientes.
 void Banco::agregarCliente(std::string nombre, std::string apellido,std::string password){ 
     sqlite3 *db;                                                        // Puntero de que se va usar a la base de datos
@@ -187,65 +257,73 @@ void Banco::agregarCliente(std::string nombre, std::string apellido,std::string 
     int rc;                                                             // codigo de retorno, indicador de si se ejecuto bien
     rc = sqlite3_open("SistemaBancario.db", &db);                       // abriendo la base de datos sistema bancario
     if (rc){                                                            // if para verificar que se abrio correctamente
-        std::cout << "No se pudo abrir la base de datos" << std::endl;
+        std::cerr << "No se pudo abrir la base de datos" << std::endl;
     }else{
         std::cout << "...." << std::endl;
     }
     
-    int id = generarID();                                               // generar un id unico para el cliente, se llama la funcion
+    std::string id;
+    do{
+        std::cout << "Ingrese la identificacion del cliente: ";
+        std::cin >> id;
+    } while(!validarID(id));
+
+    try {
+        if (checkIDExists(std::stoi(id))){
+            throw std::string("El ID ya existe, el cliente ya esta registrado");
+        }
+    }
+    catch (std::string& e) {
+        std::cout << e << std::endl;
+        return;
+    }
+                                                  
     // Haciendo una consulta SQL para insertar un nuevo cliente
-    std::string sql = "INSERT INTO CUSTOMERS (ID, NOMBRE, APELLIDO) VALUES (" + std::to_string(id) + ", '" + nombre + "', '" + apellido + "');";
+    std::string sql = "INSERT INTO CUSTOMERS (ID, NOMBRE, APELLIDO) VALUES (" + id + ", '" + nombre + "', '" + apellido + "');";
     const char* data = sql.c_str();                                     // Usando Sqlite
     rc = sqlite3_exec(db, data, NULL, 0, &zErrMsg);     
     if (rc != SQLITE_OK){                                               // si todo se ejecuta bien en el if, el cliente se agrega con exito, sino msj error
-        std::cout << "SQL ERROR: " << zErrMsg << std::endl;
+        std::cerr << "SQL ERROR: " << zErrMsg << std::endl;
         sqlite3_free(zErrMsg);
     }else{
         std::cout << "Cliente agregado con exito" << std::endl;         //cliente agregado.
     }
 
-    // Encriptando la contraseña
-    std::string salt = genSalt();                                       // generando un salt
-    std::string hashPassword = hash(password, salt);                    // hasheando la contraseña
-    // Haciendo una consulta SQL para insertar la contraseña hasheada
-
-    sql = "INSERT INTO PASSWORDS (ID_CLIENTE, SALT, PASSWORD) VALUES (" + std::to_string(id) + ", '" + salt + "', '" + hashPassword + "');";
-    data = sql.c_str();
-    rc = sqlite3_exec(db, data, NULL, 0, &zErrMsg);
-    if (rc != SQLITE_OK){                                               // si todo se ejecuta bien en el if, la contraseña se agrega con exito, sino msj error
-        std::cout << "SQL ERROR: " << zErrMsg << std::endl;
-        sqlite3_free(zErrMsg);
-    }else{
-        std::cout << "Contraseña agregada con exito" << std::endl;      //contraseña agregada.
-    }
+    
 
 
     sqlite3_close(db);                                                  // salir de la base de datos o cerrando la base de datos.
-    this->actualIDs.push_back(id);
+    this->actualIDs.push_back(std::stoi(id));                          // agregando el id al vector de ids.
 }
 
 //  metodo para Consultar locs clientes existentes
-void Banco::consultarClientes(std::string nombre, std::string apellido){ // dos parametros nombre y apellidos
+bool Banco::consultarClientes(std::string nombre, std::string apellido){ // dos parametros nombre y apellidos
     sqlite3 *db;                                                         // puntero db
     char *zErrMsg = 0;                                                   // msj de error
-    int rc;                                                              // codigo de retorno
+    int rc; 
+    bool found = false;                                                             // codigo de retorno
     rc = sqlite3_open("SistemaBancario.db", &db);                        // abriendo base de datos
     if (rc){                                                             // verificando que se abre la db correctamente.
-        std::cout << "No se pudo abrir la base de datos" << std::endl;
+        std::cerr << "No se pudo abrir la base de datos" << std::endl;
     }else{
         std::cout << "...." << std::endl;
     }
     // usando un selec de la tabla clientes para nombre
     std::string sql = "SELECT * FROM CUSTOMERS WHERE NOMBRE = '" + nombre + "' AND APELLIDO = '" + apellido + "';";
-    const char* data = sql.c_str();
-    rc = sqlite3_exec(db, data, callbackClientes, this, &zErrMsg);       // ejecutando la consulta.
-    if (rc != SQLITE_OK){                                                // Verificando que se encuentre algun cliente.
-        std::cout << "No se encontraron clientes con esos datos " << zErrMsg << std::endl;
+    //Si en la tabla customers se encuentra el nombre y apellido se devuelve true, sino false.
+    rc = sqlite3_exec(db, sql.c_str(), [](void* foundPtr, int argc, char** argv, char** azColName) -> int {
+        bool* found = static_cast<bool*>(foundPtr);
+        *found = true;
+        return 0;
+    }, &found, &zErrMsg);
+
+    if (rc != SQLITE_OK) {
+        std::cerr << "Error en la consulta SQL: " << zErrMsg << std::endl;
         sqlite3_free(zErrMsg);
     }
-    else {
-        std::cout << "Consulta realizada con exito" << std::endl;
-    }
+
+    sqlite3_close(db);
+    return found;
     
 
 }
@@ -296,7 +374,7 @@ bool Banco::validarContrasena(std::string contrasena){
 
     return true;
 }
-bool Banco::checkifClienteExists(std::string nombre, std::string apellido) {
+bool Banco::checkifClienteExists(std::string nombre, std::string apellido,std::string id) {
     sqlite3 *db;
     char *zErrMsg = 0;
     int rc;
@@ -304,13 +382,13 @@ bool Banco::checkifClienteExists(std::string nombre, std::string apellido) {
 
     rc = sqlite3_open("SistemaBancario.db", &db);
     if (rc) {
-        std::cout << "No se pudo abrir la base de datos" << std::endl;
+        std::cerr << "No se pudo abrir la base de datos" << std::endl;
         return false;
     } else {
         std::cout << "...." << std::endl;
     }
 
-    std::string sql = "SELECT * FROM CUSTOMERS WHERE NOMBRE = '" + nombre + "' AND APELLIDO = '" + apellido + "';";
+    std::string sql = "SELECT * FROM CUSTOMERS WHERE NOMBRE = '" + nombre + "' AND APELLIDO = '" + apellido + "' AND ID = '" + id + "';";
 
     /*
     Se utiliza la función sqlite3_exec para ejecutar una consulta SQL.
@@ -326,7 +404,7 @@ bool Banco::checkifClienteExists(std::string nombre, std::string apellido) {
     }, &found, &zErrMsg);
 
     if (rc != SQLITE_OK) {
-        std::cout << "Error en la consulta SQL: " << zErrMsg << std::endl;
+        std::cerr << "Error en la consulta SQL: " << zErrMsg << std::endl;
         sqlite3_free(zErrMsg);
     }
 
@@ -343,7 +421,7 @@ void Banco::newSession(){
         do {
         std::cout << "\nQue desea hacer?" << std::endl;
         std::cout << "1. Iniciar sesion" << std::endl;
-        std::cout << "2. Registrarse como nuevo cliente" << std::endl;
+        std::cout << "2. Registrar un nuevo cliente" << std::endl;
         std::cout << "3. Salir" << std::endl;
         std::cin >> choice;
         } while (!(std::stringstream(choice) >> *opcion) || (*opcion < 1 || *opcion > 3));
@@ -364,6 +442,8 @@ void Banco::newSession(){
             break;
         }
     }while(*opcion != SALIR);
+
+    delete opcion;
     
 
 }
@@ -378,7 +458,7 @@ void Banco::login(){
 
     do {
         
-        std::cout << "\nIngrese su nombre: ";
+        std::cout << "\nIngrese el nombre del cliente: ";
         std::cin >> nombre;
         if(!validarNombre(nombre)){
             choice = this->returnMain("Nombre invalido");
@@ -400,7 +480,7 @@ void Banco::login(){
     } while (!validarNombre(nombre));
 
     do{
-        std::cout << "Ingrese su apellido: ";
+        std::cout << "Ingrese el apellido del cliente: ";
         std::cin >> apellido;
         if(!validarNombre(apellido)){
             choice = this->returnMain("Apellido invalido");
@@ -423,7 +503,7 @@ void Banco::login(){
     try {
         
         //Verificar si el cliente existe
-        if (!checkifClienteExists(nombre, apellido)){
+        if (!consultarClientes(nombre, apellido)){
             throw std::string("El cliente no existe");
         }
     
@@ -432,13 +512,13 @@ void Banco::login(){
         //En caso que no exista el cliente
         //Se le da la opcion de intentar de nuevo, registrarse como nuevo cliente o salir
         std::cout << e << std::endl;
-        std::cout << "\nQue desea hacer?" << std::endl;
+        std::cout << "\n¿Que desea hacer?" << std::endl;
         std::string choice;
         int* opcion = new int();
 
         do {
             std::cout << "1. Intentar de nuevo" << std::endl;
-            std::cout << "2. Registrarse como nuevo cliente" << std::endl;
+            std::cout << "2. Registrar un nuevo cliente" << std::endl;
             std::cout << "3. Salir" << std::endl;
             std::cin >> choice;
             
@@ -462,71 +542,34 @@ void Banco::login(){
     }
 
     //En caso de que el cliente exista
-        //Solicitar contraseña
-    std::string password;
-    while (true){
-        std::cout << "\nIngrese su contraseña: ";
-        std::cin >> password;
-        if (password == ""){
-            throw std::invalid_argument("Contraseña invalida");
-        } else {
-            break;
-        }
-    }
-
-    //Optener el ID del cliente
-    sqlite3 *db;
-    char *zErrMsg = 0;
-    int rc;
-    rc = sqlite3_open("SistemaBancario.db", &db);
-    if (rc){
-        std::cout << "No se pudo abrir la base de datos" << std::endl;
-        return;
-    }else{
-        std::cout << "...." << std::endl;
-    }
-    //Hacer una consulta para obtener el ID del cliente
-    std::string sql = "SELECT ID FROM CUSTOMERS WHERE NOMBRE = '" + nombre + "' AND APELLIDO = '" + apellido + "';";
-    const char* data = sql.c_str();
-
-    //Se usa un puntero para guardar el ID
-    void *id = new int();
-    rc = sqlite3_exec(db, data, intCallback, id, &zErrMsg);
-    if (rc != SQLITE_OK){
-        std::cout << "SQL ERROR: " << zErrMsg << std::endl;
-        sqlite3_free(zErrMsg);
-    }else{
-        std::cout << "...." << std::endl;
-    }
-    //Comienza el proceso de desencriptar la contraseña
-    std::string storedPassword = getPassword(*(int*)id);
-    std::string storedSalt = getSalt(*(int*)id);
-
-    //Hay un limite de intentos
+        //Solicitar su ID
+    std::string id;
     int i;
     Cliente cliente(this->nombreCliente, this->apellidoCliente, this->idCliente);
     for (i = 0; i < NUMTRIES; i++){
-        if (checkPassword(password, storedSalt, storedPassword)){
-            std::cout << "\nLogin exitoso" << std::endl;\
-            std::cout << std::endl;
-            std::cout << std::endl;
-            
-            this->idCliente = *(int*)id;
+        std::cout << "\nIngrese la identificacion del cliente: ";
+        std::cin >> id;
+        if (checkifClienteExists(nombre, apellido, id)){
+            std::stringstream(id) >> this->idCliente;
             this->nombreCliente = nombre;
             this->apellidoCliente = apellido;
-            cliente= Cliente(this->nombreCliente, this->apellidoCliente, this->idCliente);           
+            cliente= Cliente(this->nombreCliente, this->apellidoCliente, this->idCliente);
             cliente.mostrarMenuC();
             break;
-        } else {
-            std::cout << "Contraseña incorrecta, intento " << i + 1 << " de " << NUMTRIES << std::endl;
-            std::cout << "Ingrese su contraseña: ";
-            std::cin >> password;
+        }
+        else {
+            std::cout << "Identificacion incorrecta, intento " << i + 1 << " de " << NUMTRIES << std::endl;
         }
     }
     if (i == NUMTRIES){
         std::cout << "Demasiados intentos, bloqueando cuenta" << std::endl;
         return;
     }
+
+
+    
+
+    
     system("sleep 1");
 
 }
@@ -534,32 +577,35 @@ void Banco::login(){
 void Banco::signUp(){
     std::string nombre;
     std::string apellido;
-    std::string password;
+    std::string id;
     std::string password2;
     do {
-        std::cout << "\nIngrese su nombre: ";
+        std::cout << "\nIngrese el nombre: ";
         std::cin >> nombre;
     } while (!validarNombre(nombre));
     
     do {
-        std::cout << "\nIngrese su apellido: ";
+        std::cout << "\nIngrese el apellido: ";
         std::cin >> apellido;
     } while (!validarNombre(apellido));
     
     do{
-        std::cout << "\nIngrese su contraseña: ";
-        std::cin >> password;
-    } while (!validarContrasena(password));
+        std::cout << "\nIngrese la identificacion: ";
+        std::cin >>id;
+    } while (!validarID(id));
     
-    do {
-        std::cout << "Confirme su contraseña: ";
-        std::cin >> password2;
-        if (password != password2){
-            std::cout << "\nLas contraseñas no coinciden" << std::endl;
+    try {
+        
+        if (checkIDExists(std::stoi(id))){
+            throw std::string("El ID ya existe, el cliente ya esta registrado");
         }
-    } while ( password != password2);
+    }
+    catch (std::string& e) {
+        std::cout << e << std::endl;
+        return;
+    }
     
     //Se agrega el cliente a la base de datos
-    agregarCliente(nombre, apellido, password);
+    agregarCliente(nombre, apellido, id);
     std::cout << "\nRegistro exitoso" << std::endl;
 }
