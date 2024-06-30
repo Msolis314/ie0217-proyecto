@@ -5,6 +5,7 @@
 El presente repositorio contiene el proyecto final del curso IE-0217 del primer semestre de 2024. El objetivo central del programa es emular un sistema bancario que maneje cuentas de varios clientes y realice transacciones, además de incluir un sistema de crédito.
 ## Compilación Final
 
+Programa para un sistema operativo linux.
 Para compilar el programa despues de clonar el repositorio ejecutar lo siguiente en la terminal:
 
 ```bash
