@@ -27,6 +27,9 @@ SOFTWARE.
 #include <iostream>
 #include <string>
 #include <sqlite3.h>
+#include <limits>
+#include <iomanip>
+#include <cmath>
 #include "entidadBancaria.hpp"
 #include "banco.hpp"
 #include "menu.hpp"
@@ -87,29 +90,39 @@ void Operaciones::imprimirHistorialTransacciones(int idCliente) {
 
     rc = sqlite3_prepare_v2(db, sql.c_str(), -1, &stmt, NULL);
     if (rc != SQLITE_OK) {
-        std::cerr << "SQL error: " << sqlite3_errmsg(db) << std::endl;
+        std::cerr << "Error SQL: " << sqlite3_errmsg(db) << std::endl;
         sqlite3_close(db);
         return;
     }
 
-    std::cout << "Historial de Transacciones:" << std::endl;
+    // Encabezado
+    std::cout << "===================================================================================================" << std::endl;
+    std::cout << std::setw(15) << "ID Transacción" << std::setw(15) << "Tipo" << std::setw(15) << "Cuenta Origen" << std::setw(20) << "Cuenta Destino"
+              << std::setw(15) << "Monto" << std::setw(15) << "Moneda" << std::setw(25) << "Fecha" << std::endl;
+    std::cout << "===================================================================================================" << std::endl;
+
+    // Recorrer resultados
     while (sqlite3_step(stmt) == SQLITE_ROW) {
         int idTransaccion = sqlite3_column_int(stmt, 0);
         std::string tipoTransaccion = reinterpret_cast<const char*>(sqlite3_column_text(stmt, 2));
-        int idCuenta = sqlite3_column_int(stmt, 3);
+        int idCuentaOrigen = sqlite3_column_int(stmt, 3);
         int idCuentaDestino = sqlite3_column_int(stmt, 4);
-        float monto = static_cast<float>(sqlite3_column_double(stmt, 5));
-        std::string moneda = reinterpret_cast<const char*>(sqlite3_column_text(stmt, 6)); // Nueva columna
+        double monto = sqlite3_column_double(stmt, 5);
+        std::string moneda = reinterpret_cast<const char*>(sqlite3_column_text(stmt, 6));
         std::string fecha = reinterpret_cast<const char*>(sqlite3_column_text(stmt, 7));
 
-        std::cout << "ID Transaccion: " << idTransaccion << ", Tipo: " << tipoTransaccion << ", ID Cuenta: " << idCuenta
-                  << ", ID Cuenta Destino: " << idCuentaDestino << ", Monto: " << monto << ", Moneda: " << moneda
-                  << ", Fecha: " << fecha << std::endl; // Imprime la moneda
+        // Imprimir cada transacción
+        std::cout << std::setw(15) << idTransaccion << std::setw(15) << tipoTransaccion << std::setw(15) << idCuentaOrigen << std::setw(20) << idCuentaDestino
+                  << std::setw(15) << monto << std::setw(15) << moneda << std::setw(25) << fecha << std::endl;
     }
 
+    std::cout << "===================================================================================================" << std::endl;
+
+    // Liberar memoria y cerrar la base de datos
     sqlite3_finalize(stmt);
     sqlite3_close(db);
 }
+
 
 Operaciones:: Operaciones(std::string nombre,std::string apellido,int id):cliente(nombre,apellido,id){
     Cliente cliente(nombre,apellido,id);
