@@ -262,7 +262,7 @@ void Banco::agregarCliente(std::string nombre, std::string apellido,std::string 
     
     std::string id;
     do{
-        std::cout << "Ingrese su identificacion: ";
+        std::cout << "Ingrese la identificacion del cliente: ";
         std::cin >> id;
     } while(!validarID(id));
 
@@ -510,13 +510,13 @@ void Banco::login(){
         //En caso que no exista el cliente
         //Se le da la opcion de intentar de nuevo, registrarse como nuevo cliente o salir
         std::cout << e << std::endl;
-        std::cout << "\nQue desea hacer?" << std::endl;
+        std::cout << "\n¿Que desea hacer?" << std::endl;
         std::string choice;
         int* opcion = new int();
 
         do {
             std::cout << "1. Intentar de nuevo" << std::endl;
-            std::cout << "2. Registrar como nuevo cliente" << std::endl;
+            std::cout << "2. Registrar un nuevo cliente" << std::endl;
             std::cout << "3. Salir" << std::endl;
             std::cin >> choice;
             
@@ -578,12 +578,12 @@ void Banco::signUp(){
     std::string id;
     std::string password2;
     do {
-        std::cout << "\nIngrese el nombre del cliente: ";
+        std::cout << "\nIngrese el nombre: ";
         std::cin >> nombre;
     } while (!validarNombre(nombre));
     
     do {
-        std::cout << "\nIngrese el apellido del cliente: ";
+        std::cout << "\nIngrese el apellido: ";
         std::cin >> apellido;
     } while (!validarNombre(apellido));
     
