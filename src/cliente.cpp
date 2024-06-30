@@ -299,7 +299,7 @@ bool Cliente::checkIDCuentaExists(int idCuenta,Monedas moneda) {
     } else {
         std::cout << "...." << std::endl;
     }
-
+    // Consulta SQL para verificar si el ID de cuenta ya existe en la base de datos
     if (moneda == DOLAR) {
         sql = "SELECT COUNT(*) FROM CUSTOMERS WHERE ID_CUENTA_D = " + std::to_string(idCuenta); // se va buscar en el parametro que se le pase
     } else {
@@ -318,6 +318,7 @@ bool Cliente::checkIDCuentaExists(int idCuenta,Monedas moneda) {
         sqlite3_free(zErrMsg);                          // liberar memoria            
     }
 
+    sqlite3_close(db);                                  // cerrar la base de datos
     return found;                                      // devuelve true si se encontro en la base de datos, fase si no.
 }
 
@@ -326,7 +327,7 @@ int Cliente::getIDCuenta(Monedas moneda){
     sqlite3 *db;
     int rc;
     char* zErrMsg = 0;
-    int idCuenta = 0; // Initialize idCuenta to 0
+    int idCuenta = 0; // Inicializar idCuenta a 0
     std::string sql;
 
     //Abriendo la base de datos
@@ -340,9 +341,9 @@ int Cliente::getIDCuenta(Monedas moneda){
 
     //Obteniendo el ID de la cuenta en la moneda especificada
     if (moneda == DOLAR) {
-        sql = "SELECT ID_CUENTA_D FROM CUSTOMERS WHERE ID = " + std::to_string(id);
+        sql = "SELECT ID_CUENTA_D FROM CUSTOMERS WHERE ID = " + std::to_string(this->id);
     } else {
-        sql = "SELECT ID_CUENTA_C FROM CUSTOMERS WHERE ID = " + std::to_string(id);
+        sql = "SELECT ID_CUENTA_C FROM CUSTOMERS WHERE ID = " + std::to_string(this->id);
     }
 
     rc = sqlite3_exec(db, sql.c_str(), [](void* idCuentaPtr, int argc, char** argv, char** azColName) -> int {
@@ -350,7 +351,7 @@ int Cliente::getIDCuenta(Monedas moneda){
         if (argc > 0 && argv[0] != nullptr) {
             *idCuenta = std::stoi(argv[0]);
         } else {
-            *idCuenta = 0; // Set idCuenta to 0 if no result is found
+            *idCuenta = 0; // Si no se encuentra el ID de la cuenta, se establece a 0
         }
         return *idCuenta;
     }, &idCuenta, &zErrMsg);
@@ -376,7 +377,9 @@ void Cliente::transaccion(){
     Prestamos prestamo(&entidadBancaria, this->nombre, this->apellido, this->id);
 
     do {
-        std::cout << "\n------ Menú de Transacciones ------" << std::endl;
+        std::cout << "\n**********************************************" << std::endl;
+        std::cout << "------ Menú de Transacciones ------" << std::endl;
+        std::cout << "**********************************************" << std::endl;
         std::cout << "1. Depositar dinero" << std::endl;
         std::cout << "2. Retirar dinero" << std::endl;
         std::cout << "3. Transferir dinero" << std::endl;

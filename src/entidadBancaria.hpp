@@ -129,5 +129,8 @@ class EntidadBancaria{
         
         bool validarEntrada(std::string dato, int* valor);
 
+        /// @brief destructor de la clase
+        ~EntidadBancaria();
+
 };
 #endif // ENTIDAD_BANCARIA_HPP 

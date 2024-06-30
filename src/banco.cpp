@@ -80,7 +80,7 @@ void Banco::setActualIDs(){
         std::cout << "IDs obtenidos con exito" << std::endl;           // si se obtuvieron bien los ids.
     }
 
-    
+    sqlite3_close(db);                                                 // cerrando la base de datos.
 };
 
 
@@ -105,6 +105,8 @@ void Banco::setActualIDCuentas(){
     }else{
         std::cout << "IDs de cuentas obtenidos con exito" << std::endl; // si se obtuvieron bien los ids de las cuentas.
     }
+    
+    sqlite3_close(db);                                                  // cerrando la base de datos.
 
     
 };  
@@ -162,8 +164,7 @@ int Banco::callbackCuentas(void *data, int argc, char **argv, char **azColName){
 }
 
 int Banco::callbackClientes(void *data, int argc, char **argv, char **azColName){ // data apunta a banco, argc num de columnas, argv arreglo de punteros val columnas
-    int i;
-    Banco* banco = static_cast<Banco*>(data);                                     //  accediendo al objeto banco.
+                                      //  accediendo al objeto banco.
     if (argc == 0){                                                               // si argc es cero significa que no se encontraron clientes con esos datos
         std::cerr << "No se encontraron clientes con esos datos" << std::endl;
         return 1;
@@ -195,6 +196,8 @@ void Banco::setActualIDPrestamos(){
     }else{
         std::cout << "IDs de prestamos obtenidos con exito" << std::endl;
     }
+
+    sqlite3_close(db);                                                     // cerrando la base de datos.
 
     
 };
@@ -261,7 +264,7 @@ void Banco::agregarCliente(std::string nombre, std::string apellido,std::string 
     
     std::string id;
     do{
-        std::cout << "Ingrese su identificacion: ";
+        std::cout << "Ingrese la identificacion del cliente: ";
         std::cin >> id;
     } while(!validarID(id));
 
@@ -418,7 +421,7 @@ void Banco::newSession(){
         do {
         std::cout << "\nQue desea hacer?" << std::endl;
         std::cout << "1. Iniciar sesion" << std::endl;
-        std::cout << "2. Registrarse como nuevo cliente" << std::endl;
+        std::cout << "2. Registrars nuevo cliente" << std::endl;
         std::cout << "3. Salir" << std::endl;
         std::cin >> choice;
         } while (!(std::stringstream(choice) >> *opcion) || (*opcion < 1 || *opcion > 3));
@@ -439,6 +442,8 @@ void Banco::newSession(){
             break;
         }
     }while(*opcion != SALIR);
+
+    delete opcion;
     
 
 }
@@ -453,7 +458,7 @@ void Banco::login(){
 
     do {
         
-        std::cout << "\nIngrese su nombre: ";
+        std::cout << "\nIngrese el nombre del cliente: ";
         std::cin >> nombre;
         if(!validarNombre(nombre)){
             choice = this->returnMain("Nombre invalido");
@@ -475,7 +480,7 @@ void Banco::login(){
     } while (!validarNombre(nombre));
 
     do{
-        std::cout << "Ingrese su apellido: ";
+        std::cout << "Ingrese el apellido del cliente: ";
         std::cin >> apellido;
         if(!validarNombre(apellido)){
             choice = this->returnMain("Apellido invalido");
@@ -507,13 +512,13 @@ void Banco::login(){
         //En caso que no exista el cliente
         //Se le da la opcion de intentar de nuevo, registrarse como nuevo cliente o salir
         std::cout << e << std::endl;
-        std::cout << "\nQue desea hacer?" << std::endl;
+        std::cout << "\n¿Que desea hacer?" << std::endl;
         std::string choice;
         int* opcion = new int();
 
         do {
             std::cout << "1. Intentar de nuevo" << std::endl;
-            std::cout << "2. Registrarse como nuevo cliente" << std::endl;
+            std::cout << "2. Registrar un nuevo cliente" << std::endl;
             std::cout << "3. Salir" << std::endl;
             std::cin >> choice;
             
@@ -575,17 +580,17 @@ void Banco::signUp(){
     std::string id;
     std::string password2;
     do {
-        std::cout << "\nIngrese su nombre: ";
+        std::cout << "\nIngrese el nombre: ";
         std::cin >> nombre;
     } while (!validarNombre(nombre));
     
     do {
-        std::cout << "\nIngrese su apellido: ";
+        std::cout << "\nIngrese el apellido: ";
         std::cin >> apellido;
     } while (!validarNombre(apellido));
     
     do{
-        std::cout << "\nIngrese su identificacion: ";
+        std::cout << "\nIngrese la identificacion: ";
         std::cin >>id;
     } while (!validarID(id));
     

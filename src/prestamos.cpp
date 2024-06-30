@@ -589,6 +589,7 @@ void Prestamos::setActualIDPrestamos(){
     }else{
         std::cout << "IDs de prestamos obtenidos con exito" << std::endl;
     }
+    sqlite3_close(db);                                                     // cierra la base de datos
 
 };
 
@@ -1087,57 +1088,6 @@ void Prestamos::realizarAbono2(){
 
     
 
-}
-
-// Método para realizar abono a préstamo
-void Prestamos::realizarAbono() {
-    int opcionCliente;
-    std::cout << "¿Desea abonar a un préstamo de un cliente en sesión o de otro cliente?" << std::endl;
-    std::cout << "1. Cliente en sesión" << std::endl;
-    std::cout << "2. Otro cliente" << std::endl;
-    std::cin >> opcionCliente;
-
-    int idPrestamo;
-    if (opcionCliente == 1) {
-        idPrestamo = obtenerIdPrestamoSesion();
-    } else {
-        std::cout << "Ingrese el ID del préstamo del otro cliente: ";
-        std::cin >> idPrestamo;
-    }
-
-    float cuota = consultarCuota(idPrestamo); 
-    MonedaPrestamo tipoMonedaPrestamo = consultarTipoMonedaPrestamo(idPrestamo); 
-    float montoAbono;
-
-    std::cout << "Seleccione la cuenta con la que desea abonar: " << std::endl;
-    std::cout << "1. Cuenta en colones" << std::endl;
-    std::cout << "2. Cuenta en dólares" << std::endl;
-
-    int tipoCuenta;
-    std::cin >> tipoCuenta;
-
-    std::cout << "¿Desea hacer un abono de cuota o un abono extraordinario?" << std::endl;
-    std::cout << "1. Cuota" << std::endl;
-    std::cout << "2. Abono extraordinario" << std::endl;
-    int tipoAbono;
-    std::cin >> tipoAbono;
-
-    if (tipoAbono == 1) {
-        montoAbono = cuota;
-        std::cout << "El monto de la cuota a abonar es: " << montoAbono << std::endl;
-    } else {
-        std::cout << "Ingrese el monto del abono extraordinario: ";
-        std::cin >> montoAbono;
-    }
-
-    // Convertir monto si es necesario
-    if ((tipoMonedaPrestamo == DOLARES_PRESTAMO && tipoCuenta == 1) || 
-        (tipoMonedaPrestamo == COLONES_PRESTAMO && tipoCuenta == 2)) {
-        montoAbono *= cliente.getTipoCambio();
-    }
-
-    abonarCuota(idPrestamo, montoAbono, tipoAbono == 2, tipoCuenta == 1 ? COLONES_PRESTAMO : DOLARES_PRESTAMO);
-    std::cout << "Abono realizado correctamente." << std::endl;
 }
 
 // Método para restar el monto abonado de la cuenta del cliente

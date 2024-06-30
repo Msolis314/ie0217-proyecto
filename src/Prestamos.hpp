@@ -37,17 +37,25 @@ SOFTWARE.
 #include "cliente.hpp"
 #include "db.hpp"
 
+
+/// @brief Enumeracion de los tipos de prestamos
+//// @details Enumeracion de los tipos de prestamos que se pueden solicitar.
 enum TipoPretamo {
     PERSONAL = 1,
     HIPOTECARIO = 2,
     PRENDARIO = 3
 };
 
+/// @brief Enumeracion de los tipos de interes
+//// @details Enumeracion de los tipos de interes que se pueden solicitar.
 enum MonedaPrestamo {
     COLONES_PRESTAMO = 1,
     DOLARES_PRESTAMO = 2
 };
 
+
+/// @brief Clase que realiza las operaciones de prestamos.
+/// @details Esta clase realiza las operaciones de prestamos como pagar cuota, calcular cuota, actualizar plazo, actualizar intereses, modificar capital, desplegar informe, solicitar prestamo, ingresar prestamo personal, ingresar prestamo hipotecario, ingresar prestamo prendario, generar id prestamo, ingresar tipo interes, set actual id prestamos, check id prestamo, agregar id lista, set tasa bank, consultar prestamos, callback consulta prestamos, get tipo interes, set tipo interes, get tasa actual, set tasa actual, get plazo, set plazo, get intereses abonados, set intereses abonados, get capital, set capital, get plazo actual, set plazo actual, calcular cuota variable, actualizar cuotas, abonar cuota, realizar abono, realizar abono2, obtener id prestamo sesion, restar monto cuenta cliente, consultar saldo cliente, consultar tipo moneda prestamo, consultar cuota, obtener tipo cambio.
 class Prestamos {
 private:
     Cliente cliente;
@@ -66,62 +74,96 @@ private:
     EntidadBancaria* entidadBancaria; // Añadir referencia a EntidadBancaria
     int tipoAbono;
 public:
+
+    /// @brief Constructor de la clase Prestamos
+    /// @param entidadBancaria Entidad bancaria
+    /// @param nombre Nombre del cliente
+    /// @param apellido Apellido del cliente
+    /// @param idCliente ID del cliente
     Prestamos(EntidadBancaria* entidadBancaria, std::string nombre, std::string apellido, int idCliente);;
 
     // Métodos
-    void pagarCuota(double monto);
-    double calcularCuota() const;
-    void actualizarPlazo(std::string nuevoPlazo);
-    void actualizarIntereses(std::string nuevaTasa);
-    void modificarCapital(double nuevoCapital);
-    void desplegarInforme() const;
+
+    
+    /// @brief Metodo para solicitar prestamo
     void solicitarPrestamo();
+
+    /// @brief  Metodo para solcitar un prestamo personal
     void ingresar_prestamoPersonal();
+
+    /// @brief Metodo para solicitar un prestamo hipotecario
     void ingresar_prestamoHipotecario();
+
+    /// @brief Metodo para solicitar un prestamo prendario
     void ingresar_prestamoPrendario();
+
+    /// @brief Metodo para generar un id de prestamo
+    /// @return id de prestamo
     int generar_id_prestamo();
+
+    /// @brief Metodo para ingresar el tipo de interes
+    /// @return tipo de interes
     std::string ingresarTipoInteres();
 
+    /// @brief Callback para los prestamos
+    /// @param data  Puntero a los datos
+    /// @param argc  Numero de columnas
+    /// @param argv  Argumentos
+    /// @param azColName  Nombre de las columnas
+    /// @return  0
     static int callbackPrestamos(void *data, int argc, char **argv, char **azColName);
+
+    /// @brief Metodo para setear el id de prestamos
     void setActualIDPrestamos();
+
+    /// @brief Metodo para chequear el id de prestamo
+    /// @param id  ID de prestamo
+    /// @return  true si el id de prestamo existe, false en caso contrario
     bool checkID_PRESTAMO(int id);
     void agregarID_lista(int id);
     
-    // @brief establecer tasa de cambio del banco
-    void setTasaBank();
+    /// @brief Metodo para consultar los prestamos
     void consultarPrestamos();
     int callbackConsultaPrestamos(void *data, int argc, char **argv, char **azColName);
 
-    std::string getTipoInteres() const;
-    void setTipoInteres(const std::string &tipoInteres);
-    std::string getTasaActual() const;
-    void setTasaActual(const std::string &tasaActual);
-    std::string getPlazo() const;
-    void setPlazo(const std::string &plazo);
-    double getInteresesAbonados() const;
-    void setInteresesAbonados(double interesesAbonados);
-    double getCapital() const;
-    void setCapital(double capital);
+   
     
-    std::string getPlazoActual() const;
-    void setPlazoActual(const std::string &plazoActual);
-
+   
+    /// @brief   Metodo    para calcular la cuota de un prestamo variable
     float calcularCuotaVariable(float tasaInteres, float indiceReferencia, float capital, int plazo);
 
-    void actualizarCuotas();
-
+    
+    /// @brief Metodo para abonar en la base de datos
     void abonarCuota(int idPrestamo, float abono, bool esAbonoExtraordinario, MonedaPrestamo tipoMoneda);
-    void realizarAbono();
+    
+    /// @brief Metodo para realizar un abono
     void realizarAbono2();
+
+    /// @brief  Metodo para obtener el id de prestamo de la sesion deun cliente
+    /// @return  id de prestamo
     int obtenerIdPrestamoSesion();
+
+    /// @brief Metodo para restar el monto de la cuenta del cliente
+    /// @param moneda  Moneda del prestamo
+    /// @param monto  Monto a restar
     void restarMontoCuentaCliente(MonedaPrestamo moneda, float monto);
+
+    /// @brief  Metodo para consultar el saldo del cliente
+    /// @param tipoMoneda  Tipo de moneda
+    /// @return  Saldo del cliente
     float consultarSaldoCliente(MonedaPrestamo tipoMoneda);
 
+    /// @brief Metodo para consultar el tipo de moneda del prestamo
+    /// @param idPrestamo  ID del prestamo
+    /// @return  Tipo de moneda del prestamo
     MonedaPrestamo consultarTipoMonedaPrestamo(int idPrestamo);
 
+    /// @brief Metodo para consultar la cuota de un prestamo
+    /// @param idPrestamo  ID del prestamo
+    /// @return  Cuota del prestamo
     double consultarCuota(int idPrestamo);
 
-    float obtenerTipoCambio(MonedaPrestamo monedaPrestamo, MonedaPrestamo monedaCuenta);
 };
 
-#endif
+
+#endif ///PRESTAMOS_HPP
