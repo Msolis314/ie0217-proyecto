@@ -60,6 +60,7 @@ enum TASAS{
 
 
 /// @brief Enumeracion de las combinaciones de modalidades de interes de un CDP.
+///@details SIMPLE = 1, COMPUESTO = 2, SIMPLE_VARIABLE = 3, COMPUESTO_VARIABLE = 4
 enum TIPOS_INTERES{
     SIMPLE =1,
     COMPUESTO,

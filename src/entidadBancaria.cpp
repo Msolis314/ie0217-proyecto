@@ -78,6 +78,7 @@ void EntidadBancaria::setFecha(){
         std::cout << "SQL ERROR: " << zErrMsg << std::endl;
         sqlite3_free(zErrMsg);
     }
+    sqlite3_close(db);
 
 }
 
@@ -201,4 +202,9 @@ bool EntidadBancaria::validarEntrada(std::string dato, int* valor){
         std::cout << e.what() << std::endl;
         return false;
     }
+}
+
+EntidadBancaria::~EntidadBancaria(){
+    delete tipoCambio;
+    
 }

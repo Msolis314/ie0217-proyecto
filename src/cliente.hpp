@@ -68,7 +68,7 @@ class Cliente: public EntidadBancaria{
     private:
         std::string nombre;
         std::string apellido;
-        int id;
+        int id =0;
         int idCuentaC = 0;
         int idCuentaD = 0;
         std::vector<int> prestamos;
