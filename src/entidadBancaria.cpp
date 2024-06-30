@@ -204,7 +204,3 @@ bool EntidadBancaria::validarEntrada(std::string dato, int* valor){
     }
 }
 
-EntidadBancaria::~EntidadBancaria(){
-    delete tipoCambio;
-    
-}

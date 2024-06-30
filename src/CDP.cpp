@@ -303,6 +303,9 @@ void CDP::displayMenuOptions() {
                 break;
             } catch (std::invalid_argument &e){
                 rightChoice = cliente.returnMain(e.what());
+                if(rightChoice == RETURN){
+                    return;
+                }
             }
         } while (rightChoice != RETURN);
 
@@ -317,8 +320,11 @@ void CDP::displayMenuOptions() {
                 break;
             } catch (std::invalid_argument &e){
                 rightChoice = cliente.returnMain(e.what());
+                if (rightChoice == RETURN){
+                    return ;
+                }
             }
-            break;
+            continue;
         } while (rightChoice != RETURN);
 
         this->fechaCreacion = (this->cliente).getFecha();
@@ -337,7 +343,7 @@ void CDP::displayMenuOptions() {
                     return ;
                 }   
             }
-            break;
+           continue;
         } while (rightChoice != RETURN);
         
 
