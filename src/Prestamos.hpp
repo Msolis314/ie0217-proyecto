@@ -1,6 +1,5 @@
-#ifndef PRESTAMOS_HPP//TRANSACCIONES_HPP
+#ifndef PRESTAMOS_HPP
 #define PRESTAMOS_HPP
-
 
 #include <iostream>
 #include <string>
@@ -11,9 +10,7 @@
 #include "cliente.hpp"
 #include "db.hpp"
 
-
-
-enum TipoPretamo{
+enum TipoPretamo {
     PERSONAL = 1,
     HIPOTECARIO = 2,
     PRENDARIO = 3
@@ -24,8 +21,7 @@ enum MonedaPrestamo {
     DOLARES_PRESTAMO = 2
 };
 
-
-class Prestamos : public EntidadBancaria{
+class Prestamos {
 private:
     Cliente cliente;
     std::string nombreCliente;
@@ -40,8 +36,10 @@ private:
     std::vector<int> actualIDPrestamos; 
     std::string TipoPrestamo;
     std::vector<std::pair<int, float>> tasaVariable; // Vector para almacenar las tasas variables
+    EntidadBancaria* entidadBancaria; // Añadir referencia a EntidadBancaria
+    int tipoAbono;
 public:
-    Prestamos(std::string nombre, std::string apellido, int idCliente);;
+    Prestamos(EntidadBancaria* entidadBancaria, std::string nombre, std::string apellido, int idCliente);;
 
     // Métodos
     void pagarCuota(double monto);
@@ -85,17 +83,17 @@ public:
 
     void actualizarCuotas();
 
-
     void abonarCuota(int idPrestamo, float abono, bool esAbonoExtraordinario, MonedaPrestamo tipoMoneda);
-
     void realizarAbono();
-
     int obtenerIdPrestamoSesion();
-
-    void restarMontoCuentaCliente(const std::string& cuenta, MonedaPrestamo moneda, float monto);
-
+    void restarMontoCuentaCliente(MonedaPrestamo moneda, float monto);
     float consultarSaldoCliente(MonedaPrestamo tipoMoneda);
+
+    MonedaPrestamo consultarTipoMonedaPrestamo(int idPrestamo);
+
+    double consultarCuota(int idPrestamo);
+
+    float obtenerTipoCambio(MonedaPrestamo monedaPrestamo, MonedaPrestamo monedaCuenta);
 };
 
-#endif 
-
+#endif

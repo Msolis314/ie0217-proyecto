@@ -16,9 +16,10 @@
 using namespace std;
 
 // Constructor de la clase Prestamos
-Prestamos::Prestamos(std::string nombre, std::string apellido, int id) : cliente(nombre, apellido, id) {
-    setActualIDPrestamos(); // Llamando a la función para obtener los IDs de los préstamos
-}
+Prestamos::Prestamos(EntidadBancaria* entidadBancaria, std::string nombre, std::string apellido, int id)
+    : entidadBancaria(entidadBancaria), cliente(nombre, apellido, id) {
+    // Inicialización adicional si es necesario
+}       
 
 // Declaración de la función calcularCuotaVariable
 float Prestamos::calcularCuotaVariable(float tasaInteres, float indiceReferencia, float capital, int plazo) {
@@ -738,6 +739,85 @@ void Prestamos::consultarPrestamos() {
     sqlite3_close(db);
 }
 
+MonedaPrestamo Prestamos::consultarTipoMonedaPrestamo(int idPrestamo) {
+    sqlite3 *db;            // Puntero a la base de datos SQLite
+    sqlite3_stmt *stmt;     // Puntero a la declaración SQL preparada
+    int rc;                 // Variable para el estado de las operaciones SQLite
+    MonedaPrestamo tipoMoneda = COLONES_PRESTAMO; // Valor por defecto
+
+    // Abrir la conexión a la base de datos SQLite
+    rc = sqlite3_open("SistemaBancario.db", &db);
+    if (rc) {
+        std::cerr << "No se pudo abrir la base de datos: " << sqlite3_errmsg(db) << std::endl;
+        sqlite3_close(db);
+        return tipoMoneda;
+    }
+
+    // Construir la consulta SQL para obtener el tipo de moneda del préstamo
+    std::string sql = "SELECT TIPO_CAMBIO FROM PRESTAMO WHERE ID_PRESTAMO = " + std::to_string(idPrestamo);
+
+    // Preparar la consulta SQL
+    rc = sqlite3_prepare_v2(db, sql.c_str(), -1, &stmt, NULL);
+    if (rc != SQLITE_OK) {
+        std::cerr << "Error al preparar la consulta: " << sqlite3_errmsg(db) << std::endl;
+        sqlite3_close(db);
+        return tipoMoneda;
+    }
+
+    // Ejecutar la consulta y obtener el resultado
+    if (sqlite3_step(stmt) == SQLITE_ROW) {
+        int tipoMonedaInt = sqlite3_column_int(stmt, 0);
+        if (tipoMonedaInt == 1) {
+            tipoMoneda = COLONES_PRESTAMO;
+        } else if (tipoMonedaInt == 2) {
+            tipoMoneda = DOLARES_PRESTAMO;
+        }
+    }
+
+    // Finalizar la consulta 
+    sqlite3_finalize(stmt);
+    sqlite3_close(db);
+
+    return tipoMoneda;
+}
+
+double Prestamos::consultarCuota(int idPrestamo) {
+    sqlite3 *db;            // Puntero a la base de datos SQLite
+    sqlite3_stmt *stmt;     // Puntero a la declaración SQL preparada
+    int rc;                 // Variable para el estado de las operaciones SQLite
+    double cuota = 0.0;     // Valor por defecto
+
+    // Abrir la conexión a la base de datos SQLite
+    rc = sqlite3_open("SistemaBancario.db", &db);
+    if (rc) {
+        std::cerr << "No se pudo abrir la base de datos: " << sqlite3_errmsg(db) << std::endl;
+        sqlite3_close(db);
+        return cuota;
+    }
+
+    // Construir la consulta SQL para obtener la cuota del préstamo
+    std::string sql = "SELECT cuota FROM PRESTAMO WHERE ID_PRESTAMO = " + std::to_string(idPrestamo);
+
+    // Preparar la consulta SQL
+    rc = sqlite3_prepare_v2(db, sql.c_str(), -1, &stmt, NULL);
+    if (rc != SQLITE_OK) {
+        std::cerr << "Error al preparar la consulta: " << sqlite3_errmsg(db) << std::endl;
+        sqlite3_close(db);
+        return cuota;
+    }
+
+    // Ejecutar la consulta y obtener el resultado
+    if (sqlite3_step(stmt) == SQLITE_ROW) {
+        cuota = sqlite3_column_double(stmt, 0); // Suponemos que la cuota es un número de punto flotante
+    }
+
+    // Finalizar la consulta 
+    sqlite3_finalize(stmt);
+    sqlite3_close(db);
+
+    return cuota;
+}
+
 // Método para obtener el ID del préstamo del cliente en sesión
 int Prestamos::obtenerIdPrestamoSesion() {
     sqlite3 *db;
@@ -807,7 +887,7 @@ void Prestamos::abonarCuota(int idPrestamo, float abono, bool esAbonoExtraordina
         return;
     }
 
-    std::string sqlSelect = "SELECT CUOTA, CAPITAL_ACTUAL, INTERESES_ABONADOS, TASA_INTERES, PLAZO FROM PRESTAMO WHERE ID_PRESTAMO = " + std::to_string(idPrestamo);
+    std::string sqlSelect = "SELECT CUOTA, CAPITAL_ACTUAL, INTERESES_ABONADOS, TASA_INTERES, PLAZO, TIPO_CAMBIO FROM PRESTAMO WHERE ID_PRESTAMO = " + std::to_string(idPrestamo);
     rc = sqlite3_prepare_v2(db, sqlSelect.c_str(), -1, &stmt, NULL);
     if (rc != SQLITE_OK) {
         std::cerr << "Error al preparar la consulta: " << sqlite3_errmsg(db) << std::endl;
@@ -821,67 +901,49 @@ void Prestamos::abonarCuota(int idPrestamo, float abono, bool esAbonoExtraordina
         interesesAbonados = static_cast<float>(sqlite3_column_double(stmt, 2));
         tasaInteres = static_cast<float>(sqlite3_column_double(stmt, 3));
         plazo = sqlite3_column_int(stmt, 4);
+        std::string tipoCambioPrestamo = reinterpret_cast<const char*>(sqlite3_column_text(stmt, 5));
 
         sqlite3_finalize(stmt);
 
-        if (!esAbonoExtraordinario) {
-            // Abono de cuota ordinario
-            capitalActual -= abono;
-            interesesAbonados += abono * (tasaInteres / 12 / 100);
-        } else {
-            // Abono extraordinario
-            float capitalInicial = capitalActual + interesesAbonados;
-            float interesesTotales = capitalInicial * (tasaInteres / 100);
-            float capitalFinal = capitalInicial - abono;
+        // Obtener automáticamente el tipo de moneda del préstamo
+        MonedaPrestamo tipoMonedaPrestamo = (tipoCambioPrestamo == "colones") ? COLONES_PRESTAMO : DOLARES_PRESTAMO;
 
-            // Calcular nueva cuota mensual
-            if (plazo > 0) {
-                cuota = (capitalFinal + interesesTotales) / plazo;
+        // Convertir el monto de abono a la moneda del préstamo si es necesario
+        float montoAbonoConvertido = abono;
+        if (tipoMonedaPrestamo != tipoMoneda) {
+            float tipoCambio = entidadBancaria->getTipoCambio();
+            if (tipoMonedaPrestamo == DOLARES_PRESTAMO) {
+                montoAbonoConvertido = abono / tipoCambio; // Convertir a dólares
             } else {
-                cuota = 0.0; // Manejo de error si plazo es 0 o negativo
-            }
-
-            // Actualizar datos del préstamo
-            capitalActual = capitalFinal;
-            interesesAbonados = interesesTotales;
-
-            plazo--;
-
-            // Actualizar la tabla de préstamos
-            std::string sqlUpdatePrestamo = "UPDATE PRESTAMO SET CAPITAL_ACTUAL = " + std::to_string(capitalActual) + ", INTERESES_ABONADOS = " + std::to_string(interesesAbonados) + ", CUOTA = " + std::to_string(cuota) + ", PLAZO = " + std::to_string(plazo) + " WHERE ID_PRESTAMO = " + std::to_string(idPrestamo);
-
-            rc = sqlite3_exec(db, sqlUpdatePrestamo.c_str(), NULL, 0, NULL);
-            if (rc != SQLITE_OK) {
-                std::cerr << "Error al ejecutar la consulta de actualización de préstamo: " << sqlite3_errmsg(db) << std::endl;
+                montoAbonoConvertido = abono * tipoCambio; // Convertir a colones
             }
         }
 
-        // Reducir el monto abonado de la cuenta bancaria del cliente
-        float saldoCliente = consultarSaldoCliente(tipoMoneda);
-        saldoCliente -= abono;
+        // Actualizar el capital actual y el plazo
+        capitalActual -= montoAbonoConvertido;
+        plazo--;
 
-        std::string tipoMonedaStr;
-        switch (tipoMoneda) {
-            case COLONES_PRESTAMO:
-                tipoMonedaStr = "colones";
-                break;
-            case DOLARES_PRESTAMO:
-                tipoMonedaStr = "dolares";
-                break;
-            default:
-                std::cerr << "Tipo de moneda no reconocido." << std::endl;
-                sqlite3_close(db);
-                return;
-        }
+        // Actualizar la tabla de préstamos con los nuevos valores
+        std::string sqlUpdatePrestamo = "UPDATE PRESTAMO SET CAPITAL_ACTUAL = " + std::to_string(capitalActual) + ", PLAZO = " + std::to_string(plazo) + " WHERE ID_PRESTAMO = " + std::to_string(idPrestamo);
 
-        std::string sqlUpdateCuenta = "UPDATE CUENTA_BANCARIA SET AHORROS = " + std::to_string(saldoCliente) + " WHERE ID_CLIENTE = " + std::to_string(this->cliente.id) + " AND TIPO_MONEDA = '" + tipoMonedaStr + "'";
-
-        rc = sqlite3_exec(db, sqlUpdateCuenta.c_str(), NULL, 0, NULL);
+        rc = sqlite3_exec(db, sqlUpdatePrestamo.c_str(), NULL, 0, NULL);
         if (rc != SQLITE_OK) {
-            std::cerr << "Error al ejecutar la consulta de actualización de cuenta bancaria: " << sqlite3_errmsg(db) << std::endl;
-        } else {
-            std::cout << "Abono realizado correctamente." << std::endl;
+            std::cerr << "Error al ejecutar la consulta de actualización de préstamo: " << sqlite3_errmsg(db) << std::endl;
         }
+
+        // Restar el monto convertido de la cuenta bancaria del cliente según la moneda de la cuenta
+        float montoAbonoEnCuenta = montoAbonoConvertido;
+        if (tipoMonedaPrestamo != tipoMoneda) {
+            float tipoCambio = entidadBancaria->getTipoCambio();
+            if (tipoMonedaPrestamo == DOLARES_PRESTAMO) {
+                montoAbonoEnCuenta = montoAbonoConvertido; // El monto convertido ya es en dólares
+            } else {
+                montoAbonoEnCuenta = montoAbonoConvertido; // El monto convertido ya es en colones
+            }
+        }
+        restarMontoCuentaCliente(tipoMoneda, montoAbonoEnCuenta);
+
+        std::cout << "Abono realizado correctamente." << std::endl;
     } else {
         std::cerr << "No se encontró el préstamo con ID: " << idPrestamo << std::endl;
     }
@@ -889,98 +951,60 @@ void Prestamos::abonarCuota(int idPrestamo, float abono, bool esAbonoExtraordina
     sqlite3_close(db);
 }
 
-
-
 // Método para realizar abono a préstamo
 void Prestamos::realizarAbono() {
-    int idPrestamo;
-    bool esAbonoExtraordinario;
-    MonedaPrestamo tipoMoneda;
-
+    int opcionCliente;
     std::cout << "¿Desea abonar a un préstamo de un cliente en sesión o de otro cliente?" << std::endl;
     std::cout << "1. Cliente en sesión" << std::endl;
     std::cout << "2. Otro cliente" << std::endl;
-    int opcion;
-    std::cin >> opcion;
+    std::cin >> opcionCliente;
 
-    if (opcion == 2) {
-        std::cout << "Ingrese el ID del préstamo: ";
-        std::cin >> idPrestamo;
-    } else {
+    int idPrestamo;
+    if (opcionCliente == 1) {
         idPrestamo = obtenerIdPrestamoSesion();
+    } else {
+        std::cout << "Ingrese el ID del préstamo del otro cliente: ";
+        std::cin >> idPrestamo;
     }
 
-    int opcionMoneda;
-    std::cout << "Seleccione la moneda con la que desea abonar:" << std::endl;
-    std::cout << "1. Colones" << std::endl;
-    std::cout << "2. Dólares" << std::endl;
-    std::cin >> opcionMoneda;
+    float cuota = consultarCuota(idPrestamo); 
+    MonedaPrestamo tipoMonedaPrestamo = consultarTipoMonedaPrestamo(idPrestamo); 
+    float montoAbono;
 
-    switch (opcionMoneda) {
-        case 1:
-            tipoMoneda = COLONES_PRESTAMO;
-            break;
-        case 2:
-            tipoMoneda = DOLARES_PRESTAMO;
-            break;
-        default:
-            std::cerr << "Opción de moneda no válida." << std::endl;
-            return;
-    }
+    std::cout << "Seleccione la cuenta con la que desea abonar: " << std::endl;
+    std::cout << "1. Cuenta en colones" << std::endl;
+    std::cout << "2. Cuenta en dólares" << std::endl;
+
+    int tipoCuenta;
+    std::cin >> tipoCuenta;
 
     std::cout << "¿Desea hacer un abono de cuota o un abono extraordinario?" << std::endl;
     std::cout << "1. Cuota" << std::endl;
     std::cout << "2. Abono extraordinario" << std::endl;
-    int opcionAbono;
-    std::cin >> opcionAbono;
-    esAbonoExtraordinario = (opcionAbono == 2);
+    int tipoAbono;
+    std::cin >> tipoAbono;
 
-    // Obtener el monto a abonar
-    float montoAbonar;
-    if (!esAbonoExtraordinario) {
-        sqlite3 *db;
-        sqlite3_stmt *stmt;
-        int rc;
-        float cuota;
-
-        rc = sqlite3_open("SistemaBancario.db", &db);
-        if (rc != SQLITE_OK) {
-            std::cerr << "No se pudo abrir la base de datos: " << sqlite3_errmsg(db) << std::endl;
-            return;
-        }
-
-        std::string sqlSelect = "SELECT CUOTA FROM PRESTAMO WHERE ID_PRESTAMO = " + std::to_string(idPrestamo);
-        rc = sqlite3_prepare_v2(db, sqlSelect.c_str(), -1, &stmt, NULL);
-        if (rc != SQLITE_OK) {
-            std::cerr << "Error al preparar la consulta: " << sqlite3_errmsg(db) << std::endl;
-            sqlite3_close(db);
-            return;
-        }
-
-        if (sqlite3_step(stmt) == SQLITE_ROW) {
-            cuota = static_cast<float>(sqlite3_column_double(stmt, 0));
-            std::cout << "El monto de la cuota a abonar es: " << cuota << std::endl;
-            montoAbonar = cuota;
-        } else {
-            std::cerr << "No se encontró el préstamo con ID: " << idPrestamo << std::endl;
-            sqlite3_finalize(stmt);
-            sqlite3_close(db);
-            return;
-        }
-
-        sqlite3_finalize(stmt);
-        sqlite3_close(db);
+    if (tipoAbono == 1) {
+        montoAbono = cuota;
+        std::cout << "El monto de la cuota a abonar es: " << montoAbono << std::endl;
     } else {
-        std::cout << "Ingrese el monto a abonar extraordinariamente: ";
-        std::cin >> montoAbonar;
+        std::cout << "Ingrese el monto del abono extraordinario: ";
+        std::cin >> montoAbono;
     }
 
-    // Realizar el abono
-    abonarCuota(idPrestamo, montoAbonar, esAbonoExtraordinario, tipoMoneda);
+    // Convertir monto si es necesario
+    if ((tipoMonedaPrestamo == DOLARES_PRESTAMO && tipoCuenta == 1) || 
+        (tipoMonedaPrestamo == COLONES_PRESTAMO && tipoCuenta == 2)) {
+        montoAbono *= cliente.getTipoCambio();
+    }
+
+    abonarCuota(idPrestamo, montoAbono, tipoAbono == 2, tipoCuenta == 1 ? COLONES_PRESTAMO : DOLARES_PRESTAMO);
+    std::cout << "Abono realizado correctamente." << std::endl;
 }
 
 // Método para restar el monto abonado de la cuenta del cliente
-void Prestamos::restarMontoCuentaCliente(const std::string& cuenta, MonedaPrestamo moneda, float monto) {
+// Método para restar el monto abonado de la cuenta del cliente
+void Prestamos::restarMontoCuentaCliente(MonedaPrestamo moneda, float monto) {
     sqlite3 *db;
     sqlite3_stmt *stmt;
     int rc;
@@ -991,19 +1015,36 @@ void Prestamos::restarMontoCuentaCliente(const std::string& cuenta, MonedaPresta
         return;
     }
 
-    std::string sqlUpdate;
-    switch (moneda) {
-        case COLONES_PRESTAMO:
-            sqlUpdate = "UPDATE CUENTA_BANCARIA SET AHORROS = AHORROS - " + std::to_string(monto) + " WHERE ID_CLIENTE = " + std::to_string(this->cliente.id) + " AND TIPO_MONEDA = 'colones';";
-            break;
-        case DOLARES_PRESTAMO:
-            sqlUpdate = "UPDATE CUENTA_BANCARIA SET AHORROS = AHORROS - " + std::to_string(monto) + " WHERE ID_CLIENTE = " + std::to_string(this->cliente.id) + " AND TIPO_MONEDA = 'dolares';";
-            break;
-        default:
-            std::cerr << "Tipo de moneda no reconocido." << std::endl;
-            sqlite3_close(db);
-            return;
+    std::string sqlSelect = "SELECT AHORROS FROM CUENTA_BANCARIA WHERE ID_CLIENTE = " + std::to_string(this->cliente.id) + " AND TIPO_MONEDA = ?";
+    rc = sqlite3_prepare_v2(db, sqlSelect.c_str(), -1, &stmt, NULL);
+    if (rc != SQLITE_OK) {
+        std::cerr << "Error al preparar la consulta: " << sqlite3_errmsg(db) << std::endl;
+        sqlite3_close(db);
+        return;
     }
+
+    const char *tipoMonedaStr = (moneda == COLONES_PRESTAMO) ? "colones" : "dolares";
+    sqlite3_bind_text(stmt, 1, tipoMonedaStr, -1, SQLITE_STATIC);
+
+    float ahorros = 0;
+    if (sqlite3_step(stmt) == SQLITE_ROW) {
+        ahorros = static_cast<float>(sqlite3_column_double(stmt, 0));
+    } else {
+        std::cerr << "No se encontró la cuenta del cliente con la moneda especificada." << std::endl;
+        sqlite3_finalize(stmt);
+        sqlite3_close(db);
+        return;
+    }
+    sqlite3_finalize(stmt);
+
+    // Asegurarse de que no se resta un monto mayor al saldo actual
+    if (ahorros < monto) {
+        std::cerr << "Saldo insuficiente en la cuenta para realizar el abono." << std::endl;
+        sqlite3_close(db);
+        return;
+    }
+
+    std::string sqlUpdate = "UPDATE CUENTA_BANCARIA SET AHORROS = AHORROS - " + std::to_string(monto) + " WHERE ID_CLIENTE = " + std::to_string(this->cliente.id) + " AND TIPO_MONEDA = '" + tipoMonedaStr + "'";
 
     rc = sqlite3_exec(db, sqlUpdate.c_str(), NULL, 0, NULL);
     if (rc != SQLITE_OK) {
