@@ -16,7 +16,9 @@
 using namespace std;
 
 // Constructor de la clase Prestamos
-Prestamos::Prestamos(std::string nombre, std::string apellido, int id) : cliente(nombre, apellido, id) {}
+Prestamos::Prestamos(std::string nombre, std::string apellido, int id) : cliente(nombre, apellido, id) {
+    setActualIDPrestamos(); // Llamando a la función para obtener los IDs de los préstamos
+}
 
 // Declaración de la función calcularCuotaVariable
 float Prestamos::calcularCuotaVariable(float tasaInteres, float indiceReferencia, float capital, int plazo) {
