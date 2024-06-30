@@ -1,5 +1,5 @@
 CXX := g++
-CXXFLAGS := -std=c++11 -Wall -g
+CXXFLAGS := -std=c++11 
 LDFLAGS := -L/usr/lib
 LDLIBS := -lsqlite3 -lssl -lcrypto
 
