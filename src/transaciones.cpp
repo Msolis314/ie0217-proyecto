@@ -656,10 +656,13 @@ void Operaciones::transferir() {
 
                 // Actualizar saldo de la cuenta destino según el tipo de moneda
                 if (tipoMonedaDestino == COLON) {
+                    
                     saldoDestino = consultarSaldo(idCuentaDestino);
                     saldoDestino += vars.monto;
                 } else {
-                    cliente.convertirMoneda(vars.monto, DOLAR);
+                    //Convertir el monto a dolares
+                    vars.monto = vars.monto / cliente.getTipoCambio();
+                    
                     saldoDestino = consultarSaldo(idCuentaDestino);
                     saldoDestino += vars.monto;
                 }
@@ -736,7 +739,9 @@ void Operaciones::transferir() {
                     saldoDestino = consultarSaldo(idCuentaDestino);
                     saldoDestino += vars.monto;
                 } else {
-                    cliente.convertirMoneda(vars.monto, COLON);
+                    // Convertir el monto a colones
+                    vars.monto = vars.monto * cliente.getTipoCambio();
+                   
                     saldoDestino = consultarSaldo(idCuentaDestino);
                     saldoDestino += vars.monto;
                 }

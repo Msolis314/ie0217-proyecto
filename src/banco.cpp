@@ -421,7 +421,7 @@ void Banco::newSession(){
         do {
         std::cout << "\nQue desea hacer?" << std::endl;
         std::cout << "1. Iniciar sesion" << std::endl;
-        std::cout << "2. Registrars nuevo cliente" << std::endl;
+        std::cout << "2. Registrar un nuevo cliente" << std::endl;
         std::cout << "3. Salir" << std::endl;
         std::cin >> choice;
         } while (!(std::stringstream(choice) >> *opcion) || (*opcion < 1 || *opcion > 3));
