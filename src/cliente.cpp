@@ -349,7 +349,9 @@ void Cliente::transaccion(){
     float montoF;
     Operaciones op(this->nombre, this->apellido, this->id);
     CDP cdp(this->nombre, this->apellido, this->id);
-    Prestamos prestamo(this->nombre, this->apellido, this->id);
+    EntidadBancaria entidadBancaria;
+    // Luego puedes crear la instancia de Prestamos de esta manera:
+    Prestamos prestamo(&entidadBancaria, this->nombre, this->apellido, this->id);
 
     do {
         std::cout << "\n------ Menú de Transacciones ------" << std::endl;
