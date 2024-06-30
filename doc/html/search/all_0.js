@@ -1,12 +1,12 @@
 var searchData=
 [
-  ['a_20otros_0',['Transferencias entre cuentas a otros',['../md__r_e_a_d_m_e.html#autotoc_md10',1,'']]],
-  ['a_20plazo_20cdp_1',['¿Qué es Certificados de depósito a plazo **(CDP)**?',['../md__r_e_a_d_m_e.html#autotoc_md6',1,'']]],
-  ['a_20préstamos_20de_20otras_20personas_2',['Abonos a préstamos de otras personas',['../md__r_e_a_d_m_e.html#autotoc_md12',1,'']]],
-  ['a_20préstamos_20propios_3',['Abonos a préstamos propios',['../md__r_e_a_d_m_e.html#autotoc_md11',1,'']]],
+  ['a_20otros_0',['Transferencias entre cuentas a otros',['../md__r_e_a_d_m_e.html#autotoc_md12',1,'']]],
+  ['a_20plazo_20cdp_1',['¿Qué es Certificados de depósito a plazo **(CDP)**?',['../md__r_e_a_d_m_e.html#autotoc_md8',1,'']]],
+  ['a_20préstamos_20de_20otras_20personas_2',['Abonos a préstamos de otras personas',['../md__r_e_a_d_m_e.html#autotoc_md14',1,'']]],
+  ['a_20préstamos_20propios_3',['Abonos a préstamos propios',['../md__r_e_a_d_m_e.html#autotoc_md13',1,'']]],
   ['abonarcuota_4',['abonarCuota',['../class_prestamos.html#a7c5ddcc192a7f1c6de5920ecdbabb778',1,'Prestamos']]],
-  ['abonos_20a_20préstamos_20de_20otras_20personas_5',['Abonos a préstamos de otras personas',['../md__r_e_a_d_m_e.html#autotoc_md12',1,'']]],
-  ['abonos_20a_20préstamos_20propios_6',['Abonos a préstamos propios',['../md__r_e_a_d_m_e.html#autotoc_md11',1,'']]],
+  ['abonos_20a_20préstamos_20de_20otras_20personas_5',['Abonos a préstamos de otras personas',['../md__r_e_a_d_m_e.html#autotoc_md14',1,'']]],
+  ['abonos_20a_20préstamos_20propios_6',['Abonos a préstamos propios',['../md__r_e_a_d_m_e.html#autotoc_md13',1,'']]],
   ['actualidcuentas_7',['actualIDCuentas',['../class_banco.html#a81ceafd3eaee258a196d48a822181c2e',1,'Banco']]],
   ['actualidprestamos_8',['actualIDPrestamos',['../class_banco.html#aceba2018d5dcac45be63b4c51db6f64b',1,'Banco::actualIDPrestamos'],['../class_prestamos.html#a2fe3460778fa4a1f0ce11b49d03e7116',1,'Prestamos::actualIDPrestamos']]],
   ['actualids_9',['actualIDs',['../class_banco.html#a2f6754ed8ddc28e33ada961e91f00ad9',1,'Banco']]],
@@ -22,5 +22,5 @@ var searchData=
   ['apellido_19',['apellido',['../class_c_d_p.html#af8db20899a1fff9768e0cf3df1c0f473',1,'CDP::apellido'],['../class_cliente.html#a6673d972b66adb1fd103eb1913e8d744',1,'Cliente::apellido']]],
   ['apellidocliente_20',['apellidoCliente',['../class_banco.html#a0f322a89756e45b9b68c24014a303e11',1,'Banco::apellidoCliente'],['../class_prestamos.html#a66e21bf398d66afead145ee7df0f0ae8',1,'Prestamos::apellidoCliente']]],
   ['atencion_21',['ATENCION',['../menu_8hpp.html#a63775c0553a6f57aca7b67f7be477b75a68c2a359b8e5d36e05eda94163062514',1,'menu.hpp']]],
-  ['avance_22',['Avance',['../md__r_e_a_d_m_e.html#autotoc_md22',1,'']]]
+  ['avance_22',['Avance',['../md__r_e_a_d_m_e.html#autotoc_md24',1,'']]]
 ];

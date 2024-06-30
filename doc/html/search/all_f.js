@@ -25,12 +25,12 @@ var searchData=
   ['solicitudprestamo_22',['SOLICITUDPRESTAMO',['../entidad_bancaria_8hpp.html#abe0d0c36144adf6b75897fd3122dfd4eaf5cc2dd3162f4f181a865d9892f36933',1,'entidadBancaria.hpp']]],
   ['sql_23',['sql',['../structfunction_vars.html#ab2c9a87d114fe4f837f6051d7e44c67a',1,'functionVars']]],
   ['stringcallback_24',['stringCallback',['../db_8hpp.html#a8cd33f00de36f098d994aef4a17cbcd7',1,'db.hpp']]],
-  ['strong_20¿cómo_20funciona_20la_20cuota_20strong_25',['&lt;strong&gt;¿Cómo funciona la cuota?&lt;/strong&gt;',['../md__r_e_a_d_m_e.html#autotoc_md19',1,'']]],
-  ['strong_20dualidad_20de_20cuentas_3a_20strong_26',['&lt;strong&gt;Dualidad de cuentas:&lt;/strong&gt;',['../md__r_e_a_d_m_e.html#autotoc_md5',1,'']]],
-  ['strong_20funcionamiento_20de_20cuentas_20bancarias_20strong_27',['&lt;strong&gt;Funcionamiento de cuentas bancarias.&lt;/strong&gt;',['../md__r_e_a_d_m_e.html#autotoc_md3',1,'']]],
-  ['strong_20garantías_20y_20tipos_20de_20crédito_20strong_28',['&lt;strong&gt;Garantías y Tipos de Crédito&lt;/strong&gt;',['../md__r_e_a_d_m_e.html#autotoc_md18',1,'']]],
-  ['strong_20modalidades_20strong_29',['&lt;strong&gt;Modalidades&lt;/strong&gt;',['../md__r_e_a_d_m_e.html#autotoc_md16',1,'']]],
-  ['strong_20requisitos_20para_20el_20crédito_20strong_30',['&lt;strong&gt;Requisitos para el crédito&lt;/strong&gt;',['../md__r_e_a_d_m_e.html#autotoc_md15',1,'']]],
-  ['strong_20tipos_20de_20cuentas_20bancarias_20strong_31',['&lt;strong&gt;Tipos de cuentas Bancarias.&lt;/strong&gt;',['../md__r_e_a_d_m_e.html#autotoc_md4',1,'']]],
-  ['strong_20tipos_20de_20tasas_20de_20interés_20strong_32',['&lt;strong&gt;Tipos de tasas de interés&lt;/strong&gt;',['../md__r_e_a_d_m_e.html#autotoc_md17',1,'']]]
+  ['strong_20¿cómo_20funciona_20la_20cuota_20strong_25',['&lt;strong&gt;¿Cómo funciona la cuota?&lt;/strong&gt;',['../md__r_e_a_d_m_e.html#autotoc_md21',1,'']]],
+  ['strong_20dualidad_20de_20cuentas_3a_20strong_26',['&lt;strong&gt;Dualidad de cuentas:&lt;/strong&gt;',['../md__r_e_a_d_m_e.html#autotoc_md7',1,'']]],
+  ['strong_20funcionamiento_20de_20cuentas_20bancarias_20strong_27',['&lt;strong&gt;Funcionamiento de cuentas bancarias.&lt;/strong&gt;',['../md__r_e_a_d_m_e.html#autotoc_md5',1,'']]],
+  ['strong_20garantías_20y_20tipos_20de_20crédito_20strong_28',['&lt;strong&gt;Garantías y Tipos de Crédito&lt;/strong&gt;',['../md__r_e_a_d_m_e.html#autotoc_md20',1,'']]],
+  ['strong_20modalidades_20strong_29',['&lt;strong&gt;Modalidades&lt;/strong&gt;',['../md__r_e_a_d_m_e.html#autotoc_md18',1,'']]],
+  ['strong_20requisitos_20para_20el_20crédito_20strong_30',['&lt;strong&gt;Requisitos para el crédito&lt;/strong&gt;',['../md__r_e_a_d_m_e.html#autotoc_md17',1,'']]],
+  ['strong_20tipos_20de_20cuentas_20bancarias_20strong_31',['&lt;strong&gt;Tipos de cuentas Bancarias.&lt;/strong&gt;',['../md__r_e_a_d_m_e.html#autotoc_md6',1,'']]],
+  ['strong_20tipos_20de_20tasas_20de_20interés_20strong_32',['&lt;strong&gt;Tipos de tasas de interés&lt;/strong&gt;',['../md__r_e_a_d_m_e.html#autotoc_md19',1,'']]]
 ];

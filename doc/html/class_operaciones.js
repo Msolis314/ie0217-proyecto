@@ -8,6 +8,7 @@ var class_operaciones =
     [ "depositar", "class_operaciones.html#aa3722f4153bd4fe106607313178af258", null ],
     [ "escribirHistorial", "class_operaciones.html#a9953a7276ca3f5cf33fcbee8ba0bdab1", null ],
     [ "imprimirHistorialTransacciones", "class_operaciones.html#a41ce4b76d042efb994a447530035e976", null ],
+    [ "imprimirHistorialTransferenciasRecibidas", "class_operaciones.html#ab84b05a02d86577ba5292ede5d345d23", null ],
     [ "obtenerFechaHoraActual", "class_operaciones.html#a480f4251e6fa4405a27c404d42b96be2", null ],
     [ "pagarPrestamo", "class_operaciones.html#a4c1498e817db5e60ecfee0ddbd5a8d77", null ],
     [ "pedirMonto", "class_operaciones.html#a6da7fd4989db58b9ac1bf6a772aba05b", null ],

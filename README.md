@@ -1,5 +1,35 @@
 # Sistema Bancario
+
+
+
 El presente repositorio contiene el proyecto final del curso IE-0217 del primer semestre de 2024. El objetivo central del programa es emular un sistema bancario que maneje cuentas de varios clientes y realice transacciones, además de incluir un sistema de crédito.
+## Compilación Final
+
+Para compilar el programa despues de clonar el repositorio ejecutar lo siguiente en la terminal:
+
+```bash
+make
+```
+
+Después, si se necesitan instalar dependecias:
+
+```bash
+make install
+```
+
+Para correr el programa:
+
+```bash
+make run
+```
+
+Para limpiar el directorio de _bin_:
+```bash
+make clean
+```
+## Documentación 
+El link a la documentación es el siguiente:
+[https://ie0217-proyectofinal.netlify.app](https://ie0217-proyectofinal.netlify.app)
 ## Cuentas Bancarías.
 
 ### ¿Qué es una cuenta bancaría?

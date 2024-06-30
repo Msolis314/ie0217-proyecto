@@ -120,6 +120,9 @@ Métodos públicos</h2></td></tr>
 <tr class="memitem:a41ce4b76d042efb994a447530035e976" id="r_a41ce4b76d042efb994a447530035e976"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a41ce4b76d042efb994a447530035e976">imprimirHistorialTransacciones</a> (int IdCliente)</td></tr>
 <tr class="memdesc:a41ce4b76d042efb994a447530035e976"><td class="mdescLeft">&#160;</td><td class="mdescRight">Imprimir historial de transacciones del usuario.  <br /></td></tr>
 <tr class="separator:a41ce4b76d042efb994a447530035e976"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ab84b05a02d86577ba5292ede5d345d23" id="r_ab84b05a02d86577ba5292ede5d345d23"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ab84b05a02d86577ba5292ede5d345d23">imprimirHistorialTransferenciasRecibidas</a> (int idCliente)</td></tr>
+<tr class="memdesc:ab84b05a02d86577ba5292ede5d345d23"><td class="mdescLeft">&#160;</td><td class="mdescRight">Imprimir historial de transferencias rebicidas por el usuario.  <br /></td></tr>
+<tr class="separator:ab84b05a02d86577ba5292ede5d345d23"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aa3722f4153bd4fe106607313178af258" id="r_aa3722f4153bd4fe106607313178af258"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#aa3722f4153bd4fe106607313178af258">depositar</a> (<a class="el" href="entidad_bancaria_8hpp.html#a89cef56c670c4475a5f0bf4882a52f83">Monedas</a> cambio, float <a class="el" href="#adc730bdb78e6d4008caec69df939cdfc">monto</a>)</td></tr>
 <tr class="memdesc:aa3722f4153bd4fe106607313178af258"><td class="mdescLeft">&#160;</td><td class="mdescRight">Depositar dinero en la cuenta.  <br /></td></tr>
 <tr class="separator:aa3722f4153bd4fe106607313178af258"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -204,7 +207,7 @@ Atributos privados</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definición en la línea <a class="el" href="transaciones_8cpp_source.html#l00114">114</a> del archivo <a class="el" href="transaciones_8cpp_source.html">transaciones.cpp</a>.</p>
+<p class="definition">Definición en la línea <a class="el" href="transaciones_8cpp_source.html#l00179">179</a> del archivo <a class="el" href="transaciones_8cpp_source.html">transaciones.cpp</a>.</p>
 
 </div>
 </div>
@@ -233,7 +236,7 @@ Atributos privados</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Devuelve</dt><dd>1 si la cuenta es de la moneda correcta, 0 si no lo es. </dd></dl>
 
-<p class="definition">Definición en la línea <a class="el" href="transaciones_8cpp_source.html#l00478">478</a> del archivo <a class="el" href="transaciones_8cpp_source.html">transaciones.cpp</a>.</p>
+<p class="definition">Definición en la línea <a class="el" href="transaciones_8cpp_source.html#l00543">543</a> del archivo <a class="el" href="transaciones_8cpp_source.html">transaciones.cpp</a>.</p>
 
 </div>
 </div>
@@ -296,7 +299,7 @@ Atributos privados</h2></td></tr>
 <dl class="section return"><dt>Devuelve</dt><dd>Saldo de la cuenta.</dd></dl>
 <p>Función para consultar el saldo de la cuenta, se utilza en depositar y retirar </p>
 
-<p class="definition">Definición en la línea <a class="el" href="transaciones_8cpp_source.html#l00440">440</a> del archivo <a class="el" href="transaciones_8cpp_source.html">transaciones.cpp</a>.</p>
+<p class="definition">Definición en la línea <a class="el" href="transaciones_8cpp_source.html#l00505">505</a> del archivo <a class="el" href="transaciones_8cpp_source.html">transaciones.cpp</a>.</p>
 
 </div>
 </div>
@@ -328,7 +331,7 @@ Atributos privados</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definición en la línea <a class="el" href="transaciones_8cpp_source.html#l00117">117</a> del archivo <a class="el" href="transaciones_8cpp_source.html">transaciones.cpp</a>.</p>
+<p class="definition">Definición en la línea <a class="el" href="transaciones_8cpp_source.html#l00182">182</a> del archivo <a class="el" href="transaciones_8cpp_source.html">transaciones.cpp</a>.</p>
 
 </div>
 </div>
@@ -374,7 +377,34 @@ Atributos privados</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definición en la línea <a class="el" href="transaciones_8cpp_source.html#l00076">76</a> del archivo <a class="el" href="transaciones_8cpp_source.html">transaciones.cpp</a>.</p>
+<p class="definition">Definición en la línea <a class="el" href="transaciones_8cpp_source.html#l00079">79</a> del archivo <a class="el" href="transaciones_8cpp_source.html">transaciones.cpp</a>.</p>
+
+</div>
+</div>
+<a id="ab84b05a02d86577ba5292ede5d345d23" name="ab84b05a02d86577ba5292ede5d345d23"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ab84b05a02d86577ba5292ede5d345d23">&#9670;&#160;</a></span>imprimirHistorialTransferenciasRecibidas()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void Operaciones::imprimirHistorialTransferenciasRecibidas </td>
+          <td>(</td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>idCliente</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Imprimir historial de transferencias rebicidas por el usuario. </p>
+<dl class="params"><dt>Parámetros</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">idCliente</td><td>id del cliente en sesión. </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="definition">Definición en la línea <a class="el" href="transaciones_8cpp_source.html#l00129">129</a> del archivo <a class="el" href="transaciones_8cpp_source.html">transaciones.cpp</a>.</p>
 
 </div>
 </div>
@@ -396,7 +426,7 @@ Atributos privados</h2></td></tr>
 <p>Obtener fecha y hora. </p>
 <dl class="section return"><dt>Devuelve</dt><dd>Fecha y hora en formato de cadena. </dd></dl>
 
-<p class="definition">Definición en la línea <a class="el" href="transaciones_8cpp_source.html#l00039">39</a> del archivo <a class="el" href="transaciones_8cpp_source.html">transaciones.cpp</a>.</p>
+<p class="definition">Definición en la línea <a class="el" href="transaciones_8cpp_source.html#l00042">42</a> del archivo <a class="el" href="transaciones_8cpp_source.html">transaciones.cpp</a>.</p>
 
 </div>
 </div>
@@ -441,7 +471,7 @@ Atributos privados</h2></td></tr>
 </dl>
 <dl class="section return"><dt>Devuelve</dt><dd>1 si el monto es valido, 0 si no lo es. </dd></dl>
 
-<p class="definition">Definición en la línea <a class="el" href="transaciones_8cpp_source.html#l00511">511</a> del archivo <a class="el" href="transaciones_8cpp_source.html">transaciones.cpp</a>.</p>
+<p class="definition">Definición en la línea <a class="el" href="transaciones_8cpp_source.html#l00576">576</a> del archivo <a class="el" href="transaciones_8cpp_source.html">transaciones.cpp</a>.</p>
 
 </div>
 </div>
@@ -497,7 +527,7 @@ Atributos privados</h2></td></tr>
   </dd>
 </dl>
 
-<p class="definition">Definición en la línea <a class="el" href="transaciones_8cpp_source.html#l00048">48</a> del archivo <a class="el" href="transaciones_8cpp_source.html">transaciones.cpp</a>.</p>
+<p class="definition">Definición en la línea <a class="el" href="transaciones_8cpp_source.html#l00051">51</a> del archivo <a class="el" href="transaciones_8cpp_source.html">transaciones.cpp</a>.</p>
 
 </div>
 </div>
@@ -531,7 +561,7 @@ Atributos privados</h2></td></tr>
 <dl class="section note"><dt>Nota</dt><dd>Se ha modificado la función para que el monto sea un parámetro de entrada</dd></dl>
 <p>Función para retirar dinero de la cuenta, monto tambien se modifica adentro </p>
 
-<p class="definition">Definición en la línea <a class="el" href="transaciones_8cpp_source.html#l00285">285</a> del archivo <a class="el" href="transaciones_8cpp_source.html">transaciones.cpp</a>.</p>
+<p class="definition">Definición en la línea <a class="el" href="transaciones_8cpp_source.html#l00350">350</a> del archivo <a class="el" href="transaciones_8cpp_source.html">transaciones.cpp</a>.</p>
 
 </div>
 </div>
@@ -567,7 +597,7 @@ Atributos privados</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p class="definition">Definición en la línea <a class="el" href="transaciones_8cpp_source.html#l00528">528</a> del archivo <a class="el" href="transaciones_8cpp_source.html">transaciones.cpp</a>.</p>
+<p class="definition">Definición en la línea <a class="el" href="transaciones_8cpp_source.html#l00593">593</a> del archivo <a class="el" href="transaciones_8cpp_source.html">transaciones.cpp</a>.</p>
 
 </div>
 </div>

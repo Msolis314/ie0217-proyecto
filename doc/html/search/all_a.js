@@ -10,7 +10,7 @@ var searchData=
   ['menu_5fcliente_7',['menu_cliente',['../cliente_8hpp.html#abd6d9bfc40db40306434ba99fa1b4ddc',1,'cliente.hpp']]],
   ['menuoptions_8',['MenuOptions',['../menu_8hpp.html#a63775c0553a6f57aca7b67f7be477b75',1,'menu.hpp']]],
   ['menuoptionsc_9',['MenuOptionsC',['../cliente_8hpp.html#a75ffd56b5714be77315644d591cb1f14',1,'cliente.hpp']]],
-  ['modalidades_20strong_10',['&lt;strong&gt;Modalidades&lt;/strong&gt;',['../md__r_e_a_d_m_e.html#autotoc_md16',1,'']]],
+  ['modalidades_20strong_10',['&lt;strong&gt;Modalidades&lt;/strong&gt;',['../md__r_e_a_d_m_e.html#autotoc_md18',1,'']]],
   ['moneda_11',['moneda',['../class_c_d_p.html#a350811aa128ae96bfb7b10f7bc7662a7',1,'CDP::moneda'],['../class_c_d_pintereses.html#ac97e5eacf5c107b3a753ee3f396d15a5',1,'CDPintereses::moneda']]],
   ['moneda_12',['Moneda',['../consulta_8hpp.html#afa24192aab0a941d68eff6346fe8e931',1,'consulta.hpp']]],
   ['monedaprestamo_13',['MonedaPrestamo',['../_prestamos_8hpp.html#ac0e920c30125b59b702e6f166625dbe3',1,'Prestamos.hpp']]],

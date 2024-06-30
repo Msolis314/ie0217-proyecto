@@ -96,18 +96,31 @@ $(function(){initNavTree('md__r_e_a_d_m_e.html',''); initResizable(); });
   <div class="headertitle"><div class="title">Sistema Bancario</div></div>
 </div><!--header-->
 <div class="contents">
-<div class="textblock"><p><a class="anchor" id="autotoc_md0"></a>El presente repositorio contiene el proyecto final del curso IE-0217 del primer semestre de 2024. El objetivo central del programa es emular un sistema bancario que maneje cuentas de varios clientes y realice transacciones, además de incluir un sistema de crédito. </p>
+<div class="textblock"><p><a class="anchor" id="autotoc_md0"></a></p>
+<p>El presente repositorio contiene el proyecto final del curso IE-0217 del primer semestre de 2024. El objetivo central del programa es emular un sistema bancario que maneje cuentas de varios clientes y realice transacciones, además de incluir un sistema de crédito. </p>
 <h1><a class="anchor" id="autotoc_md1"></a>
+Compilación Final</h1>
+<p>Para compilar el programa despues de clonar el repositorio ejecutar lo siguiente en la terminal:</p>
+<div class="fragment"><div class="line">make</div>
+</div><!-- fragment --><p>Después, si se necesitan instalar dependecias:</p>
+<div class="fragment"><div class="line">make install</div>
+</div><!-- fragment --><p>Para correr el programa:</p>
+<div class="fragment"><div class="line">make run</div>
+</div><!-- fragment --><p>Para limpiar el directorio de <em>bin</em>: </p><div class="fragment"><div class="line">make clean</div>
+</div><!-- fragment --> <h1><a class="anchor" id="autotoc_md2"></a>
+Documentación</h1>
+<p>El link a la documentación es el siguiente: <a href="https://ie0217-proyectofinal.netlify.app">https://ie0217-proyectofinal.netlify.app</a> </p>
+<h1><a class="anchor" id="autotoc_md3"></a>
 Cuentas Bancarías.</h1>
-<h2><a class="anchor" id="autotoc_md2"></a>
+<h2><a class="anchor" id="autotoc_md4"></a>
 ¿Qué es una cuenta bancaría?</h2>
 <p>Una cuenta bancaría es un espacio virtual donde el cliente interacciona con el banco, permitiendo que el usuario pueda almacenar su dinero en forma de depósito. Además, tiene control del dinero, dando libertad al beneficiario del servicio de gestionar su dinero para realizar pagos, recibiendo ingresos o bien, para efectuar retiros de efectivo.</p>
 <p>Una cuenta bancaria se puede comprender como “*un contrato entre el cliente y el banco, donde el titular deposita una cantidad de dinero y la entidad adquiere el compromiso de custodiarlo*”Real, A.(2024).</p>
 <p>Donde la persona usuaria puede hacer uso del dinero en cualquier momento, permitiendo que este pueda realizar diferentes transacciones, como realizar pagos, retiros o ver los movimientos que ha realizado durante cierto periodo de tiempo.</p>
-<h2><a class="anchor" id="autotoc_md3"></a>
+<h2><a class="anchor" id="autotoc_md5"></a>
 <b>Funcionamiento de cuentas bancarias.</b></h2>
 <p>El funcionamiento principal de una cuenta bancaría es permitirle al usuario realizar operaciones y tener acceso a su dinero en cualquier momento, las cuentas pueden materializarse en diferentes tipos como cuentas corrientes o de ahorro, dando diferentes funcionalidades y la posibilidad de ejecutar diversas transacciones.</p>
-<h2><a class="anchor" id="autotoc_md4"></a>
+<h2><a class="anchor" id="autotoc_md6"></a>
 <b>Tipos de cuentas Bancarias.</b></h2>
 <ul>
 <li><b>Cuenta Corriente</b> : Estas son de las cuentas más utilizadas por los usuarios, ya que permite realizar todas las operaciones que se necesitan a diario, dando una gran flexibilidad con el uso del dinero, es importante considerar que en su mayoría este tipo de cuentas no ofrecen remuneración.</li>
@@ -124,31 +137,31 @@ Cuentas Bancarías.</h1>
 </li>
 <li><b>Cuenta moneda extranjera</b>: Este tipo de cuentas va dirigido a usuarios en que necesitan hacer uso de distintas divisas, es útil para esos clientes que realizan operaciones internacionales.</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md5"></a>
+<h2><a class="anchor" id="autotoc_md7"></a>
 <b>Dualidad de cuentas:</b></h2>
 <p>Es importante mencionar, que un cliente puede poseer hasta dos cuentas bancarias, una en colones y otra en dólares, con el fin de que pueda gestionar sus ahorros con la entidad bancaria. Además, de poder tener certificados de depósito a plazo <b><a class="el" href="class_c_d_p.html" title="Clase que representa un Certificado de Depósito a Plazo.">CDP</a></b>.</p>
-<h2><a class="anchor" id="autotoc_md6"></a>
+<h2><a class="anchor" id="autotoc_md8"></a>
 ¿Qué es Certificados de depósito a plazo **(CDP)**?</h2>
 <p>Un <a class="el" href="class_c_d_p.html" title="Clase que representa un Certificado de Depósito a Plazo.">CDP</a> es ”*un depósito que se pacta entre el banco y el dueño de los fondos, a un período de tiempo determinado*”Romero, C.(2022). Con base a lo anterior, este depósito que se realiza tiene una tasa de interés que está relacionada al monto y al período de tiempo, es importante saber que este tipo de depósitos no permite retiros ni incrementos de saldo y para retirarlo el usuario debe esperar a la fecha establecida.</p>
-<h2><a class="anchor" id="autotoc_md7"></a>
+<h2><a class="anchor" id="autotoc_md9"></a>
 Operaciones Disponibles</h2>
 <p>Los usuarios, tienen acceso a diversas operaciones, tales como retiro, depósito, transferencias, pagos, entre otras. En esta sección se hará una descripción de las diferentes operaciones que se pueden realizar en las cuentas.</p>
-<h3><a class="anchor" id="autotoc_md8"></a>
+<h3><a class="anchor" id="autotoc_md10"></a>
 Retiro</h3>
 <p>Un retiro es cuando un cliente del banco, retira su dinero de su cuenta bancaria, esto se puede hacer en línea, mediante un cajero autómatico o bien, en el banco físico.</p>
-<h3><a class="anchor" id="autotoc_md9"></a>
+<h3><a class="anchor" id="autotoc_md11"></a>
 Depósito</h3>
 <p>El depósito es más bien cuando el usuario agrega dinero a su cuenta bancaria, esto puede hacerse mediante el uso de dinero en efectivo, cheque o mediante algún dispositivo.</p>
-<h3><a class="anchor" id="autotoc_md10"></a>
+<h3><a class="anchor" id="autotoc_md12"></a>
 Transferencias entre cuentas a otros</h3>
 <p>Esta operación lo que se encarga es de permitir al usuario hacer una tranferencia de fondos de una cuenta bancaria a otra del mismo banco o externo a a estede, este trámite se puede ejecutar en línea o en la sucursal.</p>
-<h3><a class="anchor" id="autotoc_md11"></a>
+<h3><a class="anchor" id="autotoc_md13"></a>
 Abonos a préstamos propios</h3>
 <p>Los abonos a préstamos propios, es cuando el cliente es el responsable del préstamo y realiza un pago del mismo, ya sea hipotecario o préstamo personal. La idea de realizar esta operación es reducir el saldo pendiente del préstamo como generar pago de intereses.</p>
-<h3><a class="anchor" id="autotoc_md12"></a>
+<h3><a class="anchor" id="autotoc_md14"></a>
 Abonos a préstamos de otras personas</h3>
 <p>Es en su esencia igual al abono de préstamos propios, pero su diferencia pricipal es que el pago se realiza al prétamo de otras personas.</p>
-<h1><a class="anchor" id="autotoc_md13"></a>
+<h1><a class="anchor" id="autotoc_md15"></a>
 Registro de transacciones</h1>
 <p>El registro de transacciones es de vital importancia dentro de un sistema financiero, este vuelve al sistema más seguro, transparente y facilita la realización de análisis y reportes. Esta funcionalidad debe incluir algunos datos mínimos para asegurar su funcionalidad:</p><ol type="1">
 <li>Momento exacto en que se realizó la transacción, fecha y hora.</li>
@@ -158,7 +171,7 @@ Registro de transacciones</h1>
 <li>Identificador único de la transacción.</li>
 <li>Razón o detalles adicionales sobre la transacción.</li>
 </ol>
-<h1><a class="anchor" id="autotoc_md14"></a>
+<h1><a class="anchor" id="autotoc_md16"></a>
 Prestamos</h1>
 <p>La Asociación Bancaria Costarricense (2011) menciona que el crédito es una forma de financiamiento del sistema financiero que permite al usuario adquirir bienes y servicios a cambio de devolver el monto prestado bajo los términos de plazo e intereses establecidos en el contrato de crédito.</p>
 <p>En el desarrollo de un sistema de gestión bancaria en C++, es fundamental comprender y gestionar conceptos clave como la tasa de interés y los diversos tipos de préstamos. En este proyecto, abordaremos la implementación de estos conceptos en C++, asegurando que el sistema sea robusto, eficiente y fácil de usar para los usuarios finales.</p>
@@ -172,7 +185,7 @@ Prestamos</h1>
 <li><b>Tasa nominal</b>: Según Trigueros (2021), es el monto que el banco declara como interés a pagar. Es un valor estático que no considera las fluctuaciones monetarias ni la frecuencia de capitalización del interés.</li>
 <li><b>Tasa efectiva</b>: Es la que durante el periodo de pago genera al banco sus intereses capitalizables, similar al interés compuesto</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md15"></a>
+<h2><a class="anchor" id="autotoc_md17"></a>
 <b>Requisitos para el crédito</b></h2>
 <p>El banco evalúa:</p>
 <ul>
@@ -180,14 +193,14 @@ Prestamos</h1>
 <li>Garantía: Respaldo que obtiene el banco en caso de incumplimiento del contrato. Puede ser hipotecaria, fiduciaria o prendaria.</li>
 <li>Historial crediticio: El banco solicitará consultar el historial crediticio del solicitante en la central de información crediticia de la Superintendencia General de Entidades Financieras para verificar su responsabilidad en el pago de créditos. Una buena calificación se obtiene si se pagan las deudas en los plazos establecidos.</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md16"></a>
+<h2><a class="anchor" id="autotoc_md18"></a>
 <b>Modalidades</b></h2>
 <ul>
 <li>Crédito directo: Préstamo común, donde la entidad financiera otorga una cantidad de dinero al solicitante bajo las condiciones de monto, plazo, garantía y tasas de interés establecidas en el contrato de préstamo.</li>
 <li>Línea de crédito: El banco otorga al deudor un monto que puede utilizar total o parcialmente y luego abonar durante un tiempo determinado.</li>
 <li>Línea de crédito revolutivo: Funcionamiento básico de las tarjetas de crédito, donde el banco autoriza una cantidad de dinero que el solicitante puede usar hasta su límite y luego reiniciar el monto si paga el principal de la deuda.</li>
 </ul>
-<h2><a class="anchor" id="autotoc_md17"></a>
+<h2><a class="anchor" id="autotoc_md19"></a>
 <b>Tipos de tasas de interés</b></h2>
 <p>La tasa de interés es el porcentaje que se cobra sobre un monto prestado en un determinado plazo de tiempo. Según el contexto en que se trate, se pueden presentar variaciones en cómo se aplican estos intereses:</p>
 <ul>
@@ -213,7 +226,7 @@ Prestamos</h1>
 <li>𝑡 es el tiempo en años.</li>
 </ul>
 <p>(Waghorn P., 2020).</p>
-<h2><a class="anchor" id="autotoc_md18"></a>
+<h2><a class="anchor" id="autotoc_md20"></a>
 <b>Garantías y Tipos de Crédito</b></h2>
 <p><b><a class="el" href="class_prestamos.html" title="Clase que realiza las operaciones de prestamos.">Prestamos</a></b></p>
 <p><em>Préstamo personal</em></p>
@@ -246,13 +259,13 @@ Prestamos</h1>
 <td class="markdownTableBodyNone"><a class="el" href="consulta_8hpp.html#adf188184a54d04a90f22079c50259b2ca184daff620aca4ad23fd2bf70d0b76af">Personal(Asociado a Activos)</a>   </td><td class="markdownTableBodyNone">CoopeAnde   </td><td class="markdownTableBodyNone">Interés nominal desde el 15 %. Tasa de interés total anual (TITA) desde 16.3   </td><td class="markdownTableBodyNone">NA   </td></tr>
 </table>
 <p>Fuentes: <a href="https://bienvenido.davivienda.cr/wps/wcm/connect/personasCR/eb9fbfc4-f3be-4ece-af28-72eccbd9cde8/Folleto_explicativo_Hipoteca.pdf?MOD=AJPERES&amp;CVID=n.S7N74">Davivienda</a> , <a href="https://www.coopeande1.com/productos-servicios/credito-prendario-dolares">CoopeAnde</a> , <a href="https://www.baccredomatic.com/es-cr/personas/prestamos?categoria=vehiculos&amp;bacid=CRIN-MULT-ACF-000007-GL-AW-PR-GG-A8-SR-00000/SEARCH-VEL-INSTITUCIONAL-VENTAS&amp;gad_source=1&amp;gclid=CjwKCAjw9cCyBhBzEiwAJTUWNbd7czAkO4HtSXMnLdln5kKmobKdZs1DH_5MHKPix7pVJAUPiRxTmxoCpvYQAvD_BwE">BAC</a></p>
-<h2><a class="anchor" id="autotoc_md19"></a>
+<h2><a class="anchor" id="autotoc_md21"></a>
 <b>¿Cómo funciona la cuota?</b></h2>
 <p>Según (INA, 2020), esta se determina en función del monto de la deuda, la tasa de interés y el plazo. Las tasas de interés variables se actualizan según un índice de referencia, como la tasa básica pasiva establecida por el <a class="el" href="class_banco.html" title="Clase que representa un banco.">Banco</a> Central de Costa Rica. Cualquier variación en este parámetro modifica la tasa de interés y, por tanto, la cuota a pagar. Este tipo de tasa es usual en créditos hipotecarios o prendarios. En créditos personales o de entidades no bancarias, suelen utilizarse tasas de interés fijas.</p>
 <p><em>La cuota mensual se define como cada uno de los pagos mensuales que hace el comprador para amortizar la deuda y pagar los intereses generados por el financiamiento</em></p>
 <p>(Artículo 2 del Decreto Ejecutivo 37899-MEIC, reglamento a la Ley N.7472, Ley de Promoción de la Competencia y Defensa Efectiva del Consumidor).</p>
 <p>La amortización, o aporte al capital, es el pago del monto prestado. Cuando se realiza un pago, la entidad actualiza el saldo. La amortización comienza igual al monto prestado y disminuye a cero al final del plazo. La cuota se compone de la amortización más los intereses. Al final del crédito, el deudor habrá pagado la cantidad debida más los intereses. Al inicio del crédito, la porción de interés es mayor que la amortización del capital. A medida que avanza el plazo, esta relación se invierte. Un deudor puede hacer pagos adicionales especificando que se destinen a la amortización, reduciendo así el saldo y los intereses. Si no se especifica, el adelanto se considera un pago de la cuota, cubriendo los intereses del siguiente plazo. En caso de morosidad, el siguiente pago cubrirá primero los intereses y luego la amortización.</p>
-<h1><a class="anchor" id="autotoc_md20"></a>
+<h1><a class="anchor" id="autotoc_md22"></a>
 Diseño de la implementación</h1>
 <p>La implementación del proyecto se basa en un modelo modular con el objetivo de facilitar el trabajo colaborativo dentro del grupo. Se aprovecharán los conceptos de programación orientada a objetos para abstraer las distintas entidades que conforman el sistema bancario como instancias de clases, permitiendo así que interactúen entre sí.</p>
 <p><img src="https://github.com/Msolis314/Clases/blob/main/ClasesProyectoIE-0217.jpg" alt="UML Clases" class="inline"/></p>
@@ -261,7 +274,7 @@ Diseño de la implementación</h1>
 <p>Otro aspecto relevante son los préstamos, ya que cada cliente puede tener uno o más préstamos en colones o dólares, cada uno con sus propios métodos y características. Se sigue un enfoque similar al definir una clase que gestione el acceso a la base de datos con esta información, identificando el id único de cada préstamo y el usuario al que pertenece.</p>
 <p>Cabe señalar que este diseño se enfoca principalmente en manejar la información de los usuarios y el programa a través del sistema de bases de datos. Se busca mejorar la mantenibilidad a largo plazo del código y facilitar el proceso de colaboración, ya que la mayor parte del trabajo se centrará en cómo interactuar con las tablas de la base de datos y no en coordinar los datos dentro del código. Finalmente, se espera utilizar, a lo largo del desarrollo e implementación, diversas herramientas aprendidas durante el curso. Además de la programación orientada a objetos, será necesario emplear memoria dinámica, estructuras de datos, un uso eficiente de los recursos computacionales y un manejo adecuado de excepciones para cumplir satisfactoriamente con los objetivos del proyecto. El esquema de la base de datos se presenta a continuación:</p>
 <p><img src="https://github.com/Msolis314/Clases/blob/main/Bases%20de%20Datos.jpg" alt="Esquema Base de Datos" class="inline"/></p>
-<h2><a class="anchor" id="autotoc_md21"></a>
+<h2><a class="anchor" id="autotoc_md23"></a>
 Cronograma</h2>
 <table class="markdownTable">
 <tr class="markdownTableHead">
@@ -303,10 +316,10 @@ Cronograma</h2>
 <tr class="markdownTableRowEven">
 <td class="markdownTableBodyNone">jueves 4 de julio   </td><td class="markdownTableBodyNone">Presentación Final   </td><td class="markdownTableBodyNone">Todos los integrantes   </td></tr>
 </table>
-<h2><a class="anchor" id="autotoc_md22"></a>
+<h2><a class="anchor" id="autotoc_md24"></a>
 Avance</h2>
 <p>En el presente avance se completo la definición de la base de datos, la implementación de las clases <a class="el" href="class_cliente.html" title="es un cliente de una entidad bancaria.">Cliente</a>, <a class="el" href="class_banco.html" title="Clase que representa un banco.">Banco</a> y Entidad Bancaria y la creación del sistema de Login.</p>
-<h3><a class="anchor" id="autotoc_md23"></a>
+<h3><a class="anchor" id="autotoc_md25"></a>
 Base de Datos</h3>
 <p>Debido a tiempo y cuestiones de implementación se tomó la desición de utilizar una base local (Squlite3) en vez de una remota para el manejo de los datos. Apesar que se pierde la opción de escalabilidad para el proyecto y la coloaboración simultanea en la base de datos se consideró que enfocarse en la modularidad y funcionamiento del código era de mayor relevancia. Especialmente considerando la importancia de que todos los integrante colaboren de forma independiente en una parte del proyecto. Además al esquema propuesto para la base de datos se agrego una nueva tabla con el objetivo de guardar las contraseñas de los clientes y su llave (Salt) de desencriptación. La encriptación de contraseñas se realizan mediante la librería <code>Openssl</code>. Los pasos para la encriptación se explican a continuación:</p>
 <ol type="1">
@@ -319,7 +332,7 @@ Base de Datos</h3>
 <p><img src="https://github.com/Msolis314/Clases/blob/main/varios/PASSSS.png" alt="TablaPasswords" class="inline"/></p>
 <p>El nuevo esquema de la base de datos es el siguiente:</p>
 <p><img src="https://github.com/Msolis314/Clases/blob/main/varios/Bases%20de%20Datos%20(3).jpg" alt="Esquema Base de Datos Avance" class="inline"/></p>
-<h3><a class="anchor" id="autotoc_md24"></a>
+<h3><a class="anchor" id="autotoc_md26"></a>
 Login</h3>
 <p>Para la implementación del sistema de <em>Login</em> se procedió como detalla el diagrama de flujo siguiente:</p>
 <p><img src="https://github.com/Msolis314/Clases/blob/main/varios/Flowchart.jpg" alt="Diagrama _Login_" class="inline"/></p>
@@ -342,7 +355,7 @@ Login</h3>
 <p class="startli"><img src="https://github.com/Msolis314/Clases/blob/main/varios/InvalidName2.png" alt="https://github.com/Msolis314/Clases/blob/main/varios/InvalidName2.png" class="inline"/></p>
 </li>
 </ul>
-<h2><a class="anchor" id="autotoc_md25"></a>
+<h2><a class="anchor" id="autotoc_md27"></a>
 Compilación</h2>
 <p>Se necesitan de algunas librerías adicionales a las estandar para ejecutar el programa. Se facilitó de un script que se encarga de descargar estás librerías en el sistema operativo linux. Seguir los siguientes pasos para completar la instalación:</p><ol type="1">
 <li><p class="startli">Dar permisos de ejecución al script</p>
@@ -356,7 +369,7 @@ Compilación</h2>
 <div class="fragment"><div class="line">make</div>
 </div><!-- fragment --><p> Para ejecutar:</p>
 <div class="fragment"><div class="line">./main.exe</div>
-</div><!-- fragment --><h2><a class="anchor" id="autotoc_md26"></a>
+</div><!-- fragment --><h2><a class="anchor" id="autotoc_md28"></a>
 Referencias</h2>
 <p>Asociación Bancaria Costarricense. (2011). Credito y Garantías. Biblioteca Financiera Virtual.</p>
 <p>BBVA. (s. f.). Qué es un préstamo financiero: tipos y diferencias con un crédito. BBVA. <a href="https://www.bbva.com/es/salud-financiera/que-es-un-prestamo-financiero-tipos-y-diferencias-con-un-credito/">https://www.bbva.com/es/salud-financiera/que-es-un-prestamo-financiero-tipos-y-diferencias-con-un-credito/</a></p>

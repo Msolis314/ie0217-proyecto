@@ -1,6 +1,6 @@
 var searchData=
 [
-  ['garantías_20y_20tipos_20de_20crédito_20strong_0',['&lt;strong&gt;Garantías y Tipos de Crédito&lt;/strong&gt;',['../md__r_e_a_d_m_e.html#autotoc_md18',1,'']]],
+  ['garantías_20y_20tipos_20de_20crédito_20strong_0',['&lt;strong&gt;Garantías y Tipos de Crédito&lt;/strong&gt;',['../md__r_e_a_d_m_e.html#autotoc_md20',1,'']]],
   ['gen_5fid_5fcuenta_1',['GEN_ID_CUENTA',['../cliente_8hpp.html#a75ffd56b5714be77315644d591cb1f14aa1022ada0c9059dd435e50dd2067641a',1,'cliente.hpp']]],
   ['generar_5fid_5fprestamo_2',['generar_id_prestamo',['../class_prestamos.html#ad23e7e24bffb3f0fde70b2a5867a1da1',1,'Prestamos']]],
   ['generarid_3',['generarID',['../class_banco.html#a56d29d9f6394b1b88e03f09770eed6ba',1,'Banco::generarID()'],['../class_c_d_p.html#acaf757092e66f07c125a55fbcfebb1f6',1,'CDP::generarID()']]],
