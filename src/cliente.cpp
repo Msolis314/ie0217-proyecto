@@ -1,3 +1,30 @@
+/*! @file cliente.cpp
+ @brief Implementacion de la clase cliente
+MIT License
+
+Copyright (c) 2024 Msolis314
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+*/
+
+
 // Incluyendo las librerias
 #include <iostream>
 #include <string>
@@ -25,6 +52,7 @@ Cliente::Cliente(std::string nombre, std::string apellido, int id) {
     this->nombre = nombre;
     this->apellido = apellido;
     this->id = id;
+    // Obtener los IDs de las cuentas del cliente
     this ->  idCuentaC= getIDCuenta(COLON);
     this ->  idCuentaD= getIDCuenta(DOLAR);
 
@@ -215,6 +243,7 @@ void Cliente::agregarCuentaD(int idCuentaD) {
 
 
 
+/// @note Este metodo genera un ID de cuenta en colones. entre 10000000000 y 99999999999
 
 int Cliente::generarIDCuentaC() {
     int minDigits = 10000000000; 
@@ -239,6 +268,7 @@ int Cliente::generarIDCuentaC() {
     return idnum;
 }
 
+/// @note Este metodo genera un ID de cuenta en dolares entre 10000 y 99999
 int Cliente::generarIDCuentaD() {
     // definiendo un rango
     long int minDigits = 10000; // si queremos que contenga al menos 5 digitos                                          
@@ -255,6 +285,7 @@ int Cliente::generarIDCuentaD() {
 }
 
 
+/// @note Este metodo verifica si un ID de cuenta ya existe en la base de datos.
 bool Cliente::checkIDCuentaExists(int idCuenta,Monedas moneda) {
     sqlite3 *db;
     int rc;                                           // verificador de que la todo funciona
@@ -330,18 +361,9 @@ int Cliente::getIDCuenta(Monedas moneda){
     return idCuenta; // Return idCuenta
 }
 
-void Cliente::agregarPrestamo(int idPrestamo) {
-    // xxxx
-}
 
-void Cliente::consultarCuentas() {
-    // xxxx
-}
 
-void Cliente::consultarPrestamos() {
-    // xxxx
-}
-
+/// @brief Metodo para realizar transacciones
 void Cliente::transaccion(){
     // Menu con todas las transacciones posibles para el cliente
     int opc;
@@ -407,7 +429,7 @@ void Cliente::transaccion(){
             op.transferir();
             break;
         case PAGOPRESTAMO:
-            prestamo.realizarAbono();
+            prestamo.realizarAbono2();
             break;
         case SOLICITUDPRESTAMO:
             prestamo.solicitarPrestamo();
@@ -439,10 +461,11 @@ void Cliente::transaccion(){
     
 }
 
+/// @details se le da al cliente la opcion de consultar su saldo en colones, dolares o en ambas monedas
 void Cliente::consultarSaldo(){
     int opc; 
     Operaciones op(this->nombre, this->apellido, this->id);
-
+    //Desplegar el menu de consulta de saldo
     do {
         std::cout << "\n------ Menú de Consulta de Saldo ------" << std::endl;
         std::cout << "1. Consultar saldo en colones" << std::endl;

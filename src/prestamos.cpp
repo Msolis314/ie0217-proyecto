@@ -1,3 +1,30 @@
+/*! @file Prestamos.cpp
+ @brief Implementacion de la clase Prestamos
+MIT License
+
+Copyright (c) 2024 Msolis314
+
+Permission is hereby granted, free of charge, to any person obtaining a copy
+of this software and associated documentation files (the "Software"), to deal
+in the Software without restriction, including without limitation the rights
+to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
+copies of the Software, and to permit persons to whom the Software is
+furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
+AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
+LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
+OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
+SOFTWARE.
+
+*/
+
+
 #include <iostream>
 #include <string>
 #include <sqlite3.h>
@@ -19,6 +46,7 @@ using namespace std;
 Prestamos::Prestamos(EntidadBancaria* entidadBancaria, std::string nombre, std::string apellido, int id)
     : entidadBancaria(entidadBancaria), cliente(nombre, apellido, id) {
     // Inicialización adicional si es necesario
+    setActualIDPrestamos();
 }       
 
 // Declaración de la función calcularCuotaVariable
@@ -932,7 +960,7 @@ void Prestamos::abonarCuota(int idPrestamo, float abono, bool esAbonoExtraordina
         }
 
         // Restar el monto convertido de la cuenta bancaria del cliente según la moneda de la cuenta
-        float montoAbonoEnCuenta = montoAbonoConvertido;
+        /*float montoAbonoEnCuenta = montoAbonoConvertido;
         if (tipoMonedaPrestamo != tipoMoneda) {
             float tipoCambio = entidadBancaria->getTipoCambio();
             if (tipoMonedaPrestamo == DOLARES_PRESTAMO) {
@@ -940,8 +968,8 @@ void Prestamos::abonarCuota(int idPrestamo, float abono, bool esAbonoExtraordina
             } else {
                 montoAbonoEnCuenta = montoAbonoConvertido; // El monto convertido ya es en colones
             }
-        }
-        restarMontoCuentaCliente(tipoMoneda, montoAbonoEnCuenta);
+        }*/
+        restarMontoCuentaCliente(tipoMoneda, abono);
 
         std::cout << "Abono realizado correctamente." << std::endl;
     } else {
@@ -949,6 +977,116 @@ void Prestamos::abonarCuota(int idPrestamo, float abono, bool esAbonoExtraordina
     }
 
     sqlite3_close(db);
+}
+void Prestamos::realizarAbono2(){
+    int opcionCliente;
+    std::string opcionClienteStr;
+    int rightChoice =0;
+    do {
+        std::cout << "¿Desea abonar a un préstamo de un cliente en sesión o de otro cliente?" << std::endl;
+        std::cout << "1. Cliente en sesión" << std::endl;
+        std::cout << "2. Otro cliente" << std::endl;
+        std::cout << "Ingrese su opción: ";
+        std::cin >> opcionClienteStr;
+        try {
+            if (!cliente.validarEntrada(opcionClienteStr, &opcionCliente)) {
+                throw std::invalid_argument("Opción no válida.");
+            }
+            if (opcionCliente < 1 || opcionCliente > 2) {
+                throw std::invalid_argument("Opción no válida.");
+            }
+            break;
+        }
+        catch (const std::invalid_argument& e) {
+            rightChoice= cliente.returnMain(e.what());
+            if (rightChoice == RETURN) {
+                return;
+            }
+         } 
+    } while (rightChoice != RETURN);
+
+    int idPrestamo;
+    if (opcionCliente == 1) {
+        idPrestamo = obtenerIdPrestamoSesion();
+    } else {
+        std::cout << "Ingrese el ID del préstamo del otro cliente: ";
+        std::cin >> idPrestamo;
+    }
+
+    float cuota = consultarCuota(idPrestamo); 
+    MonedaPrestamo tipoMonedaPrestamo = consultarTipoMonedaPrestamo(idPrestamo); 
+    float montoAbono =0;
+
+    // Seleccionar la cuenta con la que se desea abonar
+    int idCuenta;
+    std::string idCuentaStr;
+    int tipoCuenta; //Dolares o colones
+    rightChoice = 0;
+    Operaciones op(this->cliente.nombre,this->cliente.apellido, this->cliente.id);
+
+    do {
+        //Mostrar las cuentas del cliente en sesión
+        std::cout << "Cuentas del cliente: " << std::endl;
+        if (cliente.idCuentaC != 0){
+            std::cout << "1. Cuenta corriente en colones" << std::endl;
+            std::cout << "ID: " << cliente.idCuentaC << std::endl;
+        }
+        if (cliente.idCuentaD != 0){
+            std::cout << "2. Cuenta corriente en dólares" << std::endl;
+            std::cout << "ID:" << cliente.idCuentaD << std::endl;
+        }
+        std::cout << "digitel el ID de la cuenta con la que desea abonar: ";
+        std::cin >> idCuentaStr;
+        try {
+            if (!cliente.validarEntrada(idCuentaStr, &idCuenta)) {
+                throw std::invalid_argument("ID de cuenta no válido.");
+            }
+            if (idCuenta != cliente.idCuentaC && idCuenta != cliente.idCuentaD) {
+                throw std::invalid_argument("ID de cuenta no válido.");
+            }
+            break;
+
+        }
+        catch (const std::invalid_argument& e) {
+            rightChoice = cliente.returnMain(e.what());
+            if (rightChoice == RETURN) {
+                return;
+            }
+        }
+    } while (rightChoice != RETURN);
+
+    tipoCuenta = op.checkAcountCurrency(idCuenta);
+
+    std::cout << "¿Desea hacer un abono de cuota o un abono extraordinario?" << std::endl;
+    std::cout << "1. Cuota" << std::endl;
+    std::cout << "2. Abono extraordinario" << std::endl;
+    int tipoAbono;
+    std::cin >> tipoAbono;
+
+    if (tipoAbono == 1) {
+        montoAbono = cuota;
+        std::cout << "El monto de la cuota a abonar es: " << montoAbono << std::endl;
+    } else {
+        std::cout << "Ingrese el monto del abono extraordinario: ";
+        std::cin >> montoAbono;
+    }
+    // Convertir monto si es necesario
+    //El objetivo es convertir la cuota a la moneda de la cuenta
+    cliente.convertirMonedaPrestamo( montoAbono,  tipoCuenta, tipoMonedaPrestamo);
+
+    //Revisar que la cuenta tenga el monto suficiente
+    float saldo = op.consultarSaldo(idCuenta);  
+    if (saldo < montoAbono) {
+        std::cerr << "Saldo insuficiente en la cuenta para realizar el abono." << std::endl;
+        return;
+    }
+
+    abonarCuota(idPrestamo, montoAbono, tipoAbono == 2, tipoCuenta == 1 ? COLONES_PRESTAMO : DOLARES_PRESTAMO);
+    std::cout << "Abono realizado correctamente." << std::endl;
+
+
+    
+
 }
 
 // Método para realizar abono a préstamo
