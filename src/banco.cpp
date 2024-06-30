@@ -105,6 +105,8 @@ void Banco::setActualIDCuentas(){
     }else{
         std::cout << "IDs de cuentas obtenidos con exito" << std::endl; // si se obtuvieron bien los ids de las cuentas.
     }
+    
+    sqlite3_close(db);                                                  // cerrando la base de datos.
 
     
 };  
