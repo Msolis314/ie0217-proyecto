@@ -438,7 +438,7 @@ void Cliente::transaccion(){
             consultarSaldo();
             break;
         case CONSULTARMOVIMIENTOS:
-            // xxxx
+            op.imprimirHistorialTransacciones(id);
             break;
         case CONSULTARPRESTAMOS:
             prestamo.consultarPrestamos();

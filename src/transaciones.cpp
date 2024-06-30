@@ -36,7 +36,7 @@ SOFTWARE.
 
 
 // Función para obtener la fecha y hora actual en formato string
-std::string obtenerFechaHoraActual() {
+std::string Operaciones::obtenerFechaHoraActual() {
     std::time_t tiempoActual = std::time(nullptr);
     char buffer[100];
     std::strftime(buffer, sizeof(buffer), "%Y-%m-%d %H:%M:%S", std::localtime(&tiempoActual));
@@ -44,7 +44,8 @@ std::string obtenerFechaHoraActual() {
 }
 
 // Función para registrar una transacción en la base de datos
-void registrarTransaccion(int idCliente, const std::string& tipoTransaccion, int idCuenta, int idCuentaDestino, float monto) {
+// Función para registrar una transacción en la base de datos
+void Operaciones::registrarTransaccion(int idCliente, const std::string& tipoTransaccion, int idCuenta, int idCuentaDestino, float monto, const std::string& moneda) {
     sqlite3* db;
     char* zErrMsg = 0;
     int rc;
@@ -56,11 +57,11 @@ void registrarTransaccion(int idCliente, const std::string& tipoTransaccion, int
     }
 
     std::string fechaHora = obtenerFechaHoraActual();
-    std::string sql = "INSERT INTO HISTORIAL_TRANSACCIONES (ID_CLIENTE, TIPO_TRANSACCION, ID_CUENTA, ID_CUENTA_DESTINO, MONTO, FECHA) "
+    std::string sql = "INSERT INTO HISTORIAL_TRANSACCIONES (ID_CLIENTE, TIPO_TRANSACCION, ID_CUENTA, ID_CUENTA_DESTINO, MONTO, MONEDA, FECHA) "
                       "VALUES (" + std::to_string(idCliente) + ", '" + tipoTransaccion + "', " + 
                       (idCuenta == 0 ? "NULL" : std::to_string(idCuenta)) + ", " + 
                       (idCuentaDestino == 0 ? "NULL" : std::to_string(idCuentaDestino)) + ", " + 
-                      std::to_string(monto) + ", '" + fechaHora + "');";
+                      std::to_string(monto) + ", '" + moneda + "', '" + fechaHora + "');";
 
     rc = sqlite3_exec(db, sql.c_str(), NULL, 0, &zErrMsg);
     if (rc != SQLITE_OK) {
@@ -69,8 +70,46 @@ void registrarTransaccion(int idCliente, const std::string& tipoTransaccion, int
     }
 
     sqlite3_close(db);
-}   
+}
 
+// Método para imprimir el historial del usuario
+void Operaciones::imprimirHistorialTransacciones(int idCliente) {
+    sqlite3* db;
+    sqlite3_stmt* stmt;
+    int rc = sqlite3_open("SistemaBancario.db", &db);
+
+    if (rc) {
+        std::cerr << "No se pudo abrir la base de datos: " << sqlite3_errmsg(db) << std::endl;
+        return;
+    }
+
+    std::string sql = "SELECT * FROM HISTORIAL_TRANSACCIONES WHERE ID_CLIENTE = " + std::to_string(idCliente);
+
+    rc = sqlite3_prepare_v2(db, sql.c_str(), -1, &stmt, NULL);
+    if (rc != SQLITE_OK) {
+        std::cerr << "SQL error: " << sqlite3_errmsg(db) << std::endl;
+        sqlite3_close(db);
+        return;
+    }
+
+    std::cout << "Historial de Transacciones:" << std::endl;
+    while (sqlite3_step(stmt) == SQLITE_ROW) {
+        int idTransaccion = sqlite3_column_int(stmt, 0);
+        std::string tipoTransaccion = reinterpret_cast<const char*>(sqlite3_column_text(stmt, 2));
+        int idCuenta = sqlite3_column_int(stmt, 3);
+        int idCuentaDestino = sqlite3_column_int(stmt, 4);
+        float monto = static_cast<float>(sqlite3_column_double(stmt, 5));
+        std::string moneda = reinterpret_cast<const char*>(sqlite3_column_text(stmt, 6)); // Nueva columna
+        std::string fecha = reinterpret_cast<const char*>(sqlite3_column_text(stmt, 7));
+
+        std::cout << "ID Transaccion: " << idTransaccion << ", Tipo: " << tipoTransaccion << ", ID Cuenta: " << idCuenta
+                  << ", ID Cuenta Destino: " << idCuentaDestino << ", Monto: " << monto << ", Moneda: " << moneda
+                  << ", Fecha: " << fecha << std::endl; // Imprime la moneda
+    }
+
+    sqlite3_finalize(stmt);
+    sqlite3_close(db);
+}
 
 Operaciones:: Operaciones(std::string nombre,std::string apellido,int id):cliente(nombre,apellido,id){
     Cliente cliente(nombre,apellido,id);
@@ -82,6 +121,7 @@ void Operaciones::depositar(Monedas cambio,float monto){
     vars.tries = 0;
     float montoDeposito;
     std::string montoDepositoStr;
+    std::string moneda; // Variable para almacenar el tipo de moneda
 
 
     //Desplegar el menu de opciones
@@ -177,7 +217,8 @@ void Operaciones::depositar(Monedas cambio,float monto){
                     std::cerr << "SQL ERROR: " << vars.zErrMsg << std::endl;
                     sqlite3_free(vars.zErrMsg);
                 } else {
-                    registrarTransaccion(cliente.id, "Deposito", cliente.idCuentaC, 0, vars.monto); // Registro de deposito
+                    moneda = "colones"; // Se establece la moneda como colones
+                    registrarTransaccion(cliente.id, "Deposito", cliente.idCuentaC, 0, vars.monto, moneda); // Registro de deposito
                 }
 
             vars.rightChoice = cliente.returnMain("Deposito exitoso");
@@ -222,7 +263,8 @@ void Operaciones::depositar(Monedas cambio,float monto){
                     std::cerr << "SQL ERROR: " << vars.zErrMsg << std::endl;
                     sqlite3_free(vars.zErrMsg);
                 } else {
-                    registrarTransaccion(cliente.id, "Deposito", cliente.idCuentaD, 0, vars.monto); // Regsitro de deposito
+                    moneda = "dolares"; // Se establece la moneda como dolares
+                    registrarTransaccion(cliente.id, "Deposito", cliente.idCuentaD, 0, vars.monto, moneda); // Regsitro de deposito
                 }
             vars.rightChoice = cliente.returnMain("Deposito exitoso");
             vars.monto = 0;
@@ -249,6 +291,7 @@ void Operaciones::retirar(Monedas cambio,float monto){
     char* error;
     std::string sql;
     int rc;
+    std::string moneda;
     do {
 
         // EN caso que este sea un segundo intento
@@ -327,7 +370,8 @@ void Operaciones::retirar(Monedas cambio,float monto){
                     std::cerr << "SQL ERROR: " << error << std::endl;
                     sqlite3_free(error);
                 } else {
-                    registrarTransaccion(cliente.id, "Retiro", cliente.idCuentaC, 0, monto); // Regsitro de retiro
+                    moneda = "colones"; // Se establece la moneda como colones
+                    registrarTransaccion(cliente.id, "Retiro", cliente.idCuentaC, 0, monto, moneda); // Regsitro de retiro
                 }
 
                 rightChoice = cliente.returnMain("Retiro exitoso");
@@ -375,7 +419,8 @@ void Operaciones::retirar(Monedas cambio,float monto){
                     std::cerr << "SQL ERROR: " << error << std::endl;
                     sqlite3_free(error);
                 } else {
-                    registrarTransaccion(cliente.id, "Retiro", cliente.idCuentaD, 0, monto); // Registro de retiro
+                    moneda = "dolares"; // Se establece la moneda como dolares
+                    registrarTransaccion(cliente.id, "Retiro", cliente.idCuentaD, 0, monto, moneda); // Registro de retiro
                 }
 
                 //Cerrar la base de datos
@@ -480,231 +525,229 @@ int Operaciones::pedirMonto(float &monto){
     }
     return 0;
 }
-void Operaciones::transferir(){
+void Operaciones::transferir() {
     // Transferir dinero de una cuenta a otra
     functionVars vars;
     
-    //Variables
+    // Variables locales
     float saldo;
     float saldoDestino; 
     int idCuentaDestino;
+    std::string monedaOrigen;
+    std::string monedaDestino;
+    Monedas tipoMonedaDestino;
 
-    //Inicialmente se pide el monto a transferir
+    // Inicialmente se pide el monto a transferir
     do {
         vars.rightChoice = pedirMonto(vars.monto);
-        if (vars.rightChoice == RETURN){
+        if (vars.rightChoice == RETURN) {
             return;
         } else {
             break;
         }
-    } while (vars.rightChoice != RETURN) ;
+    } while (vars.rightChoice != RETURN);
+
     do {
-        //Si ha habido mas de un intneto se repite el proceso
-        if (vars.tries > 0){
-            vars.rightChoice = pedirMonto(vars.monto);        
-            
+        // Si ha habido más de un intento se repite el proceso
+        if (vars.tries > 0) {
+            vars.rightChoice = pedirMonto(vars.monto);
         }
 
         do {
-            //Pedir el ID de la cuenta destino
+            // Pedir el ID de la cuenta destino
             std::cout << "Ingrese el ID de la cuenta destino:" << std::endl;
-            while (!(std::cin >> idCuentaDestino) || idCuentaDestino < 0){
-                std::cout << "Ingrese un ID valido" << std::endl;
+            while (!(std::cin >> idCuentaDestino) || idCuentaDestino < 0) {
+                std::cout << "Ingrese un ID válido" << std::endl;
                 std::cin.clear();
                 std::cin.ignore(12300000000, '\n');
-
             }
-            //Verificar si la cuenta destino es la misma que la del cliente
-            if (idCuentaDestino == cliente.idCuentaC || idCuentaDestino == cliente.idCuentaD){
-                vars.rightChoice = cliente.returnMain("No puede transferir a su propia cuenta");
-                if (vars.rightChoice == RETURN){
-                    return;
 
-                }
-                else {
+            // Verificar si la cuenta destino es la misma que la del cliente
+            if (idCuentaDestino == cliente.idCuentaC || idCuentaDestino == cliente.idCuentaD) {
+                vars.rightChoice = cliente.returnMain("No puede transferir a su propia cuenta");
+                if (vars.rightChoice == RETURN) {
+                    return;
+                } else {
                     continue;
                 }
             } 
-            if (!cliente.checkIDCuentaExists(idCuentaDestino, COLON) && !cliente.checkIDCuentaExists(idCuentaDestino, DOLAR)){
-                    vars.rightChoice = cliente.returnMain("La cuenta destino no existe"); //La cuenta destino no existe
-                    if (vars.rightChoice == RETURN){
-                        return;
-                    }
-                    else {
-                        
-                        continue;
-                    }
+
+            // Verificar si la cuenta destino existe
+            if (!cliente.checkIDCuentaExists(idCuentaDestino, COLON) && !cliente.checkIDCuentaExists(idCuentaDestino, DOLAR)) {
+                vars.rightChoice = cliente.returnMain("La cuenta destino no existe");
+                if (vars.rightChoice == RETURN) {
+                    return;
+                } else {
+                    continue;
+                }
             }
             break;
         } while (vars.rightChoice != RETURN);
         
         do {
             std::cout << "Seleccione el tipo de moneda de la cuenta de donde desea transferir" << std::endl;
-            std::cout << "1.Colones" << std::endl;
-            std::cout << "2.Dolares" << std::endl;
+            std::cout << "1. Colones" << std::endl;
+            std::cout << "2. Dolares" << std::endl;
         } while (!(std::cin >> vars.opcion) || vars.opcion < COLON || vars.opcion > DOLAR);
 
         switch (vars.opcion) {
             case COLON:
-            //Verificar si el cliente tiene una cuenta en colones
-                if (cliente.idCuentaC == 0){
-                    vars.rightChoice = cliente.returnMain("No se ha generado una cuenta colones");
-                    if (vars.rightChoice == RETURN){
+                // Verificar si el cliente tiene una cuenta en colones
+                if (cliente.idCuentaC == 0) {
+                    vars.rightChoice = cliente.returnMain("No se ha generado una cuenta en colones");
+                    if (vars.rightChoice == RETURN) {
                         return;
-                    }
-                    else {
+                    } else {
                         vars.tries++;
                         break;
                     }
                 }
-                //Convertir la moneda del monton si es necesario
+
+                // Convertir la moneda del monto si es necesario
                 cliente.convertirMoneda(vars.monto, COLON);
-                
 
-                //Consultar el saldo de la cuenta
+                // Consultar el saldo de la cuenta
                 saldo = consultarSaldo(cliente.idCuentaC);
-                if (saldo < vars.monto){
-                    //Verificar si el saldo es suficiente
+                if (saldo < vars.monto) {
+                    // Verificar si el saldo es suficiente
                     vars.rightChoice = cliente.returnMain("No tiene suficiente saldo en la cuenta");
-                    if (vars.rightChoice == RETURN){
+                    if (vars.rightChoice == RETURN) {
                         return;
-                    }
-                    else {
+                    } else {
                         vars.tries++;
                         break;
                     }
                 }
 
-                //Actualizar el saldo de la cuenta
+                // Actualizar el saldo de la cuenta
                 saldo -= vars.monto;
-                
-                
 
-
+                // Abrir la base de datos
                 vars.rc = sqlite3_open("SistemaBancario.db", &vars.db);
-
-                if (vars.rc){
+                if (vars.rc) {
                     std::cerr << "No se pudo abrir la base de datos" << std::endl;
-                }
-                else{
-                    std::cout << "...." << std::endl;
+                } else {
+                    std::cout << "Conexión establecida con la base de datos" << std::endl;
                 }
 
+                // Actualizar saldo en la tabla CUENTA_BANCARIA para la cuenta de origen
                 vars.sql = "UPDATE CUENTA_BANCARIA SET AHORROS = " + std::to_string(saldo) + " WHERE ID_CUENTA = " + std::to_string(cliente.idCuentaC);
                 vars.rc = sqlite3_exec(vars.db, vars.sql.c_str(), NULL, 0, &vars.zErrMsg);
-
-                if (vars.rc != SQLITE_OK){
-                    std::cerr << "SQL ERROR: " << vars.zErrMsg << std::endl;
+                if (vars.rc != SQLITE_OK) {
+                    std::cerr << "Error SQL: " << vars.zErrMsg << std::endl;
                     sqlite3_free(vars.zErrMsg);
                 }
-                //Consultar el tipo de moneda de la cuenta destino
-                
-                if (checkAcountCurrency(idCuentaDestino)== COLON){
-                    //Consultar el saldo de la cuenta destino
+
+                // Consultar el tipo de moneda de la cuenta destino
+                tipoMonedaDestino = static_cast<Monedas>(checkAcountCurrency(idCuentaDestino));
+
+                // Actualizar saldo de la cuenta destino según el tipo de moneda
+                if (tipoMonedaDestino == COLON) {
                     saldoDestino = consultarSaldo(idCuentaDestino);
-                    //Actualizar el saldo de la cuenta destino
                     saldoDestino += vars.monto;
                 } else {
-                    //Consultar el saldo de la cuenta destino
-                    saldoDestino = consultarSaldo(idCuentaDestino);
-                    //Convertir el monto de colones a dolares
                     cliente.convertirMoneda(vars.monto, DOLAR);
-                    //Actualizar el saldo de la cuenta destino
+                    saldoDestino = consultarSaldo(idCuentaDestino);
                     saldoDestino += vars.monto;
                 }
-                
 
-                //Actualizar el saldo de la cuenta destino
+                // Actualizar saldo en la tabla CUENTA_BANCARIA para la cuenta destino
                 vars.sql = "UPDATE CUENTA_BANCARIA SET AHORROS = " + std::to_string(saldoDestino) + " WHERE ID_CUENTA = " + std::to_string(idCuentaDestino);
                 vars.rc = sqlite3_exec(vars.db, vars.sql.c_str(), NULL, 0, &vars.zErrMsg);
-
-                if (vars.rc != SQLITE_OK){
-                    std::cerr << "SQL ERROR: " << vars.zErrMsg << std::endl;
+                if (vars.rc != SQLITE_OK) {
+                    std::cerr << "Error SQL: " << vars.zErrMsg << std::endl;
                     sqlite3_free(vars.zErrMsg);
                 }
-                //Cerrar la base de datos
+
+                // Cerrar la base de datos
                 sqlite3_close(vars.db);
 
                 // Registrar la transferencia
-                registrarTransaccion(cliente.id, "Transferencia", cliente.idCuentaC, idCuentaDestino, vars.monto);
+                monedaOrigen = "colones";
+                monedaDestino = (tipoMonedaDestino == COLON) ? "colones" : "dolares";
+                registrarTransaccion(cliente.id, "Transferencia", cliente.idCuentaC, idCuentaDestino, vars.monto, monedaDestino);
 
                 vars.rightChoice = cliente.returnMain("Transferencia exitosa");
                 vars.tries++;
                 break;
+
             case DOLAR:
-                // Parte de consulta de la cuenta del cliente
-                if (cliente.idCuentaD == 0){
-                    vars.rightChoice = cliente.returnMain("No se ha generado una cuenta dolares");
-                    if (vars.rightChoice == RETURN){
+                // Verificar si el cliente tiene una cuenta en dólares
+                if (cliente.idCuentaD == 0) {
+                    vars.rightChoice = cliente.returnMain("No se ha generado una cuenta en dólares");
+                    if (vars.rightChoice == RETURN) {
                         return;
-                    }
-                    else {
+                    } else {
                         vars.tries++;
                         break;
                     }
                 }
-                //Consultar el saldo de la cuenta
+
+                // Consultar el saldo de la cuenta
                 saldo = consultarSaldo(cliente.idCuentaD);
-                if (saldo < vars.monto){
+                if (saldo < vars.monto) {
                     vars.rightChoice = cliente.returnMain("No tiene suficiente saldo en la cuenta");
-                    if (vars.rightChoice == RETURN){
+                    if (vars.rightChoice == RETURN) {
                         return;
-                    }
-                    else {
+                    } else {
                         vars.tries++;
                         break;
                     }
                 }
-                //Convertir la moneda del monto si es necesario
+
+                // Convertir la moneda del monto si es necesario
                 cliente.convertirMoneda(vars.monto, DOLAR);
                 saldo -= vars.monto;
 
+                // Abrir la base de datos
                 vars.rc = sqlite3_open("SistemaBancario.db", &vars.db);
-
-                if (vars.rc){
+                if (vars.rc) {
                     std::cerr << "No se pudo abrir la base de datos" << std::endl;
-                }
-                else{
-                    std::cout << "...." << std::endl;
+                } else {
+                    std::cout << "Conexión establecida con la base de datos" << std::endl;
                 }
 
+                // Actualizar saldo en la tabla CUENTA_BANCARIA para la cuenta de origen
                 vars.sql = "UPDATE CUENTA_BANCARIA SET AHORROS = " + std::to_string(saldo) + " WHERE ID_CUENTA = " + std::to_string(cliente.idCuentaD);
                 vars.rc = sqlite3_exec(vars.db, vars.sql.c_str(), NULL, 0, &vars.zErrMsg);
-
-                if (vars.rc != SQLITE_OK){
-                    std::cerr << "SQL ERROR: " << vars.zErrMsg << std::endl;
+                if (vars.rc != SQLITE_OK) {
+                    std::cerr << "Error SQL: " << vars.zErrMsg << std::endl;
                     sqlite3_free(vars.zErrMsg);
                 }
-                //Consultar el tipo de moneda de la cuenta destino
-                /*Si la cuenta destino es en colones se convierte el monto a colones y se actualiza el saldo de la cuenta destino
-                */
-                if (checkAcountCurrency(idCuentaDestino)== DOLAR){
+
+                // Consultar el tipo de moneda de la cuenta destino
+                tipoMonedaDestino = static_cast<Monedas>(checkAcountCurrency(idCuentaDestino));
+
+                // Actualizar saldo de la cuenta destino según el tipo de moneda
+                if (tipoMonedaDestino == DOLAR) {
                     saldoDestino = consultarSaldo(idCuentaDestino);
                     saldoDestino += vars.monto;
                 } else {
-                    //Si la cuenta destino es en dolares se actualiza el saldo de la cuenta destino 
-                    saldoDestino = consultarSaldo(idCuentaDestino);
                     cliente.convertirMoneda(vars.monto, COLON);
+                    saldoDestino = consultarSaldo(idCuentaDestino);
                     saldoDestino += vars.monto;
                 }
-                saldoDestino = consultarSaldo(idCuentaDestino);
-                saldoDestino += vars.monto;
 
+                // Actualizar saldo en la tabla CUENTA_BANCARIA para la cuenta destino
                 vars.sql = "UPDATE CUENTA_BANCARIA SET AHORROS = " + std::to_string(saldoDestino) + " WHERE ID_CUENTA = " + std::to_string(idCuentaDestino);
                 vars.rc = sqlite3_exec(vars.db, vars.sql.c_str(), NULL, 0, &vars.zErrMsg);
-
-                if (vars.rc != SQLITE_OK){
-                    std::cerr << "SQL ERROR: " << vars.zErrMsg << std::endl;
+                if (vars.rc != SQLITE_OK) {
+                    std::cerr << "Error SQL: " << vars.zErrMsg << std::endl;
                     sqlite3_free(vars.zErrMsg);
                 }
+
+                // Cerrar la base de datos
                 sqlite3_close(vars.db);
 
-                // Registrar la tranferencia
-                registrarTransaccion(cliente.id, "Transferencia", cliente.idCuentaD, idCuentaDestino, vars.monto);
+                // Registrar la transferencia
+                monedaOrigen = "dolares";
+                monedaDestino = (tipoMonedaDestino == DOLAR) ? "dolares" : "colones";
+                registrarTransaccion(cliente.id, "Transferencia", cliente.idCuentaD, idCuentaDestino, vars.monto, monedaDestino);
 
                 vars.rightChoice = cliente.returnMain("Transferencia exitosa");
                 vars.tries++;
                 break;
+
             default:
                 break;
         }

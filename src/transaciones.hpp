@@ -67,6 +67,27 @@ class Operaciones {
         /// @param id ID del cliente.
         Operaciones(std::string nombre,std::string apellido,int id);
 
+
+        /// @brief Obtener fecha y hora.
+        /// @return Fecha y hora en formato de cadena.
+        std::string obtenerFechaHoraActual();
+
+
+        /// @brief Registro de transacciones en base de datos.
+        /// @param idCliente id del cliente en sesión.
+        /// @param tipoTransaccion Clasificacion de la transacción.
+        /// @param idCuenta ID de la cuenta del cliente en sesión.
+        /// @param idCuentaDestino ID de la cuenta destino en caso de transferencia.
+        /// @param monto Cantidad de dinero involucrado en la transacción.
+        /// @param moneda Moneda de la transacción.
+        void registrarTransaccion(int idCliente, const std::string& tipoTransaccion, int idCuenta, int idCuentaDestino, float monto, const std::string& moneda);
+
+
+        /// @brief Imprimir historial de transacciones del usuario.
+        /// @param idCliente id del cliente en sesión.
+        void imprimirHistorialTransacciones(int IdCliente);
+
+
         /// @brief Depositar dinero en la cuenta.
         /// @param cambio Monedas de cambio DOLAR o COLON.
         /// @param monto Monto a depositar.
