@@ -1,0 +1,357 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="es">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=11"/>
+<meta name="generator" content="Doxygen 1.10.0"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Proyecto Final IE-0217: Referencia del archivo src/CDP.hpp</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<script type="text/javascript" src="clipboard.js"></script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<script type="text/javascript" src="cookie.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr id="projectrow">
+  <td id="projectlogo"><img alt="Logo" src="pago-seguro.png"/></td>
+  <td id="projectalign">
+   <div id="projectname">Proyecto Final IE-0217<span id="projectnumber">&#160;1.0</span>
+   </div>
+   <div id="projectbrief">Sistema de gestión bancaria</div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- Generado por Doxygen 1.10.0 -->
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+var searchBox = new SearchBox("searchBox", "search/",'.html');
+/* @license-end */
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function() {
+  initMenu('',true,false,'search.php','Buscar');
+  $(function() { init_search(); });
+});
+/* @license-end */
+</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function(){initNavTree('_c_d_p_8hpp.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<div id="MSearchResults">
+<div class="SRPage">
+<div id="SRIndex">
+<div id="SRResults"></div>
+<div class="SRStatus" id="Loading">Cargando...</div>
+<div class="SRStatus" id="Searching">Buscando...</div>
+<div class="SRStatus" id="NoMatches">Nada coincide</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="header">
+  <div class="summary">
+<a href="#nested-classes">Clases</a> &#124;
+<a href="#enum-members">Enumeraciones</a> &#124;
+<a href="#func-members">Funciones</a>  </div>
+  <div class="headertitle"><div class="title">Referencia del archivo CDP.hpp</div></div>
+</div><!--header-->
+<div class="contents">
+
+<p>Header file de la clase <a class="el" href="class_c_d_p.html" title="Clase que representa un Certificado de Depósito a Plazo.">CDP</a> y sus clases derivadas.  
+<a href="#details">Más...</a></p>
+<div class="textblock"><code>#include &lt;iostream&gt;</code><br />
+<code>#include &lt;string&gt;</code><br />
+<code>#include &lt;sqlite3.h&gt;</code><br />
+<code>#include &lt;vector&gt;</code><br />
+<code>#include &lt;ctime&gt;</code><br />
+<code>#include &lt;stdexcept&gt;</code><br />
+<code>#include &lt;sstream&gt;</code><br />
+<code>#include &lt;iomanip&gt;</code><br />
+<code>#include &lt;algorithm&gt;</code><br />
+<code>#include &lt;cmath&gt;</code><br />
+<code>#include &quot;<a class="el" href="entidad_bancaria_8hpp_source.html">entidadBancaria.hpp</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="menu_8hpp_source.html">menu.hpp</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="db_8hpp_source.html">db.hpp</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="transaciones_8hpp_source.html">transaciones.hpp</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="cliente_8hpp_source.html">cliente.hpp</a>&quot;</code><br />
+</div>
+<p><a href="_c_d_p_8hpp_source.html">Ir al código fuente de este archivo.</a></p>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="nested-classes" name="nested-classes"></a>
+Clases</h2></td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">struct &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="struct_c_d_p_data.html">CDPData</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Estructura que contiene los datos de un <a class="el" href="class_c_d_p.html" title="Clase que representa un Certificado de Depósito a Plazo.">CDP</a>.  <a href="struct_c_d_p_data.html#details">Más...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_c_d_p.html">CDP</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Clase que representa un Certificado de Depósito a Plazo.  <a href="class_c_d_p.html#details">Más...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_c_d_pintereses.html">CDPintereses</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Clase que representa los intereses de un Certificado de Depósito a Plazo.  <a href="class_c_d_pintereses.html#details">Más...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_c_d_pfija_simple.html">CDPfijaSimple</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Clase que representa un Certificado de Depósito a Plazo con intereses fijos y calculados de forma simple.  <a href="class_c_d_pfija_simple.html#details">Más...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_c_d_pfija_compuesto.html">CDPfijaCompuesto</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Clase que representa un Certificado de Depósito a Plazo con intereses fijos y calculados de forma compuesta.  <a href="class_c_d_pfija_compuesto.html#details">Más...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_c_d_pvariable_simple.html">CDPvariableSimple</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Clase que representa un Certificado de Depósito a Plazo con intereses variables y calculados de forma simple.  <a href="class_c_d_pvariable_simple.html#details">Más...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:"><td class="memItemLeft" align="right" valign="top">class &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="class_c_d_pvariable_compuesto.html">CDPvariableCompuesto</a></td></tr>
+<tr class="memdesc:"><td class="mdescLeft">&#160;</td><td class="mdescRight">Clase que representa un Certificado de Depósito a Plazo con intereses variables y calculados de forma compuesta.  <a href="class_c_d_pvariable_compuesto.html#details">Más...</a><br /></td></tr>
+<tr class="separator:"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="enum-members" name="enum-members"></a>
+Enumeraciones</h2></td></tr>
+<tr class="memitem:acbc769dcaeea0e7550fd9b66b9b8b1bc" id="r_acbc769dcaeea0e7550fd9b66b9b8b1bc"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#acbc769dcaeea0e7550fd9b66b9b8b1bc">OPERACIONES_CDP</a> { <br />
+&#160;&#160;<a class="el" href="#acbc769dcaeea0e7550fd9b66b9b8b1bca152671d83536d083c789b029e7c57002">AGREGAR_CDP</a> =1
+, <a class="el" href="#acbc769dcaeea0e7550fd9b66b9b8b1bca7e5cafc75aa2cb3b388f91d259aaa5b7">RETIRAR_CDP</a>
+, <a class="el" href="#acbc769dcaeea0e7550fd9b66b9b8b1bcaae7763e1f1308615610a2161dae59504">DESPLEGAR_CDP</a>
+, <a class="el" href="#acbc769dcaeea0e7550fd9b66b9b8b1bcaf976460997e3c72400449592f493d846">ELIMINAR_CDP</a>
+, <br />
+&#160;&#160;<a class="el" href="#acbc769dcaeea0e7550fd9b66b9b8b1bca2f2632469d685fe45931f97408041188">SALIR_CDP</a>
+<br />
+ }</td></tr>
+<tr class="memdesc:acbc769dcaeea0e7550fd9b66b9b8b1bc"><td class="mdescLeft">&#160;</td><td class="mdescRight">Enumeracion de las operaciones de un <a class="el" href="class_c_d_p.html" title="Clase que representa un Certificado de Depósito a Plazo.">CDP</a>.  <a href="#acbc769dcaeea0e7550fd9b66b9b8b1bc">Más...</a><br /></td></tr>
+<tr class="separator:acbc769dcaeea0e7550fd9b66b9b8b1bc"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a975978751a1ba3c1e6f42b9e417dac4d" id="r_a975978751a1ba3c1e6f42b9e417dac4d"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a975978751a1ba3c1e6f42b9e417dac4d">TASAS</a> { <a class="el" href="#a975978751a1ba3c1e6f42b9e417dac4da9bc5c9225b48b8707510545a41df03af">FIJA</a>
+, <a class="el" href="#a975978751a1ba3c1e6f42b9e417dac4da39031ce5df6f91d3778590d6d644b9ea">VARIABLE</a>
+ }</td></tr>
+<tr class="memdesc:a975978751a1ba3c1e6f42b9e417dac4d"><td class="mdescLeft">&#160;</td><td class="mdescRight">Enumeracion de las tasas de un <a class="el" href="class_c_d_p.html" title="Clase que representa un Certificado de Depósito a Plazo.">CDP</a>.  <a href="#a975978751a1ba3c1e6f42b9e417dac4d">Más...</a><br /></td></tr>
+<tr class="separator:a975978751a1ba3c1e6f42b9e417dac4d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a2564d8b66a510a6f2cc5230f88f56584" id="r_a2564d8b66a510a6f2cc5230f88f56584"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a2564d8b66a510a6f2cc5230f88f56584">TIPOS_INTERES</a> { <a class="el" href="#a2564d8b66a510a6f2cc5230f88f56584a1a6b6e9893ec9e5d9710335b4c74d3f6">SIMPLE</a> =1
+, <a class="el" href="#a2564d8b66a510a6f2cc5230f88f56584ae793e1a384d56071d77b0d26d59b8f7a">COMPUESTO</a>
+, <a class="el" href="#a2564d8b66a510a6f2cc5230f88f56584a36eeca988dd235e068226f03a8dbcad1">SIMPLE_VARIABLE</a>
+, <a class="el" href="#a2564d8b66a510a6f2cc5230f88f56584afc94eb22be9276d8e700fa7ae87dc48e">COMPUESTO_VARIABLE</a>
+ }</td></tr>
+<tr class="memdesc:a2564d8b66a510a6f2cc5230f88f56584"><td class="mdescLeft">&#160;</td><td class="mdescRight">Enumeracion de las combinaciones de modalidades de interes de un <a class="el" href="class_c_d_p.html" title="Clase que representa un Certificado de Depósito a Plazo.">CDP</a>.  <a href="#a2564d8b66a510a6f2cc5230f88f56584">Más...</a><br /></td></tr>
+<tr class="separator:a2564d8b66a510a6f2cc5230f88f56584"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:afd9564b4719fab36f9a36b8ebddfb95f" id="r_afd9564b4719fab36f9a36b8ebddfb95f"><td class="memItemLeft" align="right" valign="top">enum &#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#afd9564b4719fab36f9a36b8ebddfb95f">PERIODOS_PAGO</a> { <br />
+&#160;&#160;<a class="el" href="#afd9564b4719fab36f9a36b8ebddfb95fa6e661c98a009e66a821758e8a9f7317f">MENSUAL</a> = 0
+, <a class="el" href="#afd9564b4719fab36f9a36b8ebddfb95fa99073684980199e4cf1e839c3a18d86b">TRIMESTRAL</a>
+, <a class="el" href="#afd9564b4719fab36f9a36b8ebddfb95fac8c671a1a985f19af145e083e9245e30">SEMESTRAL</a>
+, <a class="el" href="#afd9564b4719fab36f9a36b8ebddfb95fa964d95d74494ef0a6a428c4a317178cd">ANUAL</a>
+, <br />
+&#160;&#160;<a class="el" href="#afd9564b4719fab36f9a36b8ebddfb95fad3b4b3f4784b53b64664a62946a04517">FIN_PLAZO</a>
+, <a class="el" href="#afd9564b4719fab36f9a36b8ebddfb95fa2fd6f336d08340583bd620a7f5694c90">ERROR</a> = -1
+<br />
+ }</td></tr>
+<tr class="memdesc:afd9564b4719fab36f9a36b8ebddfb95f"><td class="mdescLeft">&#160;</td><td class="mdescRight">Enumeracion de los periodos de pago de un <a class="el" href="class_c_d_p.html" title="Clase que representa un Certificado de Depósito a Plazo.">CDP</a>.  <a href="#afd9564b4719fab36f9a36b8ebddfb95f">Más...</a><br /></td></tr>
+<tr class="separator:afd9564b4719fab36f9a36b8ebddfb95f"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table><table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
+Funciones</h2></td></tr>
+<tr class="memitem:a867d6bb7e0f6d69344b3ee4ca61f3855" id="r_a867d6bb7e0f6d69344b3ee4ca61f3855"><td class="memItemLeft" align="right" valign="top">int&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a867d6bb7e0f6d69344b3ee4ca61f3855">callbackgetCDP</a> (void *NotUsed, int argc, char **argv, char **azColName)</td></tr>
+<tr class="memdesc:a867d6bb7e0f6d69344b3ee4ca61f3855"><td class="mdescLeft">&#160;</td><td class="mdescRight">Metodo para imprimir los <a class="el" href="class_c_d_p.html" title="Clase que representa un Certificado de Depósito a Plazo.">CDP</a> de un cliente.  <br /></td></tr>
+<tr class="separator:a867d6bb7e0f6d69344b3ee4ca61f3855"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<a name="details" id="details"></a><h2 class="groupheader">Descripción detallada</h2>
+<div class="textblock"><p>Header file de la clase <a class="el" href="class_c_d_p.html" title="Clase que representa un Certificado de Depósito a Plazo.">CDP</a> y sus clases derivadas. </p>
+<p>MIT License</p>
+<p>Copyright (c) 2024 Msolis314</p>
+<p>Permission is hereby granted, free of charge, to any person obtaining a copy of this software and associated documentation files (the "Software"), to deal in the Software without restriction, including without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the following conditions:</p>
+<p>The above copyright notice and this permission notice shall be included in all copies or substantial portions of the Software.</p>
+<p>THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE. </p>
+
+<p class="definition">Definición en el archivo <a class="el" href="_c_d_p_8hpp_source.html">CDP.hpp</a>.</p>
+</div><h2 class="groupheader">Documentación de enumeraciones</h2>
+<a id="acbc769dcaeea0e7550fd9b66b9b8b1bc" name="acbc769dcaeea0e7550fd9b66b9b8b1bc"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#acbc769dcaeea0e7550fd9b66b9b8b1bc">&#9670;&#160;</a></span>OPERACIONES_CDP</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="#acbc769dcaeea0e7550fd9b66b9b8b1bc">OPERACIONES_CDP</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Enumeracion de las operaciones de un <a class="el" href="class_c_d_p.html" title="Clase que representa un Certificado de Depósito a Plazo.">CDP</a>. </p>
+<table class="fieldtable">
+<tr><th colspan="2">Valores de enumeraciones</th></tr><tr><td class="fieldname"><a id="acbc769dcaeea0e7550fd9b66b9b8b1bca152671d83536d083c789b029e7c57002" name="acbc769dcaeea0e7550fd9b66b9b8b1bca152671d83536d083c789b029e7c57002"></a>AGREGAR_CDP&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="acbc769dcaeea0e7550fd9b66b9b8b1bca7e5cafc75aa2cb3b388f91d259aaa5b7" name="acbc769dcaeea0e7550fd9b66b9b8b1bca7e5cafc75aa2cb3b388f91d259aaa5b7"></a>RETIRAR_CDP&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="acbc769dcaeea0e7550fd9b66b9b8b1bcaae7763e1f1308615610a2161dae59504" name="acbc769dcaeea0e7550fd9b66b9b8b1bcaae7763e1f1308615610a2161dae59504"></a>DESPLEGAR_CDP&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="acbc769dcaeea0e7550fd9b66b9b8b1bcaf976460997e3c72400449592f493d846" name="acbc769dcaeea0e7550fd9b66b9b8b1bcaf976460997e3c72400449592f493d846"></a>ELIMINAR_CDP&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="acbc769dcaeea0e7550fd9b66b9b8b1bca2f2632469d685fe45931f97408041188" name="acbc769dcaeea0e7550fd9b66b9b8b1bca2f2632469d685fe45931f97408041188"></a>SALIR_CDP&#160;</td><td class="fielddoc"></td></tr>
+</table>
+
+<p class="definition">Definición en la línea <a class="el" href="_c_d_p_8hpp_source.html#l00047">47</a> del archivo <a class="el" href="_c_d_p_8hpp_source.html">CDP.hpp</a>.</p>
+
+</div>
+</div>
+<a id="afd9564b4719fab36f9a36b8ebddfb95f" name="afd9564b4719fab36f9a36b8ebddfb95f"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#afd9564b4719fab36f9a36b8ebddfb95f">&#9670;&#160;</a></span>PERIODOS_PAGO</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="#afd9564b4719fab36f9a36b8ebddfb95f">PERIODOS_PAGO</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Enumeracion de los periodos de pago de un <a class="el" href="class_c_d_p.html" title="Clase que representa un Certificado de Depósito a Plazo.">CDP</a>. </p>
+<p>MENSUAL = 0, TRIMESTRAL = 1, SEMESTRAL = 2, ANUAL = 3, FIN_PLAZO = 4, ERROR = -1 </p>
+<table class="fieldtable">
+<tr><th colspan="2">Valores de enumeraciones</th></tr><tr><td class="fieldname"><a id="afd9564b4719fab36f9a36b8ebddfb95fa6e661c98a009e66a821758e8a9f7317f" name="afd9564b4719fab36f9a36b8ebddfb95fa6e661c98a009e66a821758e8a9f7317f"></a>MENSUAL&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="afd9564b4719fab36f9a36b8ebddfb95fa99073684980199e4cf1e839c3a18d86b" name="afd9564b4719fab36f9a36b8ebddfb95fa99073684980199e4cf1e839c3a18d86b"></a>TRIMESTRAL&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="afd9564b4719fab36f9a36b8ebddfb95fac8c671a1a985f19af145e083e9245e30" name="afd9564b4719fab36f9a36b8ebddfb95fac8c671a1a985f19af145e083e9245e30"></a>SEMESTRAL&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="afd9564b4719fab36f9a36b8ebddfb95fa964d95d74494ef0a6a428c4a317178cd" name="afd9564b4719fab36f9a36b8ebddfb95fa964d95d74494ef0a6a428c4a317178cd"></a>ANUAL&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="afd9564b4719fab36f9a36b8ebddfb95fad3b4b3f4784b53b64664a62946a04517" name="afd9564b4719fab36f9a36b8ebddfb95fad3b4b3f4784b53b64664a62946a04517"></a>FIN_PLAZO&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="afd9564b4719fab36f9a36b8ebddfb95fa2fd6f336d08340583bd620a7f5694c90" name="afd9564b4719fab36f9a36b8ebddfb95fa2fd6f336d08340583bd620a7f5694c90"></a>ERROR&#160;</td><td class="fielddoc"></td></tr>
+</table>
+
+<p class="definition">Definición en la línea <a class="el" href="_c_d_p_8hpp_source.html#l00074">74</a> del archivo <a class="el" href="_c_d_p_8hpp_source.html">CDP.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a975978751a1ba3c1e6f42b9e417dac4d" name="a975978751a1ba3c1e6f42b9e417dac4d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a975978751a1ba3c1e6f42b9e417dac4d">&#9670;&#160;</a></span>TASAS</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="#a975978751a1ba3c1e6f42b9e417dac4d">TASAS</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Enumeracion de las tasas de un <a class="el" href="class_c_d_p.html" title="Clase que representa un Certificado de Depósito a Plazo.">CDP</a>. </p>
+<table class="fieldtable">
+<tr><th colspan="2">Valores de enumeraciones</th></tr><tr><td class="fieldname"><a id="a975978751a1ba3c1e6f42b9e417dac4da9bc5c9225b48b8707510545a41df03af" name="a975978751a1ba3c1e6f42b9e417dac4da9bc5c9225b48b8707510545a41df03af"></a>FIJA&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a975978751a1ba3c1e6f42b9e417dac4da39031ce5df6f91d3778590d6d644b9ea" name="a975978751a1ba3c1e6f42b9e417dac4da39031ce5df6f91d3778590d6d644b9ea"></a>VARIABLE&#160;</td><td class="fielddoc"></td></tr>
+</table>
+
+<p class="definition">Definición en la línea <a class="el" href="_c_d_p_8hpp_source.html#l00056">56</a> del archivo <a class="el" href="_c_d_p_8hpp_source.html">CDP.hpp</a>.</p>
+
+</div>
+</div>
+<a id="a2564d8b66a510a6f2cc5230f88f56584" name="a2564d8b66a510a6f2cc5230f88f56584"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a2564d8b66a510a6f2cc5230f88f56584">&#9670;&#160;</a></span>TIPOS_INTERES</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">enum <a class="el" href="#a2564d8b66a510a6f2cc5230f88f56584">TIPOS_INTERES</a></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Enumeracion de las combinaciones de modalidades de interes de un <a class="el" href="class_c_d_p.html" title="Clase que representa un Certificado de Depósito a Plazo.">CDP</a>. </p>
+<p>SIMPLE = 1, COMPUESTO = 2, SIMPLE_VARIABLE = 3, COMPUESTO_VARIABLE = 4 </p>
+<table class="fieldtable">
+<tr><th colspan="2">Valores de enumeraciones</th></tr><tr><td class="fieldname"><a id="a2564d8b66a510a6f2cc5230f88f56584a1a6b6e9893ec9e5d9710335b4c74d3f6" name="a2564d8b66a510a6f2cc5230f88f56584a1a6b6e9893ec9e5d9710335b4c74d3f6"></a>SIMPLE&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a2564d8b66a510a6f2cc5230f88f56584ae793e1a384d56071d77b0d26d59b8f7a" name="a2564d8b66a510a6f2cc5230f88f56584ae793e1a384d56071d77b0d26d59b8f7a"></a>COMPUESTO&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a2564d8b66a510a6f2cc5230f88f56584a36eeca988dd235e068226f03a8dbcad1" name="a2564d8b66a510a6f2cc5230f88f56584a36eeca988dd235e068226f03a8dbcad1"></a>SIMPLE_VARIABLE&#160;</td><td class="fielddoc"></td></tr>
+<tr><td class="fieldname"><a id="a2564d8b66a510a6f2cc5230f88f56584afc94eb22be9276d8e700fa7ae87dc48e" name="a2564d8b66a510a6f2cc5230f88f56584afc94eb22be9276d8e700fa7ae87dc48e"></a>COMPUESTO_VARIABLE&#160;</td><td class="fielddoc"></td></tr>
+</table>
+
+<p class="definition">Definición en la línea <a class="el" href="_c_d_p_8hpp_source.html#l00064">64</a> del archivo <a class="el" href="_c_d_p_8hpp_source.html">CDP.hpp</a>.</p>
+
+</div>
+</div>
+<h2 class="groupheader">Documentación de funciones</h2>
+<a id="a867d6bb7e0f6d69344b3ee4ca61f3855" name="a867d6bb7e0f6d69344b3ee4ca61f3855"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a867d6bb7e0f6d69344b3ee4ca61f3855">&#9670;&#160;</a></span>callbackgetCDP()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">int callbackgetCDP </td>
+          <td>(</td>
+          <td class="paramtype">void *</td>          <td class="paramname"><span class="paramname"><em>NotUsed</em>, </span></td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>argc</em>, </span></td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">char **</td>          <td class="paramname"><span class="paramname"><em>argv</em>, </span></td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">char **</td>          <td class="paramname"><span class="paramname"><em>azColName</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Metodo para imprimir los <a class="el" href="class_c_d_p.html" title="Clase que representa un Certificado de Depósito a Plazo.">CDP</a> de un cliente. </p>
+<dl class="params"><dt>Parámetros</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">NotUsed</td><td>No se utiliza. </td></tr>
+    <tr><td class="paramname">argc</td><td>Numero de columnas. </td></tr>
+    <tr><td class="paramname">argv</td><td>Valores de las columnas. </td></tr>
+    <tr><td class="paramname">azColName</td><td>Nombres de las columnas. </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Devuelve</dt><dd>int Retorna 0 si la operacion fue exitosa. </dd></dl>
+
+<p class="definition">Definición en la línea <a class="el" href="_c_d_p_8cpp_source.html#l00619">619</a> del archivo <a class="el" href="_c_d_p_8cpp_source.html">CDP.cpp</a>.</p>
+
+</div>
+</div>
+</div><!-- contents -->
+</div><!-- doc-content -->
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="navelem"><a class="el" href="dir_68267d1309a1af8e8297ef4c3efbcdba.html">src</a></li><li class="navelem"><a class="el" href="_c_d_p_8hpp.html">CDP.hpp</a></li>
+    <li class="footer">Generado por <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.10.0 </li>
+  </ul>
+</div>
+</body>
+</html>

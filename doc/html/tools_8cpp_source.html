@@ -1,0 +1,250 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="es">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=11"/>
+<meta name="generator" content="Doxygen 1.10.0"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Proyecto Final IE-0217: Archivo de código fuente src/tools.cpp</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<script type="text/javascript" src="clipboard.js"></script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<script type="text/javascript" src="cookie.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr id="projectrow">
+  <td id="projectlogo"><img alt="Logo" src="pago-seguro.png"/></td>
+  <td id="projectalign">
+   <div id="projectname">Proyecto Final IE-0217<span id="projectnumber">&#160;1.0</span>
+   </div>
+   <div id="projectbrief">Sistema de gestión bancaria</div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- Generado por Doxygen 1.10.0 -->
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+var searchBox = new SearchBox("searchBox", "search/",'.html');
+/* @license-end */
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function() {
+  initMenu('',true,false,'search.php','Buscar');
+  $(function() { init_search(); });
+});
+/* @license-end */
+</script>
+<div id="main-nav"></div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function() { codefold.init(0); });
+/* @license-end */
+</script>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function(){initNavTree('tools_8cpp_source.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<div id="MSearchResults">
+<div class="SRPage">
+<div id="SRIndex">
+<div id="SRResults"></div>
+<div class="SRStatus" id="Loading">Cargando...</div>
+<div class="SRStatus" id="Searching">Buscando...</div>
+<div class="SRStatus" id="NoMatches">Nada coincide</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="header">
+  <div class="headertitle"><div class="title">tools.cpp</div></div>
+</div><!--header-->
+<div class="contents">
+<a href="tools_8cpp.html">Ir a la documentación de este archivo.</a><div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span><span class="preprocessor">#include &lt;iostream&gt;</span></div>
+<div class="line"><a id="l00002" name="l00002"></a><span class="lineno">    2</span><span class="preprocessor">#include &lt;string&gt;</span></div>
+<div class="line"><a id="l00003" name="l00003"></a><span class="lineno">    3</span><span class="preprocessor">#include &lt;vector&gt;</span></div>
+<div class="line"><a id="l00004" name="l00004"></a><span class="lineno">    4</span><span class="preprocessor">#include &lt;ctime&gt;</span></div>
+<div class="line"><a id="l00005" name="l00005"></a><span class="lineno">    5</span><span class="preprocessor">#include &lt;openssl/evp.h&gt;</span></div>
+<div class="line"><a id="l00006" name="l00006"></a><span class="lineno">    6</span><span class="preprocessor">#include &lt;openssl/rand.h&gt;</span></div>
+<div class="line"><a id="l00007" name="l00007"></a><span class="lineno">    7</span><span class="preprocessor">#include &lt;openssl/err.h&gt;</span></div>
+<div class="line"><a id="l00008" name="l00008"></a><span class="lineno">    8</span><span class="preprocessor">#include &lt;openssl/pem.h&gt;</span></div>
+<div class="line"><a id="l00009" name="l00009"></a><span class="lineno">    9</span><span class="preprocessor">#include &lt;openssl/rsa.h&gt;</span></div>
+<div class="line"><a id="l00010" name="l00010"></a><span class="lineno">   10</span><span class="preprocessor">#include &lt;sqlite3.h&gt;</span></div>
+<div class="line"><a id="l00011" name="l00011"></a><span class="lineno">   11</span><span class="preprocessor">#include &lt;sstream&gt;</span></div>
+<div class="line"><a id="l00012" name="l00012"></a><span class="lineno">   12</span><span class="preprocessor">#include &lt;iomanip&gt;</span></div>
+<div class="line"><a id="l00013" name="l00013"></a><span class="lineno">   13</span><span class="preprocessor">#include &quot;<a class="code" href="tools_8hpp.html">tools.hpp</a>&quot;</span></div>
+<div class="line"><a id="l00014" name="l00014"></a><span class="lineno">   14</span><span class="preprocessor">#include &quot;<a class="code" href="db_8hpp.html">db.hpp</a>&quot;</span></div>
+<div class="line"><a id="l00015" name="l00015"></a><span class="lineno">   15</span> </div>
+<div class="line"><a id="l00016" name="l00016"></a><span class="lineno"><a class="line" href="tools_8cpp.html#ad6c5db50b1d4e2282874fc65eabcf969">   16</a></span><span class="preprocessor">#define SALT_SIZE 16</span></div>
+<div class="line"><a id="l00017" name="l00017"></a><span class="lineno"><a class="line" href="tools_8cpp.html#ad6074dd11ab3c97c8135c43aab03ae95">   17</a></span><span class="preprocessor">#define HASH_SIZE 32</span></div>
+<div class="line"><a id="l00018" name="l00018"></a><span class="lineno"><a class="line" href="tools_8cpp.html#aa9cc087d076e4fa101f8794a947bd01a">   18</a></span><span class="preprocessor">#define ITERATIONS 10000</span></div>
+<div class="line"><a id="l00019" name="l00019"></a><span class="lineno">   19</span> </div>
+<div class="line"><a id="l00020" name="l00020"></a><span class="lineno">   20</span> </div>
+<div class="line"><a id="l00021" name="l00021"></a><span class="lineno">   21</span><span class="comment">/* Pasos para hashear una contraseña</span></div>
+<div class="line"><a id="l00022" name="l00022"></a><span class="lineno">   22</span><span class="comment"> * 1. Generar un salt</span></div>
+<div class="line"><a id="l00023" name="l00023"></a><span class="lineno">   23</span><span class="comment"> * 2. Hashear la contraseña con el salt</span></div>
+<div class="line"><a id="l00024" name="l00024"></a><span class="lineno">   24</span><span class="comment"> * 3. Almacenar el hash y el salt</span></div>
+<div class="line"><a id="l00025" name="l00025"></a><span class="lineno">   25</span><span class="comment"> * 4. Para verificar la contraseña, hashear la contraseña con el salt almacenado y comparar con el hash almacenado</span></div>
+<div class="line"><a id="l00026" name="l00026"></a><span class="lineno">   26</span><span class="comment"> </span></div>
+<div class="line"><a id="l00027" name="l00027"></a><span class="lineno">   27</span><span class="comment">*/</span></div>
+<div class="line"><a id="l00028" name="l00028"></a><span class="lineno">   28</span> </div>
+<div class="foldopen" id="foldopen00029" data-start="{" data-end="}">
+<div class="line"><a id="l00029" name="l00029"></a><span class="lineno"><a class="line" href="tools_8cpp.html#a197f93e16c9c9c7382814a955628dcc1">   29</a></span>std::string <a class="code hl_function" href="tools_8cpp.html#a197f93e16c9c9c7382814a955628dcc1">toHex</a>(<span class="keyword">const</span> <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> *data, <span class="keywordtype">size_t</span> len){</div>
+<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span>    <span class="comment">//stringstream para almacenar los bytes</span></div>
+<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span>    std::stringstream ss;</div>
+<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span>    <span class="comment">//Establecer el formato de salida a hexadecimal</span></div>
+<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span>    ss &lt;&lt; std::hex;</div>
+<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span> </div>
+<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span>    <span class="comment">//Recorrer los bytes</span></div>
+<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span>    <span class="keywordflow">for</span> (<span class="keywordtype">size_t</span> i = 0; i &lt; len; ++i){</div>
+<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span>        <span class="comment">//Agregar el byte al stringstream</span></div>
+<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span>        ss &lt;&lt; std::setw(2) &lt;&lt; std::setfill(<span class="charliteral">&#39;0&#39;</span>) &lt;&lt; (int)data[i];</div>
+<div class="line"><a id="l00039" name="l00039"></a><span class="lineno">   39</span>    }</div>
+<div class="line"><a id="l00040" name="l00040"></a><span class="lineno">   40</span>    <span class="comment">//Retornar el stringstream como un string</span></div>
+<div class="line"><a id="l00041" name="l00041"></a><span class="lineno">   41</span>    <span class="keywordflow">return</span> ss.str();</div>
+<div class="line"><a id="l00042" name="l00042"></a><span class="lineno">   42</span>}</div>
+</div>
+<div class="line"><a id="l00043" name="l00043"></a><span class="lineno">   43</span> </div>
+<div class="foldopen" id="foldopen00044" data-start="{" data-end="}">
+<div class="line"><a id="l00044" name="l00044"></a><span class="lineno"><a class="line" href="tools_8cpp.html#ad124b50b0304097046310b4ecfec8c59">   44</a></span>std::string <a class="code hl_function" href="tools_8cpp.html#ad124b50b0304097046310b4ecfec8c59">genSalt</a>(){</div>
+<div class="line"><a id="l00045" name="l00045"></a><span class="lineno">   45</span>    <span class="comment">//Vector de bytes para almacenar el salt</span></div>
+<div class="line"><a id="l00046" name="l00046"></a><span class="lineno">   46</span>    <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> salt[<a class="code hl_define" href="tools_8cpp.html#ad6c5db50b1d4e2282874fc65eabcf969">SALT_SIZE</a>];</div>
+<div class="line"><a id="l00047" name="l00047"></a><span class="lineno">   47</span>    <span class="comment">//Generar el salt</span></div>
+<div class="line"><a id="l00048" name="l00048"></a><span class="lineno">   48</span>    RAND_bytes(salt, <a class="code hl_define" href="tools_8cpp.html#ad6c5db50b1d4e2282874fc65eabcf969">SALT_SIZE</a>);</div>
+<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span>    <span class="comment">//Retornar el salt como un string</span></div>
+<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span>    <span class="keywordflow">return</span> <a class="code hl_function" href="tools_8cpp.html#a197f93e16c9c9c7382814a955628dcc1">toHex</a>(salt, <a class="code hl_define" href="tools_8cpp.html#ad6c5db50b1d4e2282874fc65eabcf969">SALT_SIZE</a>);</div>
+<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span>}</div>
+</div>
+<div class="line"><a id="l00052" name="l00052"></a><span class="lineno">   52</span> </div>
+<div class="foldopen" id="foldopen00053" data-start="{" data-end="}">
+<div class="line"><a id="l00053" name="l00053"></a><span class="lineno"><a class="line" href="tools_8cpp.html#ac98cce18d9a898488bfdc0bd092df211">   53</a></span>std::string <a class="code hl_function" href="tools_8cpp.html#ac98cce18d9a898488bfdc0bd092df211">hash</a>(<span class="keyword">const</span> std::string &amp;password, <span class="keyword">const</span> std::string &amp;salt){</div>
+<div class="line"><a id="l00054" name="l00054"></a><span class="lineno">   54</span>    <span class="comment">//Vector de bytes para almacenar el hash</span></div>
+<div class="line"><a id="l00055" name="l00055"></a><span class="lineno">   55</span>    <span class="keywordtype">unsigned</span> <span class="keywordtype">char</span> <a class="code hl_function" href="tools_8cpp.html#ac98cce18d9a898488bfdc0bd092df211">hash</a>[<a class="code hl_define" href="tools_8cpp.html#ad6074dd11ab3c97c8135c43aab03ae95">HASH_SIZE</a>];</div>
+<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span>    <span class="comment">//Hashear la contraseña</span></div>
+<div class="line"><a id="l00057" name="l00057"></a><span class="lineno">   57</span>    PKCS5_PBKDF2_HMAC(password.c_str(), password.size(), (<span class="keywordtype">unsigned</span> <span class="keywordtype">char</span>*)salt.c_str(), salt.size(), <a class="code hl_define" href="tools_8cpp.html#aa9cc087d076e4fa101f8794a947bd01a">ITERATIONS</a>, EVP_sha256(), <a class="code hl_define" href="tools_8cpp.html#ad6074dd11ab3c97c8135c43aab03ae95">HASH_SIZE</a>, <a class="code hl_function" href="tools_8cpp.html#ac98cce18d9a898488bfdc0bd092df211">hash</a>);</div>
+<div class="line"><a id="l00058" name="l00058"></a><span class="lineno">   58</span>    <span class="comment">//Retornar el hash como un string</span></div>
+<div class="line"><a id="l00059" name="l00059"></a><span class="lineno">   59</span>    <span class="keywordflow">return</span> <a class="code hl_function" href="tools_8cpp.html#a197f93e16c9c9c7382814a955628dcc1">toHex</a>(<a class="code hl_function" href="tools_8cpp.html#ac98cce18d9a898488bfdc0bd092df211">hash</a>, <a class="code hl_define" href="tools_8cpp.html#ad6074dd11ab3c97c8135c43aab03ae95">HASH_SIZE</a>);</div>
+<div class="line"><a id="l00060" name="l00060"></a><span class="lineno">   60</span>}</div>
+</div>
+<div class="line"><a id="l00061" name="l00061"></a><span class="lineno">   61</span> </div>
+<div class="foldopen" id="foldopen00062" data-start="{" data-end="}">
+<div class="line"><a id="l00062" name="l00062"></a><span class="lineno"><a class="line" href="tools_8cpp.html#a95ca0945824156b840b0aca087a0089d">   62</a></span><span class="keywordtype">bool</span> <a class="code hl_function" href="tools_8cpp.html#a95ca0945824156b840b0aca087a0089d">checkPassword</a>(<span class="keyword">const</span> std::string &amp;password, <span class="keyword">const</span> std::string &amp;storedsalt, <span class="keyword">const</span> std::string &amp;storedhash){</div>
+<div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span>    <span class="comment">//Hashear la contraseña con el salt almacenado</span></div>
+<div class="line"><a id="l00064" name="l00064"></a><span class="lineno">   64</span>    std::string newhash = <a class="code hl_function" href="tools_8cpp.html#ac98cce18d9a898488bfdc0bd092df211">hash</a>(password, storedsalt);</div>
+<div class="line"><a id="l00065" name="l00065"></a><span class="lineno">   65</span>    <span class="comment">//Comparar el hash generado con el hash almacenado</span></div>
+<div class="line"><a id="l00066" name="l00066"></a><span class="lineno">   66</span>    <span class="keywordflow">return</span> newhash == storedhash;</div>
+<div class="line"><a id="l00067" name="l00067"></a><span class="lineno">   67</span>}</div>
+</div>
+<div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span> </div>
+<div class="foldopen" id="foldopen00069" data-start="{" data-end="}">
+<div class="line"><a id="l00069" name="l00069"></a><span class="lineno"><a class="line" href="tools_8cpp.html#a4d46645097c546e117d2829da9f0c038">   69</a></span>std::string <a class="code hl_function" href="tools_8cpp.html#a4d46645097c546e117d2829da9f0c038">getPassword</a>(<span class="keywordtype">int</span> ID){</div>
+<div class="line"><a id="l00070" name="l00070"></a><span class="lineno">   70</span>    std::string password;</div>
+<div class="line"><a id="l00071" name="l00071"></a><span class="lineno">   71</span>    std::string salt;</div>
+<div class="line"><a id="l00072" name="l00072"></a><span class="lineno">   72</span>    std::string <a class="code hl_function" href="tools_8cpp.html#ac98cce18d9a898488bfdc0bd092df211">hash</a>;</div>
+<div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span>    sqlite3 *db;</div>
+<div class="line"><a id="l00074" name="l00074"></a><span class="lineno">   74</span>    <span class="keywordtype">char</span> *zErrMsg = 0;</div>
+<div class="line"><a id="l00075" name="l00075"></a><span class="lineno">   75</span>    <span class="keyword">const</span> <span class="keywordtype">char</span> * data = <span class="stringliteral">&quot;SQLite 3&quot;</span>;</div>
+<div class="line"><a id="l00076" name="l00076"></a><span class="lineno">   76</span>    <span class="keywordtype">int</span> rc;</div>
+<div class="line"><a id="l00077" name="l00077"></a><span class="lineno">   77</span>    rc = sqlite3_open(<span class="stringliteral">&quot;SistemaBancario.db&quot;</span>, &amp;db);</div>
+<div class="line"><a id="l00078" name="l00078"></a><span class="lineno">   78</span>    <span class="keywordflow">if</span> (rc){</div>
+<div class="line"><a id="l00079" name="l00079"></a><span class="lineno">   79</span>        std::cout &lt;&lt; <span class="stringliteral">&quot;No se pudo abrir la base de datos&quot;</span> &lt;&lt; std::endl;</div>
+<div class="line"><a id="l00080" name="l00080"></a><span class="lineno">   80</span>        <span class="keywordflow">return</span> <span class="stringliteral">&quot;&quot;</span>;</div>
+<div class="line"><a id="l00081" name="l00081"></a><span class="lineno">   81</span>    }</div>
+<div class="line"><a id="l00082" name="l00082"></a><span class="lineno">   82</span>    std::string sql = <span class="stringliteral">&quot;SELECT PASSWORD FROM PASSWORDS WHERE ID_CLIENTE = &quot;</span> + std::to_string(ID) + <span class="stringliteral">&quot;;&quot;</span>;</div>
+<div class="line"><a id="l00083" name="l00083"></a><span class="lineno">   83</span>    rc = sqlite3_exec(db, sql.c_str(), <a class="code hl_function" href="db_8hpp.html#a8cd33f00de36f098d994aef4a17cbcd7">stringCallback</a>, &amp;password, &amp;zErrMsg);</div>
+<div class="line"><a id="l00084" name="l00084"></a><span class="lineno">   84</span>    <span class="keywordflow">if</span> (rc != SQLITE_OK){</div>
+<div class="line"><a id="l00085" name="l00085"></a><span class="lineno">   85</span>        std::cout &lt;&lt; <span class="stringliteral">&quot;Error en la consulta: &quot;</span> &lt;&lt; zErrMsg &lt;&lt; std::endl;</div>
+<div class="line"><a id="l00086" name="l00086"></a><span class="lineno">   86</span>        sqlite3_free(zErrMsg);</div>
+<div class="line"><a id="l00087" name="l00087"></a><span class="lineno">   87</span>        <span class="keywordflow">return</span> <span class="stringliteral">&quot;&quot;</span>;</div>
+<div class="line"><a id="l00088" name="l00088"></a><span class="lineno">   88</span>    }</div>
+<div class="line"><a id="l00089" name="l00089"></a><span class="lineno">   89</span>    <span class="keywordflow">return</span> password;</div>
+<div class="line"><a id="l00090" name="l00090"></a><span class="lineno">   90</span>}</div>
+</div>
+<div class="line"><a id="l00091" name="l00091"></a><span class="lineno">   91</span> </div>
+<div class="line"><a id="l00092" name="l00092"></a><span class="lineno">   92</span> </div>
+<div class="foldopen" id="foldopen00093" data-start="{" data-end="}">
+<div class="line"><a id="l00093" name="l00093"></a><span class="lineno"><a class="line" href="tools_8cpp.html#a40e020872e1a79f2ed52769fae753e06">   93</a></span>std::string <a class="code hl_function" href="tools_8cpp.html#a40e020872e1a79f2ed52769fae753e06">getSalt</a>(<span class="keywordtype">int</span> ID){</div>
+<div class="line"><a id="l00094" name="l00094"></a><span class="lineno">   94</span>    std::string salt;</div>
+<div class="line"><a id="l00095" name="l00095"></a><span class="lineno">   95</span>    sqlite3 *db;</div>
+<div class="line"><a id="l00096" name="l00096"></a><span class="lineno">   96</span>    <span class="keywordtype">char</span> *zErrMsg = 0;</div>
+<div class="line"><a id="l00097" name="l00097"></a><span class="lineno">   97</span>    <span class="keyword">const</span> <span class="keywordtype">char</span> * data = <span class="stringliteral">&quot;SQLite 3&quot;</span>;</div>
+<div class="line"><a id="l00098" name="l00098"></a><span class="lineno">   98</span>    <span class="keywordtype">int</span> rc;</div>
+<div class="line"><a id="l00099" name="l00099"></a><span class="lineno">   99</span>    rc = sqlite3_open(<span class="stringliteral">&quot;SistemaBancario.db&quot;</span>, &amp;db);</div>
+<div class="line"><a id="l00100" name="l00100"></a><span class="lineno">  100</span>    <span class="keywordflow">if</span> (rc){</div>
+<div class="line"><a id="l00101" name="l00101"></a><span class="lineno">  101</span>        std::cout &lt;&lt; <span class="stringliteral">&quot;No se pudo abrir la base de datos&quot;</span> &lt;&lt; std::endl;</div>
+<div class="line"><a id="l00102" name="l00102"></a><span class="lineno">  102</span>        <span class="keywordflow">return</span> <span class="stringliteral">&quot;&quot;</span>;</div>
+<div class="line"><a id="l00103" name="l00103"></a><span class="lineno">  103</span>    }</div>
+<div class="line"><a id="l00104" name="l00104"></a><span class="lineno">  104</span>    std::string sql = <span class="stringliteral">&quot;SELECT SALT FROM PASSWORDS WHERE ID_CLIENTE = &quot;</span> + std::to_string(ID) + <span class="stringliteral">&quot;;&quot;</span>;</div>
+<div class="line"><a id="l00105" name="l00105"></a><span class="lineno">  105</span>    rc = sqlite3_exec(db, sql.c_str(), <a class="code hl_function" href="db_8hpp.html#a8cd33f00de36f098d994aef4a17cbcd7">stringCallback</a>, &amp;salt, &amp;zErrMsg);</div>
+<div class="line"><a id="l00106" name="l00106"></a><span class="lineno">  106</span>    <span class="keywordflow">if</span> (rc != SQLITE_OK){</div>
+<div class="line"><a id="l00107" name="l00107"></a><span class="lineno">  107</span>        std::cout &lt;&lt; <span class="stringliteral">&quot;Error en la consulta: &quot;</span> &lt;&lt; zErrMsg &lt;&lt; std::endl;</div>
+<div class="line"><a id="l00108" name="l00108"></a><span class="lineno">  108</span>        sqlite3_free(zErrMsg);</div>
+<div class="line"><a id="l00109" name="l00109"></a><span class="lineno">  109</span>        <span class="keywordflow">return</span> <span class="stringliteral">&quot;&quot;</span>;</div>
+<div class="line"><a id="l00110" name="l00110"></a><span class="lineno">  110</span>    }</div>
+<div class="line"><a id="l00111" name="l00111"></a><span class="lineno">  111</span>    <span class="keywordflow">return</span> salt;</div>
+<div class="line"><a id="l00112" name="l00112"></a><span class="lineno">  112</span>}</div>
+</div>
+<div class="ttc" id="adb_8hpp_html"><div class="ttname"><a href="db_8hpp.html">db.hpp</a></div><div class="ttdoc">Header file de la base de datos MIT License.</div></div>
+<div class="ttc" id="adb_8hpp_html_a8cd33f00de36f098d994aef4a17cbcd7"><div class="ttname"><a href="db_8hpp.html#a8cd33f00de36f098d994aef4a17cbcd7">stringCallback</a></div><div class="ttdeci">static int stringCallback(void *data, int argc, char **argv, char **azColName)</div><div class="ttdoc">Funcion para retornar un unico string.</div><div class="ttdef"><b>Definition</b> <a href="db_8hpp_source.html#l00062">db.hpp:62</a></div></div>
+<div class="ttc" id="atools_8cpp_html_a197f93e16c9c9c7382814a955628dcc1"><div class="ttname"><a href="tools_8cpp.html#a197f93e16c9c9c7382814a955628dcc1">toHex</a></div><div class="ttdeci">std::string toHex(const unsigned char *data, size_t len)</div><div class="ttdoc">Función para convertir un string a un vector de bytes.</div><div class="ttdef"><b>Definition</b> <a href="#l00029">tools.cpp:29</a></div></div>
+<div class="ttc" id="atools_8cpp_html_a40e020872e1a79f2ed52769fae753e06"><div class="ttname"><a href="tools_8cpp.html#a40e020872e1a79f2ed52769fae753e06">getSalt</a></div><div class="ttdeci">std::string getSalt(int ID)</div><div class="ttdef"><b>Definition</b> <a href="#l00093">tools.cpp:93</a></div></div>
+<div class="ttc" id="atools_8cpp_html_a4d46645097c546e117d2829da9f0c038"><div class="ttname"><a href="tools_8cpp.html#a4d46645097c546e117d2829da9f0c038">getPassword</a></div><div class="ttdeci">std::string getPassword(int ID)</div><div class="ttdoc">Funcion para obtener una contraseña.</div><div class="ttdef"><b>Definition</b> <a href="#l00069">tools.cpp:69</a></div></div>
+<div class="ttc" id="atools_8cpp_html_a95ca0945824156b840b0aca087a0089d"><div class="ttname"><a href="tools_8cpp.html#a95ca0945824156b840b0aca087a0089d">checkPassword</a></div><div class="ttdeci">bool checkPassword(const std::string &amp;password, const std::string &amp;storedsalt, const std::string &amp;storedhash)</div><div class="ttdef"><b>Definition</b> <a href="#l00062">tools.cpp:62</a></div></div>
+<div class="ttc" id="atools_8cpp_html_aa9cc087d076e4fa101f8794a947bd01a"><div class="ttname"><a href="tools_8cpp.html#aa9cc087d076e4fa101f8794a947bd01a">ITERATIONS</a></div><div class="ttdeci">#define ITERATIONS</div><div class="ttdef"><b>Definition</b> <a href="#l00018">tools.cpp:18</a></div></div>
+<div class="ttc" id="atools_8cpp_html_ac98cce18d9a898488bfdc0bd092df211"><div class="ttname"><a href="tools_8cpp.html#ac98cce18d9a898488bfdc0bd092df211">hash</a></div><div class="ttdeci">std::string hash(const std::string &amp;password, const std::string &amp;salt)</div><div class="ttdoc">Funcion para hashear una contraseña.</div><div class="ttdef"><b>Definition</b> <a href="#l00053">tools.cpp:53</a></div></div>
+<div class="ttc" id="atools_8cpp_html_ad124b50b0304097046310b4ecfec8c59"><div class="ttname"><a href="tools_8cpp.html#ad124b50b0304097046310b4ecfec8c59">genSalt</a></div><div class="ttdeci">std::string genSalt()</div><div class="ttdoc">Funcion para generar un salt.</div><div class="ttdef"><b>Definition</b> <a href="#l00044">tools.cpp:44</a></div></div>
+<div class="ttc" id="atools_8cpp_html_ad6074dd11ab3c97c8135c43aab03ae95"><div class="ttname"><a href="tools_8cpp.html#ad6074dd11ab3c97c8135c43aab03ae95">HASH_SIZE</a></div><div class="ttdeci">#define HASH_SIZE</div><div class="ttdef"><b>Definition</b> <a href="#l00017">tools.cpp:17</a></div></div>
+<div class="ttc" id="atools_8cpp_html_ad6c5db50b1d4e2282874fc65eabcf969"><div class="ttname"><a href="tools_8cpp.html#ad6c5db50b1d4e2282874fc65eabcf969">SALT_SIZE</a></div><div class="ttdeci">#define SALT_SIZE</div><div class="ttdef"><b>Definition</b> <a href="#l00016">tools.cpp:16</a></div></div>
+<div class="ttc" id="atools_8hpp_html"><div class="ttname"><a href="tools_8hpp.html">tools.hpp</a></div></div>
+</div><!-- fragment --></div><!-- contents -->
+</div><!-- doc-content -->
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="navelem"><a class="el" href="dir_68267d1309a1af8e8297ef4c3efbcdba.html">src</a></li><li class="navelem"><a class="el" href="tools_8cpp.html">tools.cpp</a></li>
+    <li class="footer">Generado por <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.10.0 </li>
+  </ul>
+</div>
+</body>
+</html>

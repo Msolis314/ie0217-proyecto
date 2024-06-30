@@ -1,0 +1,221 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="es">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=11"/>
+<meta name="generator" content="Doxygen 1.10.0"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Proyecto Final IE-0217: Archivo de código fuente src/transaciones.hpp</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<script type="text/javascript" src="clipboard.js"></script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<script type="text/javascript" src="cookie.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr id="projectrow">
+  <td id="projectlogo"><img alt="Logo" src="pago-seguro.png"/></td>
+  <td id="projectalign">
+   <div id="projectname">Proyecto Final IE-0217<span id="projectnumber">&#160;1.0</span>
+   </div>
+   <div id="projectbrief">Sistema de gestión bancaria</div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- Generado por Doxygen 1.10.0 -->
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+var searchBox = new SearchBox("searchBox", "search/",'.html');
+/* @license-end */
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function() {
+  initMenu('',true,false,'search.php','Buscar');
+  $(function() { init_search(); });
+});
+/* @license-end */
+</script>
+<div id="main-nav"></div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function() { codefold.init(0); });
+/* @license-end */
+</script>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function(){initNavTree('transaciones_8hpp_source.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<div id="MSearchResults">
+<div class="SRPage">
+<div id="SRIndex">
+<div id="SRResults"></div>
+<div class="SRStatus" id="Loading">Cargando...</div>
+<div class="SRStatus" id="Searching">Buscando...</div>
+<div class="SRStatus" id="NoMatches">Nada coincide</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="header">
+  <div class="headertitle"><div class="title">transaciones.hpp</div></div>
+</div><!--header-->
+<div class="contents">
+<a href="transaciones_8hpp.html">Ir a la documentación de este archivo.</a><div class="fragment"><div class="line"><a id="l00001" name="l00001"></a><span class="lineno">    1</span> </div>
+<div class="line"><a id="l00029" name="l00029"></a><span class="lineno">   29</span><span class="preprocessor">#ifndef TRANSACCIONES_HPP </span><span class="comment">//TRANSACCIONES_HPP</span></div>
+<div class="line"><a id="l00030" name="l00030"></a><span class="lineno">   30</span><span class="preprocessor">#define TRANSACCIONES_HPP</span></div>
+<div class="line"><a id="l00031" name="l00031"></a><span class="lineno">   31</span> </div>
+<div class="line"><a id="l00032" name="l00032"></a><span class="lineno">   32</span><span class="preprocessor">#include &lt;iostream&gt;</span></div>
+<div class="line"><a id="l00033" name="l00033"></a><span class="lineno">   33</span><span class="preprocessor">#include &lt;string&gt;</span></div>
+<div class="line"><a id="l00034" name="l00034"></a><span class="lineno">   34</span><span class="preprocessor">#include &lt;sqlite3.h&gt;</span></div>
+<div class="line"><a id="l00035" name="l00035"></a><span class="lineno">   35</span><span class="preprocessor">#include &quot;<a class="code" href="entidad_bancaria_8hpp.html">entidadBancaria.hpp</a>&quot;</span></div>
+<div class="line"><a id="l00036" name="l00036"></a><span class="lineno">   36</span><span class="preprocessor">#include &quot;<a class="code" href="menu_8hpp.html">menu.hpp</a>&quot;</span></div>
+<div class="line"><a id="l00037" name="l00037"></a><span class="lineno">   37</span><span class="preprocessor">#include &quot;<a class="code" href="cliente_8hpp.html">cliente.hpp</a>&quot;</span></div>
+<div class="line"><a id="l00038" name="l00038"></a><span class="lineno">   38</span> </div>
+<div class="foldopen" id="foldopen00039" data-start="{" data-end="};">
+<div class="line"><a id="l00039" name="l00039"></a><span class="lineno"><a class="line" href="structfunction_vars.html">   39</a></span><span class="keyword">struct </span><a class="code hl_struct" href="structfunction_vars.html">functionVars</a>{</div>
+<div class="line"><a id="l00040" name="l00040"></a><span class="lineno"><a class="line" href="structfunction_vars.html#abfaca264395e65df97684f173bce0b82">   40</a></span>    <span class="keywordtype">int</span> <a class="code hl_variable" href="structfunction_vars.html#abfaca264395e65df97684f173bce0b82">opcion</a>;</div>
+<div class="line"><a id="l00041" name="l00041"></a><span class="lineno"><a class="line" href="structfunction_vars.html#a1d87c812e2a357ae4da46bdc9ec9566d">   41</a></span>    <span class="keywordtype">float</span> <a class="code hl_variable" href="structfunction_vars.html#a1d87c812e2a357ae4da46bdc9ec9566d">monto</a>;</div>
+<div class="line"><a id="l00042" name="l00042"></a><span class="lineno"><a class="line" href="structfunction_vars.html#afa115c27c5b410c5b82421b434d2cf59">   42</a></span>    std::string <a class="code hl_variable" href="structfunction_vars.html#afa115c27c5b410c5b82421b434d2cf59">dato</a>;</div>
+<div class="line"><a id="l00043" name="l00043"></a><span class="lineno"><a class="line" href="structfunction_vars.html#a9d7085ccfe900acb3b552b6bfc71e757">   43</a></span>    <span class="keywordtype">int</span> <a class="code hl_variable" href="structfunction_vars.html#a9d7085ccfe900acb3b552b6bfc71e757">tries</a>;</div>
+<div class="line"><a id="l00044" name="l00044"></a><span class="lineno"><a class="line" href="structfunction_vars.html#a988d483617e438926f50a2daefe3a93f">   44</a></span>    <span class="keywordtype">int</span> <a class="code hl_variable" href="structfunction_vars.html#a988d483617e438926f50a2daefe3a93f">rightChoice</a>;</div>
+<div class="line"><a id="l00045" name="l00045"></a><span class="lineno"><a class="line" href="structfunction_vars.html#acd84a58ddd060a48960b69ab30c41a6a">   45</a></span>    <a class="code hl_variable" href="structfunction_vars.html#abfaca264395e65df97684f173bce0b82">sqlite3</a> *<a class="code hl_variable" href="structfunction_vars.html#acd84a58ddd060a48960b69ab30c41a6a">db</a>;</div>
+<div class="line"><a id="l00046" name="l00046"></a><span class="lineno"><a class="line" href="structfunction_vars.html#ab2c9a87d114fe4f837f6051d7e44c67a">   46</a></span>    std::string <a class="code hl_variable" href="structfunction_vars.html#ab2c9a87d114fe4f837f6051d7e44c67a">sql</a>;</div>
+<div class="line"><a id="l00047" name="l00047"></a><span class="lineno"><a class="line" href="structfunction_vars.html#acd90f54404fa7b06acc5623c42960400">   47</a></span>    <span class="keywordtype">char</span> *<a class="code hl_variable" href="structfunction_vars.html#acd90f54404fa7b06acc5623c42960400">zErrMsg</a> = 0;</div>
+<div class="line"><a id="l00048" name="l00048"></a><span class="lineno"><a class="line" href="structfunction_vars.html#ad3d1bf856e422b726efbb8c6435f8f2f">   48</a></span>    <span class="keywordtype">int</span> <a class="code hl_variable" href="structfunction_vars.html#ad3d1bf856e422b726efbb8c6435f8f2f">rc</a>;</div>
+<div class="line"><a id="l00049" name="l00049"></a><span class="lineno">   49</span> </div>
+<div class="line"><a id="l00050" name="l00050"></a><span class="lineno">   50</span>} <span class="keyword">typedef</span> <a class="code hl_struct" href="structfunction_vars.html">functionVars</a>;</div>
+</div>
+<div class="line"><a id="l00051" name="l00051"></a><span class="lineno">   51</span> </div>
+<div class="foldopen" id="foldopen00055" data-start="{" data-end="};">
+<div class="line"><a id="l00055" name="l00055"></a><span class="lineno"><a class="line" href="class_operaciones.html">   55</a></span><span class="keyword">class </span><a class="code hl_class" href="class_operaciones.html">Operaciones</a> {</div>
+<div class="line"><a id="l00056" name="l00056"></a><span class="lineno">   56</span>    <span class="keyword">private</span>:</div>
+<div class="line"><a id="l00057" name="l00057"></a><span class="lineno"><a class="line" href="class_operaciones.html#a0a193d79e69a29274e5462db000d595e">   57</a></span>        std::string <a class="code hl_variable" href="class_operaciones.html#a0a193d79e69a29274e5462db000d595e">tipo</a>;</div>
+<div class="line"><a id="l00058" name="l00058"></a><span class="lineno"><a class="line" href="class_operaciones.html#aceca08ff969cbb70063adc0e6d32438c">   58</a></span>        std::string <a class="code hl_variable" href="class_operaciones.html#aceca08ff969cbb70063adc0e6d32438c">fecha</a>;</div>
+<div class="line"><a id="l00059" name="l00059"></a><span class="lineno"><a class="line" href="class_operaciones.html#ac7a88ee6ec510941692a26125fb8b445">   59</a></span>        std::string <a class="code hl_variable" href="class_operaciones.html#ac7a88ee6ec510941692a26125fb8b445">hora</a>;</div>
+<div class="line"><a id="l00060" name="l00060"></a><span class="lineno"><a class="line" href="class_operaciones.html#adc730bdb78e6d4008caec69df939cdfc">   60</a></span>        <span class="keywordtype">float</span> <a class="code hl_variable" href="class_operaciones.html#adc730bdb78e6d4008caec69df939cdfc">monto</a>;</div>
+<div class="line"><a id="l00061" name="l00061"></a><span class="lineno"><a class="line" href="class_operaciones.html#ae753d76f16c8eb38b0e6bda55fb619e7">   61</a></span>        <a class="code hl_class" href="class_cliente.html">Cliente</a> <a class="code hl_variable" href="class_operaciones.html#ae753d76f16c8eb38b0e6bda55fb619e7">cliente</a>;</div>
+<div class="line"><a id="l00062" name="l00062"></a><span class="lineno"><a class="line" href="class_operaciones.html#a9c2bf87440e3e5facacc3f4a577d0054">   62</a></span>        <span class="keywordtype">int</span> <a class="code hl_variable" href="class_operaciones.html#a9c2bf87440e3e5facacc3f4a577d0054">idCuentaDestino</a>;</div>
+<div class="line"><a id="l00063" name="l00063"></a><span class="lineno">   63</span>    <span class="keyword">public</span>:</div>
+<div class="line"><a id="l00068" name="l00068"></a><span class="lineno">   68</span>        <a class="code hl_function" href="class_operaciones.html#afd23cac3d7748efc4e524122a7661451">Operaciones</a>(std::string nombre,std::string apellido,<span class="keywordtype">int</span> <span class="keywordtype">id</span>);</div>
+<div class="line"><a id="l00069" name="l00069"></a><span class="lineno">   69</span> </div>
+<div class="line"><a id="l00070" name="l00070"></a><span class="lineno">   70</span> </div>
+<div class="line"><a id="l00073" name="l00073"></a><span class="lineno">   73</span>        std::string <a class="code hl_function" href="class_operaciones.html#a480f4251e6fa4405a27c404d42b96be2">obtenerFechaHoraActual</a>();</div>
+<div class="line"><a id="l00074" name="l00074"></a><span class="lineno">   74</span> </div>
+<div class="line"><a id="l00075" name="l00075"></a><span class="lineno">   75</span> </div>
+<div class="line"><a id="l00083" name="l00083"></a><span class="lineno">   83</span>        <span class="keywordtype">void</span> <a class="code hl_function" href="class_operaciones.html#a449bfc1d0ff5240362a9967cff7b0e13">registrarTransaccion</a>(<span class="keywordtype">int</span> idCliente, <span class="keyword">const</span> std::string&amp; tipoTransaccion, <span class="keywordtype">int</span> idCuenta, <span class="keywordtype">int</span> <a class="code hl_variable" href="class_operaciones.html#a9c2bf87440e3e5facacc3f4a577d0054">idCuentaDestino</a>, <span class="keywordtype">float</span> <a class="code hl_variable" href="class_operaciones.html#adc730bdb78e6d4008caec69df939cdfc">monto</a>, <span class="keyword">const</span> std::string&amp; moneda);</div>
+<div class="line"><a id="l00084" name="l00084"></a><span class="lineno">   84</span> </div>
+<div class="line"><a id="l00085" name="l00085"></a><span class="lineno">   85</span> </div>
+<div class="line"><a id="l00088" name="l00088"></a><span class="lineno">   88</span>        <span class="keywordtype">void</span> <a class="code hl_function" href="class_operaciones.html#a41ce4b76d042efb994a447530035e976">imprimirHistorialTransacciones</a>(<span class="keywordtype">int</span> IdCliente);</div>
+<div class="line"><a id="l00089" name="l00089"></a><span class="lineno">   89</span> </div>
+<div class="line"><a id="l00090" name="l00090"></a><span class="lineno">   90</span> </div>
+<div class="line"><a id="l00094" name="l00094"></a><span class="lineno">   94</span>        <span class="keywordtype">void</span> <a class="code hl_function" href="class_operaciones.html#aa3722f4153bd4fe106607313178af258">depositar</a>(<a class="code hl_enumeration" href="entidad_bancaria_8hpp.html#a89cef56c670c4475a5f0bf4882a52f83">Monedas</a> cambio, <span class="keywordtype">float</span> <a class="code hl_variable" href="class_operaciones.html#adc730bdb78e6d4008caec69df939cdfc">monto</a>);</div>
+<div class="line"><a id="l00095" name="l00095"></a><span class="lineno">   95</span> </div>
+<div class="line"><a id="l00099" name="l00099"></a><span class="lineno">   99</span>        <span class="keywordtype">void</span> <a class="code hl_function" href="class_operaciones.html#a476406613d51920451f55f04c1ccdf64">retirar</a>(<a class="code hl_enumeration" href="entidad_bancaria_8hpp.html#a89cef56c670c4475a5f0bf4882a52f83">Monedas</a> cambio, <span class="keywordtype">float</span> <a class="code hl_variable" href="class_operaciones.html#adc730bdb78e6d4008caec69df939cdfc">monto</a>);</div>
+<div class="line"><a id="l00100" name="l00100"></a><span class="lineno">  100</span>        <span class="keywordtype">void</span> <a class="code hl_function" href="class_operaciones.html#ae2a8538104b40a1cd64677632f9d7eb0">transferir</a>();</div>
+<div class="line"><a id="l00101" name="l00101"></a><span class="lineno"><a class="line" href="class_operaciones.html#a4c1498e817db5e60ecfee0ddbd5a8d77">  101</a></span>        <span class="keywordtype">void</span> <a class="code hl_function" href="class_operaciones.html#a4c1498e817db5e60ecfee0ddbd5a8d77">pagarPrestamo</a>();</div>
+<div class="line"><a id="l00102" name="l00102"></a><span class="lineno"><a class="line" href="class_operaciones.html#a10d49ab3ca4778cb2530118c6cea3941">  102</a></span>        <span class="keywordtype">void</span> <a class="code hl_function" href="class_operaciones.html#a10d49ab3ca4778cb2530118c6cea3941">solicitarPrestamo</a>();</div>
+<div class="line"><a id="l00103" name="l00103"></a><span class="lineno">  103</span> </div>
+<div class="line"><a id="l00107" name="l00107"></a><span class="lineno">  107</span>        <span class="keywordtype">float</span> <a class="code hl_function" href="class_operaciones.html#a1ab911f091a2f156d05690c8981cf5d9">consultarSaldo</a>(<span class="keywordtype">int</span> idCuenta);</div>
+<div class="line"><a id="l00108" name="l00108"></a><span class="lineno">  108</span> </div>
+<div class="line"><a id="l00110" name="l00110"></a><span class="lineno"><a class="line" href="class_operaciones.html#a9953a7276ca3f5cf33fcbee8ba0bdab1">  110</a></span>        <span class="keywordtype">void</span> <a class="code hl_function" href="class_operaciones.html#a9953a7276ca3f5cf33fcbee8ba0bdab1">escribirHistorial</a>();</div>
+<div class="line"><a id="l00111" name="l00111"></a><span class="lineno">  111</span> </div>
+<div class="line"><a id="l00115" name="l00115"></a><span class="lineno">  115</span>        <span class="keywordtype">int</span> <a class="code hl_function" href="class_operaciones.html#ab52bdea9cf61c9507ebf445bb9c64f3c">checkAcountCurrency</a>(<span class="keywordtype">int</span> idCuenta);</div>
+<div class="line"><a id="l00116" name="l00116"></a><span class="lineno">  116</span> </div>
+<div class="line"><a id="l00117" name="l00117"></a><span class="lineno"><a class="line" href="class_operaciones.html#a27752edaaa2527c8a887b60b200639d1">  117</a></span>        <span class="keywordtype">void</span> <a class="code hl_function" href="class_operaciones.html#a27752edaaa2527c8a887b60b200639d1">consultarMovimientos</a>();</div>
+<div class="line"><a id="l00118" name="l00118"></a><span class="lineno"><a class="line" href="class_operaciones.html#acf1a93118e12ca20d37d40145b7f731c">  118</a></span>        <span class="keywordtype">void</span> <a class="code hl_function" href="class_operaciones.html#acf1a93118e12ca20d37d40145b7f731c">consultarPrestamos</a>();</div>
+<div class="line"><a id="l00119" name="l00119"></a><span class="lineno">  119</span> </div>
+<div class="line"><a id="l00123" name="l00123"></a><span class="lineno">  123</span>        <span class="keywordtype">int</span> <a class="code hl_function" href="class_operaciones.html#a6da7fd4989db58b9ac1bf6a772aba05b">pedirMonto</a>(<span class="keywordtype">float</span> &amp;<a class="code hl_variable" href="class_operaciones.html#adc730bdb78e6d4008caec69df939cdfc">monto</a>);</div>
+<div class="line"><a id="l00124" name="l00124"></a><span class="lineno">  124</span> </div>
+<div class="line"><a id="l00125" name="l00125"></a><span class="lineno">  125</span> </div>
+<div class="line"><a id="l00126" name="l00126"></a><span class="lineno">  126</span>};</div>
+</div>
+<div class="line"><a id="l00127" name="l00127"></a><span class="lineno">  127</span><span class="preprocessor">#endif </span><span class="comment">//TRANSACCIONES_HPP</span></div>
+<div class="ttc" id="aclass_cliente_html"><div class="ttname"><a href="class_cliente.html">Cliente</a></div><div class="ttdoc">es un cliente de una entidad bancaria.</div><div class="ttdef"><b>Definition</b> <a href="cliente_8hpp_source.html#l00067">cliente.hpp:67</a></div></div>
+<div class="ttc" id="aclass_operaciones_html"><div class="ttname"><a href="class_operaciones.html">Operaciones</a></div><div class="ttdoc">Clase que realiza las operaciones bancarias.</div><div class="ttdef"><b>Definition</b> <a href="#l00055">transaciones.hpp:55</a></div></div>
+<div class="ttc" id="aclass_operaciones_html_a0a193d79e69a29274e5462db000d595e"><div class="ttname"><a href="class_operaciones.html#a0a193d79e69a29274e5462db000d595e">Operaciones::tipo</a></div><div class="ttdeci">std::string tipo</div><div class="ttdef"><b>Definition</b> <a href="#l00057">transaciones.hpp:57</a></div></div>
+<div class="ttc" id="aclass_operaciones_html_a10d49ab3ca4778cb2530118c6cea3941"><div class="ttname"><a href="class_operaciones.html#a10d49ab3ca4778cb2530118c6cea3941">Operaciones::solicitarPrestamo</a></div><div class="ttdeci">void solicitarPrestamo()</div></div>
+<div class="ttc" id="aclass_operaciones_html_a1ab911f091a2f156d05690c8981cf5d9"><div class="ttname"><a href="class_operaciones.html#a1ab911f091a2f156d05690c8981cf5d9">Operaciones::consultarSaldo</a></div><div class="ttdeci">float consultarSaldo(int idCuenta)</div><div class="ttdoc">Consultar el saldo de la cuenta.</div><div class="ttdef"><b>Definition</b> <a href="transaciones_8cpp_source.html#l00440">transaciones.cpp:440</a></div></div>
+<div class="ttc" id="aclass_operaciones_html_a27752edaaa2527c8a887b60b200639d1"><div class="ttname"><a href="class_operaciones.html#a27752edaaa2527c8a887b60b200639d1">Operaciones::consultarMovimientos</a></div><div class="ttdeci">void consultarMovimientos()</div></div>
+<div class="ttc" id="aclass_operaciones_html_a41ce4b76d042efb994a447530035e976"><div class="ttname"><a href="class_operaciones.html#a41ce4b76d042efb994a447530035e976">Operaciones::imprimirHistorialTransacciones</a></div><div class="ttdeci">void imprimirHistorialTransacciones(int IdCliente)</div><div class="ttdoc">Imprimir historial de transacciones del usuario.</div><div class="ttdef"><b>Definition</b> <a href="transaciones_8cpp_source.html#l00076">transaciones.cpp:76</a></div></div>
+<div class="ttc" id="aclass_operaciones_html_a449bfc1d0ff5240362a9967cff7b0e13"><div class="ttname"><a href="class_operaciones.html#a449bfc1d0ff5240362a9967cff7b0e13">Operaciones::registrarTransaccion</a></div><div class="ttdeci">void registrarTransaccion(int idCliente, const std::string &amp;tipoTransaccion, int idCuenta, int idCuentaDestino, float monto, const std::string &amp;moneda)</div><div class="ttdoc">Registro de transacciones en base de datos.</div><div class="ttdef"><b>Definition</b> <a href="transaciones_8cpp_source.html#l00048">transaciones.cpp:48</a></div></div>
+<div class="ttc" id="aclass_operaciones_html_a476406613d51920451f55f04c1ccdf64"><div class="ttname"><a href="class_operaciones.html#a476406613d51920451f55f04c1ccdf64">Operaciones::retirar</a></div><div class="ttdeci">void retirar(Monedas cambio, float monto)</div><div class="ttdoc">Retirar dinero de la cuenta.</div><div class="ttdef"><b>Definition</b> <a href="transaciones_8cpp_source.html#l00285">transaciones.cpp:285</a></div></div>
+<div class="ttc" id="aclass_operaciones_html_a480f4251e6fa4405a27c404d42b96be2"><div class="ttname"><a href="class_operaciones.html#a480f4251e6fa4405a27c404d42b96be2">Operaciones::obtenerFechaHoraActual</a></div><div class="ttdeci">std::string obtenerFechaHoraActual()</div><div class="ttdoc">Obtener fecha y hora.</div><div class="ttdef"><b>Definition</b> <a href="transaciones_8cpp_source.html#l00039">transaciones.cpp:39</a></div></div>
+<div class="ttc" id="aclass_operaciones_html_a4c1498e817db5e60ecfee0ddbd5a8d77"><div class="ttname"><a href="class_operaciones.html#a4c1498e817db5e60ecfee0ddbd5a8d77">Operaciones::pagarPrestamo</a></div><div class="ttdeci">void pagarPrestamo()</div></div>
+<div class="ttc" id="aclass_operaciones_html_a6da7fd4989db58b9ac1bf6a772aba05b"><div class="ttname"><a href="class_operaciones.html#a6da7fd4989db58b9ac1bf6a772aba05b">Operaciones::pedirMonto</a></div><div class="ttdeci">int pedirMonto(float &amp;monto)</div><div class="ttdoc">Pedir el monto de la transaccion.</div><div class="ttdef"><b>Definition</b> <a href="transaciones_8cpp_source.html#l00511">transaciones.cpp:511</a></div></div>
+<div class="ttc" id="aclass_operaciones_html_a9953a7276ca3f5cf33fcbee8ba0bdab1"><div class="ttname"><a href="class_operaciones.html#a9953a7276ca3f5cf33fcbee8ba0bdab1">Operaciones::escribirHistorial</a></div><div class="ttdeci">void escribirHistorial()</div><div class="ttdoc">Escribir el historial de las transacciones.</div></div>
+<div class="ttc" id="aclass_operaciones_html_a9c2bf87440e3e5facacc3f4a577d0054"><div class="ttname"><a href="class_operaciones.html#a9c2bf87440e3e5facacc3f4a577d0054">Operaciones::idCuentaDestino</a></div><div class="ttdeci">int idCuentaDestino</div><div class="ttdef"><b>Definition</b> <a href="#l00062">transaciones.hpp:62</a></div></div>
+<div class="ttc" id="aclass_operaciones_html_aa3722f4153bd4fe106607313178af258"><div class="ttname"><a href="class_operaciones.html#aa3722f4153bd4fe106607313178af258">Operaciones::depositar</a></div><div class="ttdeci">void depositar(Monedas cambio, float monto)</div><div class="ttdoc">Depositar dinero en la cuenta.</div><div class="ttdef"><b>Definition</b> <a href="transaciones_8cpp_source.html#l00117">transaciones.cpp:117</a></div></div>
+<div class="ttc" id="aclass_operaciones_html_ab52bdea9cf61c9507ebf445bb9c64f3c"><div class="ttname"><a href="class_operaciones.html#ab52bdea9cf61c9507ebf445bb9c64f3c">Operaciones::checkAcountCurrency</a></div><div class="ttdeci">int checkAcountCurrency(int idCuenta)</div><div class="ttdoc">Verificar si la cuenta tiene la moneda correcta.</div><div class="ttdef"><b>Definition</b> <a href="transaciones_8cpp_source.html#l00478">transaciones.cpp:478</a></div></div>
+<div class="ttc" id="aclass_operaciones_html_ac7a88ee6ec510941692a26125fb8b445"><div class="ttname"><a href="class_operaciones.html#ac7a88ee6ec510941692a26125fb8b445">Operaciones::hora</a></div><div class="ttdeci">std::string hora</div><div class="ttdef"><b>Definition</b> <a href="#l00059">transaciones.hpp:59</a></div></div>
+<div class="ttc" id="aclass_operaciones_html_aceca08ff969cbb70063adc0e6d32438c"><div class="ttname"><a href="class_operaciones.html#aceca08ff969cbb70063adc0e6d32438c">Operaciones::fecha</a></div><div class="ttdeci">std::string fecha</div><div class="ttdef"><b>Definition</b> <a href="#l00058">transaciones.hpp:58</a></div></div>
+<div class="ttc" id="aclass_operaciones_html_acf1a93118e12ca20d37d40145b7f731c"><div class="ttname"><a href="class_operaciones.html#acf1a93118e12ca20d37d40145b7f731c">Operaciones::consultarPrestamos</a></div><div class="ttdeci">void consultarPrestamos()</div></div>
+<div class="ttc" id="aclass_operaciones_html_adc730bdb78e6d4008caec69df939cdfc"><div class="ttname"><a href="class_operaciones.html#adc730bdb78e6d4008caec69df939cdfc">Operaciones::monto</a></div><div class="ttdeci">float monto</div><div class="ttdef"><b>Definition</b> <a href="#l00060">transaciones.hpp:60</a></div></div>
+<div class="ttc" id="aclass_operaciones_html_ae2a8538104b40a1cd64677632f9d7eb0"><div class="ttname"><a href="class_operaciones.html#ae2a8538104b40a1cd64677632f9d7eb0">Operaciones::transferir</a></div><div class="ttdeci">void transferir()</div><div class="ttdef"><b>Definition</b> <a href="transaciones_8cpp_source.html#l00528">transaciones.cpp:528</a></div></div>
+<div class="ttc" id="aclass_operaciones_html_ae753d76f16c8eb38b0e6bda55fb619e7"><div class="ttname"><a href="class_operaciones.html#ae753d76f16c8eb38b0e6bda55fb619e7">Operaciones::cliente</a></div><div class="ttdeci">Cliente cliente</div><div class="ttdef"><b>Definition</b> <a href="#l00061">transaciones.hpp:61</a></div></div>
+<div class="ttc" id="aclass_operaciones_html_afd23cac3d7748efc4e524122a7661451"><div class="ttname"><a href="class_operaciones.html#afd23cac3d7748efc4e524122a7661451">Operaciones::Operaciones</a></div><div class="ttdeci">Operaciones(std::string nombre, std::string apellido, int id)</div><div class="ttdoc">Constructor de la clase Operaciones.</div><div class="ttdef"><b>Definition</b> <a href="transaciones_8cpp_source.html#l00114">transaciones.cpp:114</a></div></div>
+<div class="ttc" id="acliente_8hpp_html"><div class="ttname"><a href="cliente_8hpp.html">cliente.hpp</a></div><div class="ttdoc">Header file de la clase Cliente MIT License.</div></div>
+<div class="ttc" id="aentidad_bancaria_8hpp_html"><div class="ttname"><a href="entidad_bancaria_8hpp.html">entidadBancaria.hpp</a></div><div class="ttdoc">Clase padre del sistema bancario MIT License.</div></div>
+<div class="ttc" id="aentidad_bancaria_8hpp_html_a89cef56c670c4475a5f0bf4882a52f83"><div class="ttname"><a href="entidad_bancaria_8hpp.html#a89cef56c670c4475a5f0bf4882a52f83">Monedas</a></div><div class="ttdeci">Monedas</div><div class="ttdoc">Enumeracion de las monedas.</div><div class="ttdef"><b>Definition</b> <a href="entidad_bancaria_8hpp_source.html#l00039">entidadBancaria.hpp:39</a></div></div>
+<div class="ttc" id="amenu_8hpp_html"><div class="ttname"><a href="menu_8hpp.html">menu.hpp</a></div><div class="ttdoc">Header file de la clase Menu MIT License.</div></div>
+<div class="ttc" id="astructfunction_vars_html"><div class="ttname"><a href="structfunction_vars.html">functionVars</a></div><div class="ttdef"><b>Definition</b> <a href="#l00039">transaciones.hpp:39</a></div></div>
+<div class="ttc" id="astructfunction_vars_html_a1d87c812e2a357ae4da46bdc9ec9566d"><div class="ttname"><a href="structfunction_vars.html#a1d87c812e2a357ae4da46bdc9ec9566d">functionVars::monto</a></div><div class="ttdeci">float monto</div><div class="ttdef"><b>Definition</b> <a href="#l00041">transaciones.hpp:41</a></div></div>
+<div class="ttc" id="astructfunction_vars_html_a988d483617e438926f50a2daefe3a93f"><div class="ttname"><a href="structfunction_vars.html#a988d483617e438926f50a2daefe3a93f">functionVars::rightChoice</a></div><div class="ttdeci">int rightChoice</div><div class="ttdef"><b>Definition</b> <a href="#l00044">transaciones.hpp:44</a></div></div>
+<div class="ttc" id="astructfunction_vars_html_a9d7085ccfe900acb3b552b6bfc71e757"><div class="ttname"><a href="structfunction_vars.html#a9d7085ccfe900acb3b552b6bfc71e757">functionVars::tries</a></div><div class="ttdeci">int tries</div><div class="ttdef"><b>Definition</b> <a href="#l00043">transaciones.hpp:43</a></div></div>
+<div class="ttc" id="astructfunction_vars_html_ab2c9a87d114fe4f837f6051d7e44c67a"><div class="ttname"><a href="structfunction_vars.html#ab2c9a87d114fe4f837f6051d7e44c67a">functionVars::sql</a></div><div class="ttdeci">std::string sql</div><div class="ttdef"><b>Definition</b> <a href="#l00046">transaciones.hpp:46</a></div></div>
+<div class="ttc" id="astructfunction_vars_html_abfaca264395e65df97684f173bce0b82"><div class="ttname"><a href="structfunction_vars.html#abfaca264395e65df97684f173bce0b82">functionVars::opcion</a></div><div class="ttdeci">int opcion</div><div class="ttdef"><b>Definition</b> <a href="#l00040">transaciones.hpp:40</a></div></div>
+<div class="ttc" id="astructfunction_vars_html_acd84a58ddd060a48960b69ab30c41a6a"><div class="ttname"><a href="structfunction_vars.html#acd84a58ddd060a48960b69ab30c41a6a">functionVars::db</a></div><div class="ttdeci">sqlite3 * db</div><div class="ttdef"><b>Definition</b> <a href="#l00045">transaciones.hpp:45</a></div></div>
+<div class="ttc" id="astructfunction_vars_html_acd90f54404fa7b06acc5623c42960400"><div class="ttname"><a href="structfunction_vars.html#acd90f54404fa7b06acc5623c42960400">functionVars::zErrMsg</a></div><div class="ttdeci">char * zErrMsg</div><div class="ttdef"><b>Definition</b> <a href="#l00047">transaciones.hpp:47</a></div></div>
+<div class="ttc" id="astructfunction_vars_html_ad3d1bf856e422b726efbb8c6435f8f2f"><div class="ttname"><a href="structfunction_vars.html#ad3d1bf856e422b726efbb8c6435f8f2f">functionVars::rc</a></div><div class="ttdeci">int rc</div><div class="ttdef"><b>Definition</b> <a href="#l00048">transaciones.hpp:48</a></div></div>
+<div class="ttc" id="astructfunction_vars_html_afa115c27c5b410c5b82421b434d2cf59"><div class="ttname"><a href="structfunction_vars.html#afa115c27c5b410c5b82421b434d2cf59">functionVars::dato</a></div><div class="ttdeci">std::string dato</div><div class="ttdef"><b>Definition</b> <a href="#l00042">transaciones.hpp:42</a></div></div>
+</div><!-- fragment --></div><!-- contents -->
+</div><!-- doc-content -->
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="navelem"><a class="el" href="dir_68267d1309a1af8e8297ef4c3efbcdba.html">src</a></li><li class="navelem"><a class="el" href="transaciones_8hpp.html">transaciones.hpp</a></li>
+    <li class="footer">Generado por <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.10.0 </li>
+  </ul>
+</div>
+</body>
+</html>

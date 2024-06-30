@@ -1,0 +1,294 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "https://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml" lang="es">
+<head>
+<meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=11"/>
+<meta name="generator" content="Doxygen 1.10.0"/>
+<meta name="viewport" content="width=device-width, initial-scale=1"/>
+<title>Proyecto Final IE-0217: Referencia del archivo src/tools.hpp</title>
+<link href="tabs.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="jquery.js"></script>
+<script type="text/javascript" src="dynsections.js"></script>
+<script type="text/javascript" src="clipboard.js"></script>
+<link href="navtree.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="resize.js"></script>
+<script type="text/javascript" src="navtreedata.js"></script>
+<script type="text/javascript" src="navtree.js"></script>
+<script type="text/javascript" src="cookie.js"></script>
+<link href="search/search.css" rel="stylesheet" type="text/css"/>
+<script type="text/javascript" src="search/searchdata.js"></script>
+<script type="text/javascript" src="search/search.js"></script>
+<link href="doxygen.css" rel="stylesheet" type="text/css" />
+</head>
+<body>
+<div id="top"><!-- do not remove this div, it is closed by doxygen! -->
+<div id="titlearea">
+<table cellspacing="0" cellpadding="0">
+ <tbody>
+ <tr id="projectrow">
+  <td id="projectlogo"><img alt="Logo" src="pago-seguro.png"/></td>
+  <td id="projectalign">
+   <div id="projectname">Proyecto Final IE-0217<span id="projectnumber">&#160;1.0</span>
+   </div>
+   <div id="projectbrief">Sistema de gestión bancaria</div>
+  </td>
+ </tr>
+ </tbody>
+</table>
+</div>
+<!-- end header part -->
+<!-- Generado por Doxygen 1.10.0 -->
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+var searchBox = new SearchBox("searchBox", "search/",'.html');
+/* @license-end */
+</script>
+<script type="text/javascript" src="menudata.js"></script>
+<script type="text/javascript" src="menu.js"></script>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function() {
+  initMenu('',true,false,'search.php','Buscar');
+  $(function() { init_search(); });
+});
+/* @license-end */
+</script>
+<div id="main-nav"></div>
+</div><!-- top -->
+<div id="side-nav" class="ui-resizable side-nav-resizable">
+  <div id="nav-tree">
+    <div id="nav-tree-contents">
+      <div id="nav-sync" class="sync"></div>
+    </div>
+  </div>
+  <div id="splitbar" style="-moz-user-select:none;" 
+       class="ui-resizable-handle">
+  </div>
+</div>
+<script type="text/javascript">
+/* @license magnet:?xt=urn:btih:d3d9a9a6595521f9666a5e94cc830dab83b65699&amp;dn=expat.txt MIT */
+$(function(){initNavTree('tools_8hpp.html',''); initResizable(); });
+/* @license-end */
+</script>
+<div id="doc-content">
+<!-- window showing the filter options -->
+<div id="MSearchSelectWindow"
+     onmouseover="return searchBox.OnSearchSelectShow()"
+     onmouseout="return searchBox.OnSearchSelectHide()"
+     onkeydown="return searchBox.OnSearchSelectKey(event)">
+</div>
+
+<!-- iframe showing the search results (closed by default) -->
+<div id="MSearchResultsWindow">
+<div id="MSearchResults">
+<div class="SRPage">
+<div id="SRIndex">
+<div id="SRResults"></div>
+<div class="SRStatus" id="Loading">Cargando...</div>
+<div class="SRStatus" id="Searching">Buscando...</div>
+<div class="SRStatus" id="NoMatches">Nada coincide</div>
+</div>
+</div>
+</div>
+</div>
+
+<div class="header">
+  <div class="summary">
+<a href="#func-members">Funciones</a>  </div>
+  <div class="headertitle"><div class="title">Referencia del archivo tools.hpp</div></div>
+</div><!--header-->
+<div class="contents">
+<div class="textblock"><code>#include &lt;iostream&gt;</code><br />
+<code>#include &lt;vector&gt;</code><br />
+<code>#include &lt;string&gt;</code><br />
+<code>#include &quot;<a class="el" href="db_8hpp_source.html">db.hpp</a>&quot;</code><br />
+</div>
+<p><a href="tools_8hpp_source.html">Ir al código fuente de este archivo.</a></p>
+<table class="memberdecls">
+<tr class="heading"><td colspan="2"><h2 class="groupheader"><a id="func-members" name="func-members"></a>
+Funciones</h2></td></tr>
+<tr class="memitem:a197f93e16c9c9c7382814a955628dcc1" id="r_a197f93e16c9c9c7382814a955628dcc1"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a197f93e16c9c9c7382814a955628dcc1">toHex</a> (const unsigned char *data, size_t len)</td></tr>
+<tr class="memdesc:a197f93e16c9c9c7382814a955628dcc1"><td class="mdescLeft">&#160;</td><td class="mdescRight">Función para convertir un string a un vector de bytes.  <br /></td></tr>
+<tr class="separator:a197f93e16c9c9c7382814a955628dcc1"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad124b50b0304097046310b4ecfec8c59" id="r_ad124b50b0304097046310b4ecfec8c59"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ad124b50b0304097046310b4ecfec8c59">genSalt</a> ()</td></tr>
+<tr class="memdesc:ad124b50b0304097046310b4ecfec8c59"><td class="mdescLeft">&#160;</td><td class="mdescRight">Funcion para generar un salt.  <br /></td></tr>
+<tr class="separator:ad124b50b0304097046310b4ecfec8c59"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac98cce18d9a898488bfdc0bd092df211" id="r_ac98cce18d9a898488bfdc0bd092df211"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#ac98cce18d9a898488bfdc0bd092df211">hash</a> (const std::string &amp;password, const std::string &amp;salt)</td></tr>
+<tr class="memdesc:ac98cce18d9a898488bfdc0bd092df211"><td class="mdescLeft">&#160;</td><td class="mdescRight">Funcion para hashear una contraseña.  <br /></td></tr>
+<tr class="separator:ac98cce18d9a898488bfdc0bd092df211"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a95ca0945824156b840b0aca087a0089d" id="r_a95ca0945824156b840b0aca087a0089d"><td class="memItemLeft" align="right" valign="top">bool&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a95ca0945824156b840b0aca087a0089d">checkPassword</a> (const std::string &amp;password, const std::string &amp;storedsalt, const std::string &amp;storedhash)</td></tr>
+<tr class="separator:a95ca0945824156b840b0aca087a0089d"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a4d46645097c546e117d2829da9f0c038" id="r_a4d46645097c546e117d2829da9f0c038"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a4d46645097c546e117d2829da9f0c038">getPassword</a> (int ID)</td></tr>
+<tr class="memdesc:a4d46645097c546e117d2829da9f0c038"><td class="mdescLeft">&#160;</td><td class="mdescRight">Funcion para obtener una contraseña.  <br /></td></tr>
+<tr class="separator:a4d46645097c546e117d2829da9f0c038"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a40e020872e1a79f2ed52769fae753e06" id="r_a40e020872e1a79f2ed52769fae753e06"><td class="memItemLeft" align="right" valign="top">std::string&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="#a40e020872e1a79f2ed52769fae753e06">getSalt</a> (int ID)</td></tr>
+<tr class="separator:a40e020872e1a79f2ed52769fae753e06"><td class="memSeparator" colspan="2">&#160;</td></tr>
+</table>
+<h2 class="groupheader">Documentación de funciones</h2>
+<a id="a95ca0945824156b840b0aca087a0089d" name="a95ca0945824156b840b0aca087a0089d"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a95ca0945824156b840b0aca087a0089d">&#9670;&#160;</a></span>checkPassword()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">bool checkPassword </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;</td>          <td class="paramname"><span class="paramname"><em>password</em>, </span></td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::string &amp;</td>          <td class="paramname"><span class="paramname"><em>storedsalt</em>, </span></td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::string &amp;</td>          <td class="paramname"><span class="paramname"><em>storedhash</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definición en la línea <a class="el" href="tools_8cpp_source.html#l00062">62</a> del archivo <a class="el" href="tools_8cpp_source.html">tools.cpp</a>.</p>
+
+</div>
+</div>
+<a id="ad124b50b0304097046310b4ecfec8c59" name="ad124b50b0304097046310b4ecfec8c59"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ad124b50b0304097046310b4ecfec8c59">&#9670;&#160;</a></span>genSalt()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::string genSalt </td>
+          <td>(</td>
+          <td class="paramname"><span class="paramname"></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Funcion para generar un salt. </p>
+<dl class="section note"><dt>Nota</dt><dd>Se utiliza para hashear contraseñasSSSSSS </dd></dl>
+<dl class="section return"><dt>Devuelve</dt><dd>salt </dd></dl>
+
+<p class="definition">Definición en la línea <a class="el" href="tools_8cpp_source.html#l00044">44</a> del archivo <a class="el" href="tools_8cpp_source.html">tools.cpp</a>.</p>
+
+</div>
+</div>
+<a id="a4d46645097c546e117d2829da9f0c038" name="a4d46645097c546e117d2829da9f0c038"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a4d46645097c546e117d2829da9f0c038">&#9670;&#160;</a></span>getPassword()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::string getPassword </td>
+          <td>(</td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>ID</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Funcion para obtener una contraseña. </p>
+
+<p class="definition">Definición en la línea <a class="el" href="tools_8cpp_source.html#l00069">69</a> del archivo <a class="el" href="tools_8cpp_source.html">tools.cpp</a>.</p>
+
+</div>
+</div>
+<a id="a40e020872e1a79f2ed52769fae753e06" name="a40e020872e1a79f2ed52769fae753e06"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a40e020872e1a79f2ed52769fae753e06">&#9670;&#160;</a></span>getSalt()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::string getSalt </td>
+          <td>(</td>
+          <td class="paramtype">int</td>          <td class="paramname"><span class="paramname"><em>ID</em></span></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p class="definition">Definición en la línea <a class="el" href="tools_8cpp_source.html#l00093">93</a> del archivo <a class="el" href="tools_8cpp_source.html">tools.cpp</a>.</p>
+
+</div>
+</div>
+<a id="ac98cce18d9a898488bfdc0bd092df211" name="ac98cce18d9a898488bfdc0bd092df211"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#ac98cce18d9a898488bfdc0bd092df211">&#9670;&#160;</a></span>hash()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::string hash </td>
+          <td>(</td>
+          <td class="paramtype">const std::string &amp;</td>          <td class="paramname"><span class="paramname"><em>password</em>, </span></td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">const std::string &amp;</td>          <td class="paramname"><span class="paramname"><em>salt</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Funcion para hashear una contraseña. </p>
+<dl class="params"><dt>Parámetros</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">password</td><td>contraseña a hashear </td></tr>
+    <tr><td class="paramname">salt</td><td>salt a utilizar </td></tr>
+  </table>
+  </dd>
+</dl>
+
+<p class="definition">Definición en la línea <a class="el" href="tools_8cpp_source.html#l00053">53</a> del archivo <a class="el" href="tools_8cpp_source.html">tools.cpp</a>.</p>
+
+</div>
+</div>
+<a id="a197f93e16c9c9c7382814a955628dcc1" name="a197f93e16c9c9c7382814a955628dcc1"></a>
+<h2 class="memtitle"><span class="permalink"><a href="#a197f93e16c9c9c7382814a955628dcc1">&#9670;&#160;</a></span>toHex()</h2>
+
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">std::string toHex </td>
+          <td>(</td>
+          <td class="paramtype">const unsigned char *</td>          <td class="paramname"><span class="paramname"><em>data</em>, </span></td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">size_t</td>          <td class="paramname"><span class="paramname"><em>len</em></span>&#160;)</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Función para convertir un string a un vector de bytes. </p>
+<dl class="params"><dt>Parámetros</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">data</td><td>string a convertir </td></tr>
+    <tr><td class="paramname">len</td><td>tamaño del string </td></tr>
+  </table>
+  </dd>
+</dl>
+<dl class="section return"><dt>Devuelve</dt><dd>bytes del string </dd></dl>
+
+<p class="definition">Definición en la línea <a class="el" href="tools_8cpp_source.html#l00029">29</a> del archivo <a class="el" href="tools_8cpp_source.html">tools.cpp</a>.</p>
+
+</div>
+</div>
+</div><!-- contents -->
+</div><!-- doc-content -->
+<!-- start footer part -->
+<div id="nav-path" class="navpath"><!-- id is needed for treeview function! -->
+  <ul>
+    <li class="navelem"><a class="el" href="dir_68267d1309a1af8e8297ef4c3efbcdba.html">src</a></li><li class="navelem"><a class="el" href="tools_8hpp.html">tools.hpp</a></li>
+    <li class="footer">Generado por <a href="https://www.doxygen.org/index.html"><img class="footer" src="doxygen.svg" width="104" height="31" alt="doxygen"/></a> 1.10.0 </li>
+  </ul>
+</div>
+</body>
+</html>
