@@ -87,6 +87,10 @@ class Operaciones {
         /// @param idCliente id del cliente en sesión.
         void imprimirHistorialTransacciones(int IdCliente);
 
+        /// @brief Imprimir historial de transferencias rebicidas por el usuario.
+        /// @param idCliente id del cliente en sesión.
+        void imprimirHistorialTransferenciasRecibidas(int idCliente);
+
 
         /// @brief Depositar dinero en la cuenta.
         /// @param cambio Monedas de cambio DOLAR o COLON.

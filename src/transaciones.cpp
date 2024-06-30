@@ -121,6 +121,58 @@ void Operaciones::imprimirHistorialTransacciones(int idCliente) {
     // Liberar memoria y cerrar la base de datos
     sqlite3_finalize(stmt);
     sqlite3_close(db);
+
+    imprimirHistorialTransferenciasRecibidas(idCliente);
+}
+
+// Método para imprimir el historial de transferencias recibidas por el usuario
+void Operaciones::imprimirHistorialTransferenciasRecibidas(int idCliente) {
+    sqlite3* db;
+    sqlite3_stmt* stmt;
+    int rc = sqlite3_open("SistemaBancario.db", &db);
+
+    if (rc) {
+        std::cerr << "No se pudo abrir la base de datos: " << sqlite3_errmsg(db) << std::endl;
+        return;
+    }
+
+    // Consulta SQL para obtener las transferencias recibidas por el usuario
+    std::string sql = "SELECT * FROM HISTORIAL_TRANSACCIONES WHERE ID_CUENTA_DESTINO IN "
+                      "(SELECT ID_CUENTA FROM CUENTA_BANCARIA WHERE ID_CLIENTE = " + std::to_string(idCliente) + ")";
+
+    rc = sqlite3_prepare_v2(db, sql.c_str(), -1, &stmt, NULL);
+    if (rc != SQLITE_OK) {
+        std::cerr << "Error SQL: " << sqlite3_errmsg(db) << std::endl;
+        sqlite3_close(db);
+        return;
+    }
+
+    // Encabezado
+    std::cout << "===================================================================================================" << std::endl;
+    std::cout << std::setw(15) << "ID Transacción" << std::setw(15) << "Tipo" << std::setw(15) << "Cuenta Origen" << std::setw(20) << "Cuenta Destino"
+              << std::setw(15) << "Monto" << std::setw(15) << "Moneda" << std::setw(25) << "Fecha" << std::endl;
+    std::cout << "===================================================================================================" << std::endl;
+
+    // Recorrer resultados
+    while (sqlite3_step(stmt) == SQLITE_ROW) {
+        int idTransaccion = sqlite3_column_int(stmt, 0);
+        std::string tipoTransaccion = reinterpret_cast<const char*>(sqlite3_column_text(stmt, 2));
+        int idCuentaOrigen = sqlite3_column_int(stmt, 3);
+        int idCuentaDestino = sqlite3_column_int(stmt, 4);
+        double monto = sqlite3_column_double(stmt, 5);
+        std::string moneda = reinterpret_cast<const char*>(sqlite3_column_text(stmt, 6));
+        std::string fecha = reinterpret_cast<const char*>(sqlite3_column_text(stmt, 7));
+
+        // Imprimir cada transacción
+        std::cout << std::setw(15) << idTransaccion << std::setw(15) << tipoTransaccion << std::setw(15) << idCuentaOrigen << std::setw(20) << idCuentaDestino
+                  << std::setw(15) << monto << std::setw(15) << moneda << std::setw(25) << fecha << std::endl;
+    }
+
+    std::cout << "===================================================================================================" << std::endl;
+
+    // Liberar memoria y cerrar la base de datos
+    sqlite3_finalize(stmt);
+    sqlite3_close(db);
 }
 
 
